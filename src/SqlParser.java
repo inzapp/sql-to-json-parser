@@ -22,41 +22,44 @@ public class SqlParser {
             "               WHERE MASKING_YB = 'Y'";
 
     private static final String[] SYNTAX = {
-            "SELECT", "SELECT DISTINCT", "INSERT", "UPDATE", "DELETE", "FROM", "WHERE",
-            "ORDER BY", "GROUP BY", "UNION", "UNION ALL"
+            "SELECT", "DISTINCT", "INSERT", "UPDATE", "DELETE", "FROM", "WHERE",
+            "BY", "UNION", "ALL"
     };
 
     public static void main(String[] args) {
         List<String> strList = new LinkedList<>(Arrays.asList(SQL.split(" ")));
         switch (strList.get(0).toUpperCase()) {
             case "SELECT":
+                System.out.printf("method : %s\n\n", strList.get(0).toUpperCase());
                 removeUntil(strList, new String[]{"SELECT"});
                 if(strList.isEmpty())
                     return;
 
                 String[] strings = getStringsUntil(strList, new String[]{"FROM"}, ",");
-//                for (String cur : strings)
-//                    System.out.println(cur.trim());
+                System.out.println("col : ");
+                for (String cur : strings)
+                    System.out.println(cur.trim());
+                System.out.println();
 
                 removeUntil(strList, new String[]{"FROM"});
                 if(strList.isEmpty())
                     return;
 
                 strings = getStringsUntil(strList, new String[]{"WHERE"}, ",");
-//                for (String cur : strings)
-//                    System.out.println(cur.trim());
+                System.out.println("table :");
+                for (String cur : strings)
+                    System.out.println(cur.trim());
+                System.out.println();
 
                 removeUntil(strList, new String[]{"WHERE"});
                 if(strList.isEmpty())
                     return;
 
-                strings = getStringsUntil(strList, new String[]{"ORDER BY", "GROUP BY"}, ",");
+                strings = getStringsUntil(strList, new String[]{"BY"}, " ");
+                System.out.println("condition :");
                 for (String cur : strings)
                     System.out.println(cur.trim());
-
-                removeUntil(strList, new String[]{"ORDER BY", "GROUP BY"});
-                if(strList.isEmpty())
-                    return;
+                System.out.println();
                 break;
 
             default:
