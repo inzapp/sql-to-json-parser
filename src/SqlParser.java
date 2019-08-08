@@ -55,7 +55,7 @@ public class SqlParser {
                 if(strList.isEmpty())
                     return;
 
-                strings = getStringsUntil(strList, new String[]{"BY"}, " ");
+                strings = getStringsUntil(strList, new String[]{""}, "AND");
                 System.out.println("condition :");
                 for (String cur : strings)
                     System.out.println(cur.trim());
