@@ -1,20 +1,38 @@
-import java.sql.PreparedStatement;
 import java.util.*;
 
 public class SqlParser {
-    private static String SQL = "SELECT firstCol, secondCol, thirdCol FROM table1 as a, ";
+    private static String SQL = "SELECT  \n" +
+            "                REG_NO AS REGIS_SEQNO,\n" +
+            "               to_char(REG_DTM,'yyyy-MM-dd') AS REGIS_DT,   \n" +
+            "               to_char(REG_DTM,'HH24miss') AS REGIS_TM,   \n" +
+            "               to_char(UPDT_DTM,'yyyyMMdd') AS MODIFY_DT,\n" +
+            "               to_char(UPDT_DTM,'HH24miss') AS MODIFY_TIME,\n" +
+            "               RGR_ID AS REGIS_ID,   \n" +
+            "               RGR_NM AS REGIS_NAME, \n" +
+            "               ANW_NM AS REPLY_NAME, \n" +
+            "               ANW_ID AS REPLY_ID,   \n" +
+            "               ANS_DT AS REPLY_DT,   \n" +
+            "               TXT AS CONTENTS,   \n" +
+            "               NVL(ATC_FL, '') AS ACCTFILE,   \n" +
+            "               NTT_TYP AS BOARD_TYPE, \n" +
+            "               TITL AS TITLE,      \n" +
+            "               INQ_CNT AS CNT,\n" +
+            "               COUNT(*) OVER() AS TOTAL_CNT\n" +
+            "               FROM ETCH002M\n" +
+            "               WHERE MASKING_YB = 'Y'";
+
     private static final String[] SYNTAX = {
             "SELECT", "SELECT DISTINCT", "INSERT", "UPDATE", "DELETE", "FROM", "WHERE",
             "ORDER BY", "GROUP BY", "UNION", "UNION ALL"
     };
 
     public static void main(String[] args) {
-        List<String> strList = new LinkedList<>(Arrays.asList(split(SQL, " ")));
+        List<String> strList = new LinkedList<>(Arrays.asList(SQL.split(" ")));
         switch (strList.get(0).toUpperCase()) {
             case "SELECT":
                 strList.remove(0);
-                for(String cur : getStringUntil(getString(strList), new String[]{"FROM"}).split(" "))
-                    System.out.println(cur);
+                for (String cur : getStringsUntil(strList, new String[]{"FROM"}, ","))
+                    System.out.println(cur.trim());
                 break;
 
             default:
@@ -22,67 +40,58 @@ public class SqlParser {
         }
     }
 
+    private static String[] getStringsUntil(List<String> strList, String[] criteria, String regex) {
+        String[] strings = getStringUntil(getString(strList), criteria).split(regex);
+        List<String> totalList = new ArrayList<>();
+        List<String> listForCombine = new ArrayList<>();
+
+        Stack<Boolean> bracketStack = new Stack<>();
+        for (String cur : strings) {
+            char[] iso = cur.toCharArray();
+            for (char c : iso) {
+                if (c == '(')
+                    bracketStack.push(true);
+                else if (c == ')')
+                    bracketStack.pop();
+            }
+
+            listForCombine.add(cur);
+            if (bracketStack.empty()) {
+                totalList.add(getString(listForCombine));
+                listForCombine.clear();
+            } else {
+                listForCombine.add(regex);
+            }
+        }
+
+        String[] arr = new String[totalList.size()];
+        for (int i = 0; i < totalList.size(); ++i)
+            arr[i] = totalList.get(i);
+        return arr;
+    }
+
     private static String getString(List<String> strList) {
         StringBuilder builder = new StringBuilder();
-        for(String cur : strList)
+        for (String cur : strList)
             builder.append(cur).append(" ");
         return builder.toString().trim();
     }
 
     private static String getStringUntil(String str, String[] criteria) {
-        List<String> strList = Arrays.asList(str.split(" "));
+        String[] strings = str.split(" ");
         List<String> untilStrList = new ArrayList<>();
         boolean breakFlag = false;
-        for(String cur : strList) {
-            for(String criterion : criteria) {
-                if(cur.trim().equals(criterion.trim())) {
+        for (String cur : strings) {
+            for (String criterion : criteria) {
+                if (cur.trim().equals(criterion.trim())) {
                     breakFlag = true;
                     break;
                 }
             }
-            if(breakFlag)
+            if (breakFlag)
                 break;
             untilStrList.add(cur.trim());
         }
         return getString(untilStrList);
-    }
-
-    private static String[] split(String str, String regex) {
-        String[] splits = str.split(regex);
-        List<String> splitList = new ArrayList<>();
-        List<String> quoteWordList = new ArrayList<>();
-        boolean quote = false;
-        for (String cur : splits) {
-            char[] iso = cur.toCharArray();
-            if (iso[0] == '\'' && iso[iso.length - 1] == '\'') {
-                splitList.add(cur);
-            } else if (iso[0] == '\'' || iso[0] == '\"') {
-                // 'asd asd asd asd' 나 "asd asd" 와 같은 쿼테이션으로 둘러쌓인 단어의 시작부분을 감지
-                quoteWordList.add(cur);
-                quote = true;
-            } else if (iso[iso.length - 1] == '\'' || iso[iso.length - 1] == '\"') {
-                // 'asd asd asd asd' 나 "asd asd" 와 같은 쿼테이션으로 둘러쌓인 단어의 끝부분을 감지
-                quoteWordList.add(cur);
-                StringBuilder builder = new StringBuilder();
-                for (String curQuote : quoteWordList)
-                    builder.append(curQuote + " ");
-                splitList.add(builder.toString().trim());
-                quoteWordList.clear();
-                quote = false;
-            } else {
-                if (quote) {
-                    // 쿼테이션 플래그가 활성화되어 3번째 else if 문에 들어가기 전까지 모두를 담아둠
-                    quoteWordList.add(cur);
-                } else {
-                    // 쿼테이션으로 둘러쌓이지 않은 일반 단어 감지
-                    splitList.add(cur);
-                }
-            }
-        }
-
-        String[] newSplits = new String[splitList.size()];
-        for (int i = 0; i < splitList.size(); ++i)
-            newSplits[i] = splitList.get(i);
-        return newSplits;
     }
 }
