@@ -2,24 +2,31 @@ import java.util.*;
 
 public class SqlParser {
     private static String SQL = "SELECT  \n" +
-            "                REG_NO AS REGIS_SEQNO,\n" +
-            "               to_char(REG_DTM,'yyyy-MM-dd') AS REGIS_DT,   \n" +
-            "               to_char(REG_DTM,'HH24miss') AS REGIS_TM,   \n" +
-            "               to_char(UPDT_DTM,'yyyyMMdd') AS MODIFY_DT,\n" +
-            "               to_char(UPDT_DTM,'HH24miss') AS MODIFY_TIME,\n" +
-            "               RGR_ID AS REGIS_ID,   \n" +
-            "               RGR_NM AS REGIS_NAME, \n" +
-            "               ANW_NM AS REPLY_NAME, \n" +
-            "               ANW_ID AS REPLY_ID,   \n" +
-            "               ANS_DT AS REPLY_DT,   \n" +
-            "               TXT AS CONTENTS,   \n" +
-            "               NVL(ATC_FL, '') AS ACCTFILE,   \n" +
-            "               NTT_TYP AS BOARD_TYPE, \n" +
-            "               TITL AS TITLE,      \n" +
-            "               INQ_CNT AS CNT,\n" +
-            "               COUNT(*) OVER() AS TOTAL_CNT\n" +
-            "               FROM ETCH002M\n" +
-            "               WHERE MASKING_YB = 'Y'";
+            "         EC_CLPS_DV_CD         as   STAFF_GBN,            \n" +
+            "         EC_NM            as   STAFF_CLASS,          \n" +
+            "         EC_GRP            as   ORG_STAFF_GBN,        \n" +
+            "         ODR            as   ORDER_SEQ,            \n" +
+            "         ORGZ_ID            as   ORG_ID,\n" +
+            "         EMP_NO            as   STAFF_EMP_ID,         \n" +
+            "         USE_AYN            as   USE_YN,         \n" +
+            "         REG_DTM,                          \n" +
+            "         RGR_ID,         \n" +
+            "         UPDT_DTM,       \n" +
+            "         UTUR_ID\n" +
+            "      FROM ETCH005M\n" +
+            "         WHERE EC_CLPS_DV_CD IN (\n" +
+            "                  SELECT   EC_DV as staff_gbn\n" +
+            "                      FROM ETCH004M\n" +
+            "                     WHERE (TO_DATE (SCH_REG_DT , 'YYYY-MM-DD')\n" +
+            "                               BETWEEN TO_DATE (SYSDATE, 'YYYY-MM-DD')\n" +
+            "                                   AND TO_DATE (SYSDATE, 'YYYY-MM-DD')\n" +
+            "                           )\n" +
+            "                  GROUP BY EC_DV \n" +
+            "                  UNION\n" +
+            "                  SELECT EC_CLPS_DV_CD as staff_gbn\n" +
+            "                    FROM ETCH005M\n" +
+            "                   WHERE NVL (USE_AYN, 'Y') <> 'N'   )\n" +
+            "      ORDER BY ODR";
 
     private static final String[] SYNTAX = {
             "SELECT", "DISTINCT", "INSERT", "UPDATE", "DELETE", "FROM", "WHERE",
@@ -55,7 +62,7 @@ public class SqlParser {
                 if(strList.isEmpty())
                     return;
 
-                strings = getStringsUntil(strList, new String[]{""}, "AND");
+                strings = getStringsUntil(strList, new String[]{""}, "AND|OR| ");
                 System.out.println("condition :");
                 for (String cur : strings)
                     System.out.println(cur.trim());
