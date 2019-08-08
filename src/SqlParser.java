@@ -30,13 +30,55 @@ public class SqlParser {
         List<String> strList = new LinkedList<>(Arrays.asList(SQL.split(" ")));
         switch (strList.get(0).toUpperCase()) {
             case "SELECT":
-                strList.remove(0);
-                for (String cur : getStringsUntil(strList, new String[]{"FROM"}, ","))
+                removeUntil(strList, new String[]{"SELECT"});
+                if(strList.isEmpty())
+                    return;
+
+                String[] strings = getStringsUntil(strList, new String[]{"FROM"}, ",");
+//                for (String cur : strings)
+//                    System.out.println(cur.trim());
+
+                removeUntil(strList, new String[]{"FROM"});
+                if(strList.isEmpty())
+                    return;
+
+                strings = getStringsUntil(strList, new String[]{"WHERE"}, ",");
+//                for (String cur : strings)
+//                    System.out.println(cur.trim());
+
+                removeUntil(strList, new String[]{"WHERE"});
+                if(strList.isEmpty())
+                    return;
+
+                strings = getStringsUntil(strList, new String[]{"ORDER BY", "GROUP BY"}, ",");
+                for (String cur : strings)
                     System.out.println(cur.trim());
+
+                removeUntil(strList, new String[]{"ORDER BY", "GROUP BY"});
+                if(strList.isEmpty())
+                    return;
                 break;
 
             default:
                 break;
+        }
+    }
+
+    private static void removeUntil(List<String> strList, String[] criteria) {
+        boolean breakFlag = false;
+        while (!breakFlag) {
+            for (String criterion : criteria) {
+                if(strList.isEmpty())
+                    return;
+
+                if (strList.get(0).equals(criterion)) {
+                    strList.remove(0);
+                    breakFlag = true;
+                    break;
+                } else {
+                    strList.remove(0);
+                }
+            }
         }
     }
 
