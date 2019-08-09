@@ -78,9 +78,24 @@ public class SqlParser {
         return columnList;
     }
 
+    private static List<String> getSelectTableList(String sql) {
+        Statement statement;
+        try {
+            statement = CCJSqlParserUtil.parse(sql);
+        } catch (JSQLParserException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        Select selectStatement = (Select) statement;
+        TablesNamesFinder tablesNamesFinder = new TablesNamesFinder();
+        List<String> tableList = tablesNamesFinder.getTableList(selectStatement);
+        return tableList;
+    }
+
     public static void main(String[] args) {
         try {
-            for (String cur : getSelectColumnList(SQL)) {
+            for (String cur : getSelectTableList(SQL)) {
                 System.out.println(cur);
             }
 
