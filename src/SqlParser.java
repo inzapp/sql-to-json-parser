@@ -59,7 +59,7 @@ public class SqlParser {
             "BY", "UNION", "ALL"
     };
 
-    private static List<String> selectColumns(String sql) {
+    private static List<String> getSelectColumnList(String sql) {
         Select select;
         try {
             select = (Select) CCJSqlParserUtil.parse(sql);
@@ -69,9 +69,9 @@ public class SqlParser {
         }
 
         assert select != null;
-        PlainSelect pl = (PlainSelect)select.getSelectBody();
+        PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
         List<String> columnList = new ArrayList<>();
-        for (SelectItem item : pl.getSelectItems()) {
+        for (SelectItem item : plainSelect.getSelectItems()) {
             System.out.println(item.toString());
             columnList.add(item.toString());
         }
@@ -80,12 +80,8 @@ public class SqlParser {
 
     public static void main(String[] args) {
         try {
-            String sqlStr = SQL;
-            Select select = (Select)CCJSqlParserUtil.parse(sqlStr);
-
-            PlainSelect pl = (PlainSelect)select.getSelectBody();
-            for (SelectItem item : pl.getSelectItems()) {
-                System.out.println(item.toString());
+            for (String cur : getSelectColumnList(SQL)) {
+                System.out.println(cur);
             }
 
             System.exit(1);
@@ -101,7 +97,7 @@ public class SqlParser {
             case "SELECT":
                 System.out.printf("method : %s\n\n", strList.get(0).toUpperCase());
                 removeUntil(strList, new String[]{"SELECT"});
-                if(strList.isEmpty())
+                if (strList.isEmpty())
                     return;
 
                 String[] strings = getStringsUntil(strList, new String[]{"FROM"}, ",");
@@ -111,7 +107,7 @@ public class SqlParser {
                 System.out.println();
 
                 removeUntil(strList, new String[]{"FROM"});
-                if(strList.isEmpty())
+                if (strList.isEmpty())
                     return;
 
                 strings = getStringsUntil(strList, new String[]{"WHERE"}, ",");
@@ -121,7 +117,7 @@ public class SqlParser {
                 System.out.println();
 
                 removeUntil(strList, new String[]{"WHERE"});
-                if(strList.isEmpty())
+                if (strList.isEmpty())
                     return;
 
                 strings = getStringsUntil(strList, new String[]{""}, "AND|OR| ");
@@ -140,7 +136,7 @@ public class SqlParser {
         boolean breakFlag = false;
         while (!breakFlag) {
             for (String criterion : criteria) {
-                if(strList.isEmpty())
+                if (strList.isEmpty())
                     return;
 
                 if (strList.get(0).equals(criterion)) {
