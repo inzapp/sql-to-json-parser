@@ -16,6 +16,7 @@ import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.util.TablesNamesFinder;
 
 
+import java.io.IOException;
 import java.util.List;
 
 public class SqlParser {
@@ -144,45 +145,6 @@ public class SqlParser {
         if (statement instanceof Delete) {
             Delete delete = (Delete) statement;
             parseDelete(delete);
-        }
-    }
-
-    private static void addQuote(Statement statement) {
-        try {
-            PlainSelect plainSelect = (PlainSelect) statement;
-            Expression expression = plainSelect.getWhere();
-            expression.accept(new ExpressionVisitorAdapter() {
-                @Override
-                protected void visitBinaryExpression(BinaryExpression expr) {
-                    if (expr instanceof ComparisonOperator) {
-                        String right = expr.getRightExpression().toString();
-                        char[] iso = right.toCharArray();
-                        if (iso[0] == '\'' && iso[iso.length - 1] == '\'') {
-                            StringBuilder builder = new StringBuilder();
-                            for (int i = 1; i < iso.length - 1; ++i)
-                                builder.append(iso[i]);
-                            String added = builder.toString().replaceAll("'", "''");
-                            builder = new StringBuilder();
-                            builder.append("'").append(added).append("'");
-                            StringBuilder finalBuilder = builder;
-                            expr.setRightExpression(new BinaryExpression() {
-                                @Override
-                                public String getStringExpression() {
-                                    return finalBuilder.toString();
-                                }
-
-                                @Override
-                                public void accept(ExpressionVisitor expressionVisitor) {
-
-                                }
-                            });
-                        }
-                    }
-                    super.visitBinaryExpression(expr);
-                }
-            });
-        } catch (Exception e) {
-            // empty
         }
     }
 
