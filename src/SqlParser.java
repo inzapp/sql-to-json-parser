@@ -1,4 +1,5 @@
 import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.parser.CCJSqlParser;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.*;
@@ -59,16 +60,8 @@ public class SqlParser {
             "BY", "UNION", "ALL"
     };
 
-    private static List<String> getSelectColumnList(String sql) {
-        Select select;
-        try {
-            select = (Select) CCJSqlParserUtil.parse(sql);
-        } catch (JSQLParserException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        assert select != null;
+    private static List<String> getSelectColumnList(Statement statement) {
+        Select select = (Select) statement;
         PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
         List<String> columnList = new ArrayList<>();
         for (SelectItem item : plainSelect.getSelectItems()) {
@@ -78,15 +71,7 @@ public class SqlParser {
         return columnList;
     }
 
-    private static List<String> getSelectTableList(String sql) {
-        Statement statement;
-        try {
-            statement = CCJSqlParserUtil.parse(sql);
-        } catch (JSQLParserException e) {
-            e.printStackTrace();
-            return null;
-        }
-
+    private static List<String> getSelectTableList(Statement statement) {
         Select selectStatement = (Select) statement;
         TablesNamesFinder tablesNamesFinder = new TablesNamesFinder();
         List<String> tableList = tablesNamesFinder.getTableList(selectStatement);
@@ -94,17 +79,19 @@ public class SqlParser {
     }
 
     public static void main(String[] args) {
+        Statement statement;
         try {
-            for (String cur : getSelectTableList(SQL)) {
-                System.out.println(cur);
-            }
-
-            System.exit(1);
-            Statement statement = CCJSqlParserUtil.parse(SQL);
-            Select convertedStatement = (Select) statement;
+            statement = CCJSqlParserUtil.parse(SQL);
         } catch (JSQLParserException e) {
             e.printStackTrace();
+            return;
         }
+
+        for (String cur : getSelectColumnList(statement))
+            System.out.println(cur);
+
+        for (String cur : getSelectTableList(statement))
+            System.out.println(cur);
         System.exit(1);
 
         List<String> strList = new LinkedList<>(Arrays.asList(SQL.split(" ")));
