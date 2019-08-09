@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3efaa97-ec05-4093-9248-3ac33d751bec" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/jsqlparser_2_0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql-parser.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sql-parser.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SqlParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SqlParser.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +28,10 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../lib/jsqlparser-2.0.jar!/" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
