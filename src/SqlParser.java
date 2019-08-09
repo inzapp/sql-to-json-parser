@@ -1,5 +1,9 @@
 import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.expression.BinaryExpression;
 import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.ExpressionVisitor;
+import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
+import net.sf.jsqlparser.expression.operators.relational.ComparisonOperator;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
@@ -83,7 +87,7 @@ public class SqlParser {
             "anw_nm='',\n" +
             "anw_id='',\n" +
             "ans_dt='',\n" +
-            "txt = '<p>asdfaasd~!@#%@W%sdfsdf</p>',\n" +
+            "txt = '<p>'asdfaasd~!@#%@W%sdfsdf</p>',\n" +
             "atc_fl='',\n" +
             "titl='테스트'\n" +
             "WHERE reg_no=24831;";
@@ -103,7 +107,7 @@ public class SqlParser {
             "ETCH009M\n" +
             "WHERE PK_SEQ = \"2019-00370\"";
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 //        SELECT_SQL.replaceAll("'", "''");
 //        INSERT_SQL.replaceAll("'", "''");
 //        UPDATE_SQL.replaceAll("'", "''");
@@ -114,9 +118,17 @@ public class SqlParser {
         parseSQL(DELETE_SQL);
     }
 
-    private static void parseSQL(String sql) throws JSQLParserException {
-        Statement statement = CCJSqlParserUtil.parse(sql);
-//        System.out.println("\n==============sql: " + sql);
+    private static void parseSQL(String sql) {
+        Statement statement;
+        try {
+            statement = CCJSqlParserUtil.parse(sql);
+        } catch (JSQLParserException e) {
+//            e.printStackTrace();
+            System.out.println("\n==============sql:\n" + "syntax error");
+            return;
+        }
+//        addQuote(statement);
+        System.out.println("\n==============sql:\n" + sql);
         if (statement instanceof Select) {
             Select select = (Select) statement;
             parseSelect(select);
@@ -132,6 +144,45 @@ public class SqlParser {
         if (statement instanceof Delete) {
             Delete delete = (Delete) statement;
             parseDelete(delete);
+        }
+    }
+
+    private static void addQuote(Statement statement) {
+        try {
+            PlainSelect plainSelect = (PlainSelect) statement;
+            Expression expression = plainSelect.getWhere();
+            expression.accept(new ExpressionVisitorAdapter() {
+                @Override
+                protected void visitBinaryExpression(BinaryExpression expr) {
+                    if (expr instanceof ComparisonOperator) {
+                        String right = expr.getRightExpression().toString();
+                        char[] iso = right.toCharArray();
+                        if (iso[0] == '\'' && iso[iso.length - 1] == '\'') {
+                            StringBuilder builder = new StringBuilder();
+                            for (int i = 1; i < iso.length - 1; ++i)
+                                builder.append(iso[i]);
+                            String added = builder.toString().replaceAll("'", "''");
+                            builder = new StringBuilder();
+                            builder.append("'").append(added).append("'");
+                            StringBuilder finalBuilder = builder;
+                            expr.setRightExpression(new BinaryExpression() {
+                                @Override
+                                public String getStringExpression() {
+                                    return finalBuilder.toString();
+                                }
+
+                                @Override
+                                public void accept(ExpressionVisitor expressionVisitor) {
+
+                                }
+                            });
+                        }
+                    }
+                    super.visitBinaryExpression(expr);
+                }
+            });
+        } catch (Exception e) {
+            // empty
         }
     }
 
