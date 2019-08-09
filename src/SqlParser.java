@@ -21,13 +21,13 @@ import java.util.List;
 
 public class SqlParser {
 
-//    public static final String SELECT_SQL = "select user_name,age,email from t_user " +
+//    public static String SELECT_SQL = "select user_name,age,email from t_user " +
 //            "where user_id > 16546 group by age order by user_name desc";
-//    public static final String INSERT_SQL = "insert into t_order (id,user_id,sum) values ('EF1243',12,23.6)";
-//    public static final String UPDATE_SQL = "update person set first_name = 'Fred' where last_name ='Wilson'";
-//    public static final String DELETE_SQL = "delete from t_item where id = 'AF3434'";
+//    public static String INSERT_SQL = "insert into t_order (id,user_id,sum) values ('EF1243',12,23.6)";
+//    public static String UPDATE_SQL = "update person set first_name = 'Fred' where last_name ='Wilson'";
+//    public static String DELETE_SQL = "delete from t_item where id = 'AF3434'";
 
-//    private static final String SELECT_SQL = "SELECT\n" +
+//    private static String SELECT_SQL = "SELECT\n" +
 //            "EC_CLPS_DV_CD as STAFF_GBN,\n" +
 //            "EC_NM as STAFF_CLASS,\n" +
 //            "EC_GRP as ORG_STAFF_GBN,\n" +
@@ -54,7 +54,7 @@ public class SqlParser {
 //            "WHERE NVL(USE_AYN,'Y')<>'N')\n" +
 //            "ORDER BY ODR";
 
-    private static final String SELECT_SQL = "SELECT\n" +
+    private static String SELECT_SQL = "SELECT\n" +
             "REG_NO AS REGIS_SEQNO,\n" +
             "to_char(REG_DTM,'yyyy-MM-dd') AS REGIS_DT,\n" +
             "to_char(REG_DTM,'HH24miss') AS REGIS_TM,\n" +
@@ -74,7 +74,7 @@ public class SqlParser {
             "FROM ETCH002M\n" +
             "WHERE MASKING_YB = 'Y'";
 
-    private static final String INSERT_SQL = "INSERT INTO etob004m\n" +
+    private static String INSERT_SQL = "INSERT INTO etob004m\n" +
             "(tsk_no,dept_cd,tsk_dv_cd,tsk_nm,oppb_gd_cd,txt,stt_dtm,\n" +
             "end_dtm,rgr_id,reg_dtm,utur_id,updt_dtm\n" +
             ")\n" +
@@ -82,13 +82,13 @@ public class SqlParser {
             "TO_DATE('2019-08-08 18:00:00','yyyy-MM-dd HH24:mi:ss'),'1507030',SYSDATE,'1507030',SYSDATE\n" +
             ")";
 
-    private static final String UPDATE_SQL = "UPDATE etch002m\n" +
+    private static String UPDATE_SQL = "UPDATE etch002m\n" +
             "SET updt_dtm=SYSDATE,\n" +
             "utur_id=0912026,\n" +
             "anw_nm='',\n" +
             "anw_id='',\n" +
             "ans_dt='',\n" +
-            "txt = '<p>'asdfaasd~!@#%@W%sdfsdf</p>',\n" +
+            "txt = '<p>asdfaasd~!@#%@W%sdfsdf</p>',\n" +
             "atc_fl='',\n" +
             "titl='테스트'\n" +
             "WHERE reg_no=24831;";
@@ -104,15 +104,18 @@ public class SqlParser {
 //            "titl ='테스트'\n" +
 //            "WHERE reg_no = 24831;";
 
-    private static final String DELETE_SQL = "DELETE FROM\n" +
-            "ETCH009M\n" +
-            "WHERE PK_SEQ = \"2019-00370\"";
+//    private static String DELETE_SQL = "DELETE FROM\n" +
+//            "ETCH009M\n" +
+//            "WHERE PK_SEQ = '2019-00370'";
+
+    private static String DELETE_SQL = "DELETE FROM ETCH006M \n" +
+            "WHERE EMP_NO IN ('123', '124', '125', '126', '127', '128')";
 
     public static void main(String[] args) {
-//        SELECT_SQL.replaceAll("'", "''");
-//        INSERT_SQL.replaceAll("'", "''");
-//        UPDATE_SQL.replaceAll("'", "''");
-//        DELETE_SQL.replaceAll("'", "''");
+//        SELECT_SQL = SELECT_SQL.replaceAll("'", "''");
+//        INSERT_SQL = INSERT_SQL.replaceAll("'", "''");
+//        UPDATE_SQL = UPDATE_SQL.replaceAll("'", "'");
+//        DELETE_SQL = DELETE_SQL.replaceAll("'", "''");
         parseSQL(SELECT_SQL);
         parseSQL(INSERT_SQL);
         parseSQL(UPDATE_SQL);
