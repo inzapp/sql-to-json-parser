@@ -12,7 +12,6 @@ import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.util.TablesNamesFinder;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Attr;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -76,6 +75,7 @@ public class SqlParser {
             statement = CCJSqlParserUtil.parse(sql);
         } catch (JSQLParserException e) {
             // sql parse failure
+//            e.printStackTrace();
             return pRes.SQL_SYNTAX_ERROR;
         }
 
@@ -97,7 +97,6 @@ public class SqlParser {
 
         // return json string with indent
         try {
-            assert json != null;
             return json.toString(4);
         } catch (JSONException e) {
             return null;
@@ -190,14 +189,14 @@ public class SqlParser {
         List<String> columnNameList = new ArrayList<>();
         if (columnList != null) {
             columnList.forEach(column -> columnNameList.add(column.getColumnName()));
-            putToJson(json, Attribute.COLUMN, columnList.toString());
+            putToJson(json, Attribute.COLUMN, columnNameList.toString());
         }
 
         // add table
         List<Table> tableList = update.getTables();
         List<String> tableNameList = new ArrayList<>();
         tableList.forEach(table -> tableNameList.add(table.getName()));
-        putToJson(json, Attribute.TABLE, tableList.toString());
+        putToJson(json, Attribute.TABLE, tableNameList.toString());
 
         // add value
         List<Expression> expressions = update.getExpressions();

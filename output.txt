@@ -1,5 +1,1 @@
-{
-    "crud": "insert",
-    "value": "['TESTVALUE']",
-    "table": "TABLENAME"
-}
+sql syntax error
