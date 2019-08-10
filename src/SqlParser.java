@@ -12,6 +12,7 @@ import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.util.TablesNamesFinder;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Attr;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -69,13 +70,16 @@ public class SqlParser {
     }
 
     private static String sqlToJsonString(String sql) {
+        // parse sql
         Statement statement;
         try {
             statement = CCJSqlParserUtil.parse(sql);
         } catch (JSQLParserException e) {
+            // sql parse failure
             return pRes.SQL_SYNTAX_ERROR;
         }
 
+        // convert sql string to json
         JSONObject json = new JSONObject();
         if (statement instanceof Insert) {
             Insert insert = (Insert) statement;
@@ -91,6 +95,7 @@ public class SqlParser {
             json = parseDelete(delete);
         }
 
+        // return json string with indent
         try {
             assert json != null;
             return json.toString(4);
@@ -175,59 +180,63 @@ public class SqlParser {
         return json;
     }
 
-    private static JSONObject parseDelete(Delete delete) {
-        Table table = delete.getTable();
-        String tableName = table.getName();
-
-        Expression where = delete.getWhere();
-        String whereCondition = where.toString();
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put(Attribute.CRUD, Attribute.DELETE);
-            json.put(Attribute.TABLE, tableName);
-            json.put(Attribute.WHERE, whereCondition);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-
-
     private static JSONObject parseUpdate(Update update) {
+        // add crud
+        JSONObject json = new JSONObject();
+        putToJson(json, Attribute.CRUD, Attribute.UPDATE);
+
+        // add column
         List<Column> columnList = update.getColumns();
         List<String> columnNameList = new ArrayList<>();
-        if (columnList != null)
+        if (columnList != null) {
             columnList.forEach(column -> columnNameList.add(column.getColumnName()));
+            putToJson(json, Attribute.COLUMN, columnList.toString());
+        }
 
+        // add table
         List<Table> tableList = update.getTables();
         List<String> tableNameList = new ArrayList<>();
         tableList.forEach(table -> tableNameList.add(table.getName()));
+        putToJson(json, Attribute.TABLE, tableList.toString());
 
+        // add value
         List<Expression> expressions = update.getExpressions();
         List<String> valueList = new ArrayList<>();
         expressions.forEach(expression -> valueList.add(expression.toString()));
+        putToJson(json, Attribute.VALUE, valueList.toString());
 
+        // add where
         Expression whereExpression = update.getWhere();
-        String whereCondition = whereExpression.toString();
+        if (whereExpression != null)
+            putToJson(json, Attribute.WHERE, whereExpression.toString());
 
+        return json;
+    }
+
+    private static JSONObject parseDelete(Delete delete) {
+        // add crud
         JSONObject json = new JSONObject();
-        try {
-            json.put(Attribute.CRUD, Attribute.UPDATE);
-            json.put(Attribute.COLUMN, columnNameList);
-            json.put(Attribute.TABLE, tableNameList);
-            json.put(Attribute.VALUE, valueList);
-            json.put(Attribute.WHERE, whereCondition);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
+        putToJson(json, Attribute.CRUD, Attribute.DELETE);
+
+        // add table
+        Table table = delete.getTable();
+        putToJson(json, Attribute.TABLE, table.toString());
+
+        // add where
+        Expression whereExpression = delete.getWhere();
+        if(whereExpression != null)
+            putToJson(json, Attribute.WHERE, whereExpression.toString());
+
         return json;
     }
 
 
     public static JSONObject parseSelectJoin(Statement statement) {
+        // add crud
+        JSONObject json = new JSONObject();
+        putToJson(json, Attribute.CRUD, Attribute.SELECT);
+
+        // add join, join expression
         Select select = (Select) statement;
         PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
         List<Join> joins = plainSelect.getJoins();
@@ -238,17 +247,10 @@ public class SqlParser {
                 joinList.add(join.toString());
                 joinExpressionList.add(join.getOnExpression().toString());
             }
+            putToJson(json, Attribute.JOIN, joinList.toString());
+            putToJson(json, Attribute.JOIN_EXPRESSION, joinExpressionList.toString());
         }
 
-        JSONObject json = new JSONObject();
-        try {
-            json.put(Attribute.CRUD, Attribute.SELECT);
-            json.put(Attribute.JOIN, joinList);
-            json.put(Attribute.JOIN_EXPRESSION, joinExpressionList);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
         return json;
     }
 
