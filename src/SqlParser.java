@@ -13,7 +13,6 @@ import net.sf.jsqlparser.util.TablesNamesFinder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +39,6 @@ class pRes {
 }
 
 public class SqlParser {
-
-
 //    public static String SELECT_SQL = "select user_name,age,email from t_user " +
 //            "where user_id > 16546 group by age order by user_name desc";
 //    public static String INSERT_SQL = "insert into t_order (id,user_id,sum) values ('EF1243',12,23.6)";
