@@ -1,9 +1,5 @@
 import net.sf.jsqlparser.JSQLParserException;
-import net.sf.jsqlparser.expression.BinaryExpression;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.ExpressionVisitor;
-import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
-import net.sf.jsqlparser.expression.operators.relational.ComparisonOperator;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
@@ -14,12 +10,37 @@ import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.util.TablesNamesFinder;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-
-import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
+
+class Attribute {
+    static final String INSERT = "insert";
+    static final String SELECT = "select";
+    static final String UPDATE = "update";
+    static final String DELETE = "delete";
+    static final String CRUD = "crud";
+    static final String COLUMN = "column";
+    static final String TABLE = "table";
+    static final String WHERE = "where";
+    static final String VALUE = "value";
+    static final String GROUP_BY = "group_by";
+    static final String ORDER_BY = "order_by";
+    static final String JOIN = "join";
+    static final String JOIN_EXPRESSION = "join_expression";
+}
+
+class pRes {
+    static final String OUTPUT_FILE_NAME = "parsed.txt";
+}
+
 public class SqlParser {
+
 
 //    public static String SELECT_SQL = "select user_name,age,email from t_user " +
 //            "where user_id > 16546 group by age order by user_name desc";
@@ -112,13 +133,9 @@ public class SqlParser {
             "WHERE EMP_NO IN ('123', '124', '125', '126', '127', '128')";
 
     public static void main(String[] args) {
-//        SELECT_SQL = SELECT_SQL.replaceAll("'", "''");
-//        INSERT_SQL = INSERT_SQL.replaceAll("'", "''");
-//        UPDATE_SQL = UPDATE_SQL.replaceAll("'", "'");
-//        DELETE_SQL = DELETE_SQL.replaceAll("'", "''");
-        parseSQL(SELECT_SQL);
-        parseSQL(INSERT_SQL);
-        parseSQL(UPDATE_SQL);
+//        parseSQL(SELECT_SQL);
+//        parseSQL(INSERT_SQL);
+//        parseSQL(UPDATE_SQL);
         parseSQL(DELETE_SQL);
     }
 
@@ -127,44 +144,57 @@ public class SqlParser {
         try {
             statement = CCJSqlParserUtil.parse(sql);
         } catch (JSQLParserException e) {
-//            e.printStackTrace();
             System.out.println("\n==============sql:\n" + "syntax error");
             return;
         }
-//        addQuote(statement);
+
         System.out.println("\n==============sql:\n" + sql);
+        JSONObject json = new JSONObject();
         if (statement instanceof Select) {
             Select select = (Select) statement;
-            parseSelect(select);
-        }
-        if (statement instanceof Update) {
+            json = parseSelect(select);
+        } else if (statement instanceof Update) {
             Update update = (Update) statement;
-            parseUpdate(update);
-        }
-        if (statement instanceof Insert) {
+            json = parseUpdate(update);
+        } else if (statement instanceof Insert) {
             Insert insert = (Insert) statement;
-            parseInsert(insert);
-        }
-        if (statement instanceof Delete) {
+            json = parseInsert(insert);
+        } else if (statement instanceof Delete) {
             Delete delete = (Delete) statement;
-            parseDelete(delete);
+            json = parseDelete(delete);
         }
+        saveJsonToFile(json);
     }
 
-    private static void parseDelete(Delete delete) {
+    private static JSONObject parseDelete(Delete delete) {
         System.out.println("\ntable: ");
         Table table = delete.getTable();
-        System.out.print(table.getName());
+        String tableName = table.getName();
+        System.out.print(tableName);
 
         Expression where = delete.getWhere();
-        System.out.println("\nWhere: " + where.toString());
+        String whereCondition = where.toString();
+        System.out.println("\nWhere: " + whereCondition);
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put(Attribute.CRUD, Attribute.DELETE);
+            json.put(Attribute.TABLE, tableName);
+            json.put(Attribute.WHERE, whereCondition);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
-    private static void parseInsert(Insert insert) {
+    private static JSONObject parseInsert(Insert insert) {
         System.out.println("\ncolumn: ");
-        List<Column> columns = insert.getColumns();
-        if (columns != null) {
-            columns.forEach(column -> System.out.println(column.getColumnName() + " "));
+        List<Column> columnList = insert.getColumns();
+        List<String> columnNameList = new ArrayList<>();
+        if (columnList != null) {
+            columnList.forEach(column -> columnNameList.add(column.getColumnName()));
+            columnList.forEach(column -> System.out.println(column.getColumnName() + " "));
         }
 
         System.out.println("\ntable: ");
@@ -172,39 +202,71 @@ public class SqlParser {
         System.out.print(tableName);
 
         System.out.println("\nvalue:");
-        List<Expression> insertValueExpressionList = ((ExpressionList) insert.getItemsList())
-                .getExpressions();
+        List<Expression> insertValueExpressionList = ((ExpressionList) insert.getItemsList()).getExpressions();
+        List<String> insertValueList = new ArrayList<>();
+        insertValueExpressionList.forEach(expression -> insertValueList.add(expression.toString()));
         insertValueExpressionList.forEach(expression -> System.out.println(expression.toString() + " "));
         System.out.println();
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put(Attribute.CRUD, Attribute.INSERT);
+            json.put(Attribute.TABLE, tableName);
+            json.put(Attribute.VALUE, insertValueList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
-    private static void parseUpdate(Update update) {
+    private static JSONObject parseUpdate(Update update) {
         System.out.println("\ncolumn: ");
-        List<Column> columns = update.getColumns();
-        if (columns != null) {
-            columns.forEach(column -> System.out.println(column.getColumnName() + " "));
+        List<Column> columnList = update.getColumns();
+        List<String> columnNameList = new ArrayList<>();
+        if (columnList != null) {
+            columnList.forEach(column -> columnNameList.add(column.getColumnName()));
+            columnList.forEach(column -> System.out.println(column.getColumnName() + " "));
         }
 
         System.out.println("\ntable: ");
-        List<Table> tables = update.getTables();
-        tables.forEach(table -> System.out.println(table.getName() + " "));
+        List<Table> tableList = update.getTables();
+        List<String> tableNameList = new ArrayList<>();
+        tableList.forEach(table -> tableNameList.add(table.getName()));
+        tableList.forEach(table -> System.out.println(table.getName() + " "));
 
         System.out.println("\nvalue: ");
         List<Expression> expressions = update.getExpressions();
+        List<String> valueList = new ArrayList<>();
+        expressions.forEach(expression -> valueList.add(expression.toString()));
         expressions.forEach(expression -> System.out.println(expression.toString() + " "));
 
         Expression whereExpression = update.getWhere();
-        System.out.println("\nwhere:\n " + whereExpression);
+        String whereCondition = whereExpression.toString();
+        System.out.println("\nwhere:\n " + whereCondition);
         System.out.println();
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put(Attribute.CRUD, Attribute.UPDATE);
+            json.put(Attribute.TABLE, tableNameList);
+            json.put(Attribute.VALUE, valueList);
+            json.put(Attribute.WHERE, whereCondition);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
-    private static void parseSelect(Select select) {
+    private static JSONObject parseSelect(Select select) {
         System.out.print("\ncolumn: ");
         PlainSelect plain = (PlainSelect) select.getSelectBody();
         List<SelectItem> selectItems = plain.getSelectItems();
+        List<String> columnList = new ArrayList<>();
         if (selectItems != null) {
-            for (int i = 0; i < selectItems.size(); i++) {
-                SelectItem selectItem = selectItems.get(i);
+            for (SelectItem selectItem : selectItems) {
+                columnList.add(selectItem.toString());
                 System.out.println(selectItem.toString() + " ");
             }
         }
@@ -215,38 +277,78 @@ public class SqlParser {
         tableList.forEach(System.out::println);
 
         Expression whereExpression = plain.getWhere();
-        System.out.print("\nwhere: " + whereExpression.toString());
+        String whereCondition = whereExpression.toString();
+        System.out.print("\nwhere: " + whereCondition);
 
         System.out.print("\ngroup by: ");
         GroupByElement groupByElement = plain.getGroupBy();
+        List<String> groupByList = new ArrayList<>();
         if (groupByElement != null) {
             List<Expression> groupByExpressions = groupByElement.getGroupByExpressions();
             if (groupByExpressions != null) {
-                groupByExpressions
-                        .forEach(groupByExpression -> System.out.println(groupByExpression.toString()));
+                groupByExpressions.forEach(groupByExpression -> System.out.println(groupByExpression.toString()));
+                groupByExpressions.forEach(groupByExpression -> groupByList.add(groupByExpression.toString()));
             }
         }
 
         System.out.print("\norder by: ");
         List<OrderByElement> orderByElementList = plain.getOrderByElements();
+        List<String> orderByList = new ArrayList<>();
         if (orderByElementList != null) {
-            orderByElementList
-                    .forEach(orderByElement -> System.out.println(orderByElement.getExpression().toString()));
+            orderByElementList.forEach(orderByElement -> System.out.println(orderByElement.getExpression().toString()));
+            orderByElementList.forEach(orderByElement -> orderByList.add(orderByElement.getExpression().toString()));
         }
         System.out.println();
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put(Attribute.CRUD, Attribute.SELECT);
+            json.put(Attribute.COLUMN, columnList);
+            json.put(Attribute.TABLE, tableList);
+            json.put(Attribute.WHERE, whereCondition);
+            json.put(Attribute.GROUP_BY, groupByList);
+            json.put(Attribute.ORDER_BY, orderByList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
-    public static void parseSelectJoin(String sql) throws JSQLParserException {
+    public static JSONObject parseSelectJoin(String sql) throws JSQLParserException {
         Statement statement = CCJSqlParserUtil.parse(sql);
         Select select = (Select) statement;
         PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
-        List<Join> joinList = plainSelect.getJoins();
-        if (joinList != null) {
-            for (int i = 0; i < joinList.size(); i++) {
-                Join join = joinList.get(i);
+        List<Join> joins = plainSelect.getJoins();
+        List<String> joinList = new ArrayList<>();
+        List<String> joinExpressionList = new ArrayList<>();
+        if (joins != null) {
+            for (Join join : joins) {
                 System.out.println("join: " + join.toString());
                 System.out.println("join expression: " + join.getOnExpression().toString());
+                joinList.add(join.toString());
+                joinExpressionList.add(join.getOnExpression().toString());
             }
+        }
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put(Attribute.CRUD, Attribute.SELECT);
+            json.put(Attribute.JOIN, joinList);
+            json.put(Attribute.JOIN_EXPRESSION, joinExpressionList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+    private static void saveJsonToFile(JSONObject json) {
+        try {
+            FileOutputStream fos = new FileOutputStream(pRes.OUTPUT_FILE_NAME);
+            fos.write(json.toString().getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
