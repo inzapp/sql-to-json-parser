@@ -1,0 +1,8 @@
+{
+    "crud": "select",
+    "column": ["*"],
+    "group_by": [],
+    "order_by": [],
+    "where": "",
+    "table": ["TAB"]
+}
