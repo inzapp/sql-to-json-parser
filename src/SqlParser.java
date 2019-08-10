@@ -77,25 +77,102 @@ public class SqlParser {
         }
 
         JSONObject json = new JSONObject();
-        if (statement instanceof Select) {
+        if (statement instanceof Insert) {
+            Insert insert = (Insert) statement;
+            json = parseInsert(insert);
+        } else if (statement instanceof Select) {
             Select select = (Select) statement;
             json = parseSelect(select);
         } else if (statement instanceof Update) {
             Update update = (Update) statement;
             json = parseUpdate(update);
-        } else if (statement instanceof Insert) {
-            Insert insert = (Insert) statement;
-            json = parseInsert(insert);
         } else if (statement instanceof Delete) {
             Delete delete = (Delete) statement;
             json = parseDelete(delete);
         }
 
         try {
+            assert json != null;
             return json.toString(4);
         } catch (JSONException e) {
             return null;
         }
+    }
+
+    private static JSONObject parseInsert(Insert insert) {
+        // add crud
+        JSONObject json = new JSONObject();
+        putToJson(json, Attribute.CRUD, Attribute.INSERT);
+
+        // add column
+        List<Column> columnList = insert.getColumns();
+        List<String> columnNameList = new ArrayList<>();
+        if (columnList != null) {
+            columnList.forEach(column -> columnNameList.add(column.getColumnName()));
+            putToJson(json, Attribute.COLUMN, columnNameList.toString());
+        }
+
+        // add table
+        String tableName = insert.getTable().getName();
+        if (tableName != null)
+            putToJson(json, Attribute.TABLE, tableName);
+
+        // add value
+        List<Expression> insertValueExpressionList = ((ExpressionList) insert.getItemsList()).getExpressions();
+        List<String> insertValueList = new ArrayList<>();
+        insertValueExpressionList.forEach(expression -> insertValueList.add(expression.toString()));
+        if (!insertValueList.isEmpty())
+            putToJson(json, Attribute.VALUE, insertValueList.toString());
+
+        return json;
+    }
+
+    private static JSONObject parseSelect(Select select) {
+        // add crud
+        JSONObject json = new JSONObject();
+        putToJson(json, Attribute.CRUD, Attribute.SELECT);
+
+        // add column
+        PlainSelect plain = (PlainSelect) select.getSelectBody();
+        List<SelectItem> selectItems = plain.getSelectItems();
+        List<String> columnList = new ArrayList<>();
+        if (selectItems != null) {
+            for (SelectItem selectItem : selectItems)
+                columnList.add(selectItem.toString());
+            putToJson(json, Attribute.COLUMN, columnList.toString());
+        }
+
+        // add table
+        TablesNamesFinder tablesNamesFinder = new TablesNamesFinder();
+        List<String> tableList = tablesNamesFinder.getTableList(select);
+        if (!tableList.isEmpty())
+            putToJson(json, Attribute.TABLE, tableList.toString());
+
+        // add where
+        Expression whereExpression = plain.getWhere();
+        if (whereExpression != null)
+            putToJson(json, Attribute.WHERE, whereExpression.toString());
+
+        // add group by
+        GroupByElement groupByElement = plain.getGroupBy();
+        List<String> groupByList = new ArrayList<>();
+        if (groupByElement != null) {
+            List<Expression> groupByExpressions = groupByElement.getGroupByExpressions();
+            if (groupByExpressions != null) {
+                groupByExpressions.forEach(groupByExpression -> groupByList.add(groupByExpression.toString()));
+                putToJson(json, Attribute.GROUP_BY, groupByList.toString());
+            }
+        }
+
+        // add order by
+        List<OrderByElement> orderByElementList = plain.getOrderByElements();
+        List<String> orderByList = new ArrayList<>();
+        if (orderByElementList != null) {
+            orderByElementList.forEach(orderByElement -> orderByList.add(orderByElement.getExpression().toString()));
+            putToJson(json, Attribute.ORDER_BY, orderByList.toString());
+        }
+
+        return json;
     }
 
     private static JSONObject parseDelete(Delete delete) {
@@ -117,29 +194,6 @@ public class SqlParser {
         return json;
     }
 
-    private static JSONObject parseInsert(Insert insert) {
-        List<Column> columnList = insert.getColumns();
-        List<String> columnNameList = new ArrayList<>();
-        if (columnList != null)
-            columnList.forEach(column -> columnNameList.add(column.getColumnName()));
-
-        String tableName = insert.getTable().getName();
-
-        List<Expression> insertValueExpressionList = ((ExpressionList) insert.getItemsList()).getExpressions();
-        List<String> insertValueList = new ArrayList<>();
-        insertValueExpressionList.forEach(expression -> insertValueList.add(expression.toString()));
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put(Attribute.CRUD, Attribute.INSERT);
-            json.put(Attribute.TABLE, tableName);
-            json.put(Attribute.VALUE, insertValueList);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return json;
-    }
 
     private static JSONObject parseUpdate(Update update) {
         List<Column> columnList = update.getColumns();
@@ -172,53 +226,6 @@ public class SqlParser {
         return json;
     }
 
-    private static JSONObject parseSelect(Select select) {
-        PlainSelect plain = (PlainSelect) select.getSelectBody();
-        List<SelectItem> selectItems = plain.getSelectItems();
-        List<String> columnList = new ArrayList<>();
-        if (selectItems != null) {
-            for (SelectItem selectItem : selectItems)
-                columnList.add(selectItem.toString());
-        }
-
-        TablesNamesFinder tablesNamesFinder = new TablesNamesFinder();
-        List<String> tableList = tablesNamesFinder.getTableList(select);
-
-        Expression whereExpression = plain.getWhere();
-        String whereCondition = "";
-        try {
-            whereExpression.toString();
-        }catch(Exception e) {
-            // empty
-        }
-
-        GroupByElement groupByElement = plain.getGroupBy();
-        List<String> groupByList = new ArrayList<>();
-        if (groupByElement != null) {
-            List<Expression> groupByExpressions = groupByElement.getGroupByExpressions();
-            if (groupByExpressions != null)
-                groupByExpressions.forEach(groupByExpression -> groupByList.add(groupByExpression.toString()));
-        }
-
-        List<OrderByElement> orderByElementList = plain.getOrderByElements();
-        List<String> orderByList = new ArrayList<>();
-        if (orderByElementList != null)
-            orderByElementList.forEach(orderByElement -> orderByList.add(orderByElement.getExpression().toString()));
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put(Attribute.CRUD, Attribute.SELECT);
-            json.put(Attribute.COLUMN, columnList);
-            json.put(Attribute.TABLE, tableList);
-            json.put(Attribute.WHERE, whereCondition);
-            json.put(Attribute.GROUP_BY, groupByList);
-            json.put(Attribute.ORDER_BY, orderByList);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return json;
-    }
 
     public static JSONObject parseSelectJoin(Statement statement) {
         Select select = (Select) statement;
@@ -243,6 +250,14 @@ public class SqlParser {
             return null;
         }
         return json;
+    }
+
+    private static void putToJson(JSONObject json, String key, String value) {
+        try {
+            json.put(key, value);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void saveFile(String jsonString) {

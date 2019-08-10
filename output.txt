@@ -1,8 +1,5 @@
 {
-    "crud": "select",
-    "column": ["*"],
-    "group_by": [],
-    "order_by": [],
-    "where": "",
-    "table": ["TAB"]
+    "crud": "insert",
+    "value": "['TESTVALUE']",
+    "table": "TABLENAME"
 }
