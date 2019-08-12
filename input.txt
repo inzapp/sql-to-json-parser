@@ -1,7 +1,2 @@
-INSERT INTO etob015m
-            (pk_seq, emp_no, orgz_cd, cnn_eqpm, cnn_ip_addr, client_typ,
-             cnn_env, mnu_nm, txt, emp_nm, reg_dtm, rgr_id, updt_dtm, utur_id
-            )
-     VALUES (esms_action_history_room_seq.NEXTVAL, '1507030', 'success', 'PC', '0:0:0:0:0:0:0:1', 'Chrome',
-             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36', 'append > s', 's', 'y', SYSDATE, '1507030', NULL, NULL
-            )
+DELETE FROM ETCH006M 
+       WHERE EMP_NO IN ('123', '124', '125', '126', '127', '128')

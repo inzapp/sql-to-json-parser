@@ -1,1 +1,5 @@
-sql syntax error
+{
+    "crud": "delete",
+    "where": "EMP_NO IN ('123', '124', '125', '126', '127', '128')",
+    "table": "ETCH006M"
+}
