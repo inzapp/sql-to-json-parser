@@ -1,0 +1,2 @@
+DELETE FROM ETCH006M 
+       WHERE EMP_NO IN ('123', '124', '125', '126', '127', '128')
