@@ -19,5 +19,5 @@ SELECT
                                    AND TO_DATE (SYSDATE, 'YYYY-MM-DD')
                            )
                   GROUP BY EC_DV
-                     )
+                    )
       ORDER BY ODR

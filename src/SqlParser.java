@@ -292,10 +292,8 @@ public class SqlParser {
 
     private static void putToJson(JSONObject json, String key, String value) {
         try {
-            System.out.println(value);
             if (hasSubQuery(value) && !key.equals(Attribute.CRUD)) {
                 String subQuery = extractSubQuery(value);
-                System.out.println(subQuery);
                 json.put(key, new JSONObject(sqlToJsonString(subQuery)));
             } else
                 json.put(key, value);
