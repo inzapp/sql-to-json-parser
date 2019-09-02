@@ -20,21 +20,22 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 class Attribute {
-    static final String INSERT = "insert";
-    static final String SELECT = "select";
-    static final String UPDATE = "update";
-    static final String DELETE = "delete";
-    static final String CRUD = "crud";
-    static final String COLUMN = "column";
-    static final String TABLE = "table";
-    static final String WHERE = "where";
-    static final String VALUE = "value";
-    static final String GROUP_BY = "group_by";
-    static final String ORDER_BY = "order_by";
-    static final String JOIN = "join";
-    static final String JOIN_EXPRESSION = "join_expression";
+    static final String INSERT = "INSERT";
+    static final String SELECT = "SELECT";
+    static final String UPDATE = "UPDATE";
+    static final String DELETE = "DELETE";
+    static final String CRUD = "CRUD";
+    static final String COLUMN = "COLUMN";
+    static final String TABLE = "TABLE";
+    static final String WHERE = "WHERE";
+    static final String VALUE = "VALUE";
+    static final String GROUP_BY = "GROUP_BY";
+    static final String ORDER_BY = "ORDER_BY";
+    static final String JOIN = "JOIN";
+    static final String JOIN_EXPRESSION = "JOIN_EXPRESSION";
 }
 
 class pRes {
@@ -77,7 +78,7 @@ public class SqlParser {
             statement = CCJSqlParserUtil.parse(sql);
         } catch (JSQLParserException e) {
             // sql parse failure
-//            e.printStackTrace();
+            e.printStackTrace();
             return pRes.SQL_SYNTAX_ERROR;
         }
 
@@ -138,9 +139,11 @@ public class SqlParser {
         JSONObject json = new JSONObject();
         putToJson(json, Attribute.CRUD, Attribute.SELECT);
 
+        // convert plain select
+        PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
+
         // add column
-        PlainSelect plain = (PlainSelect) select.getSelectBody();
-        List<SelectItem> selectItems = plain.getSelectItems();
+        List<SelectItem> selectItems = plainSelect.getSelectItems();
         List<String> columnList = new ArrayList<>();
         if (selectItems != null) {
             for (SelectItem selectItem : selectItems)
@@ -155,17 +158,14 @@ public class SqlParser {
             putToJson(json, Attribute.TABLE, tableList.toString());
 
         // add where
-        Expression whereExpression = plain.getWhere();
+        Expression whereExpression = plainSelect.getWhere();
         if (whereExpression != null) {
             String whereString = whereExpression.toString();
-            if (hasSubQuery(whereString)) {
-                String subQuery = extractSubQuery(whereString);
-            }
             putToJson(json, Attribute.WHERE, whereString);
         }
 
         // add group by
-        GroupByElement groupByElement = plain.getGroupBy();
+        GroupByElement groupByElement = plainSelect.getGroupBy();
         List<String> groupByList = new ArrayList<>();
         if (groupByElement != null) {
             List<Expression> groupByExpressions = groupByElement.getGroupByExpressions();
@@ -176,7 +176,7 @@ public class SqlParser {
         }
 
         // add order by
-        List<OrderByElement> orderByElementList = plain.getOrderByElements();
+        List<OrderByElement> orderByElementList = plainSelect.getOrderByElements();
         List<String> orderByList = new ArrayList<>();
         if (orderByElementList != null) {
             orderByElementList.forEach(orderByElement -> orderByList.add(orderByElement.getExpression().toString()));
@@ -237,12 +237,15 @@ public class SqlParser {
     }
 
     private static boolean hasSubQuery(String whereString) {
-        return whereString.toUpperCase().contains(Attribute.SELECT.toUpperCase()) || whereString.contains(Attribute.SELECT);
+        return (whereString.toUpperCase().contains(Attribute.SELECT.toUpperCase()) || whereString.contains(Attribute.SELECT));
     }
 
     private static String extractSubQuery(String whereString) {
         boolean upperCase = false;
         String[] splits = whereString.split(Attribute.SELECT);
+        if (splits.length == 0)
+            return "";
+
         if (splits.length == 1) {
             splits = whereString.split(Attribute.SELECT.toUpperCase());
             upperCase = true;
@@ -254,18 +257,14 @@ public class SqlParser {
         sb.append(select);
         for (int i = 1; i < splits.length; ++i) {
             sb.append(splits[i]);
-            if(i == splits.length - 1)
+            if (i == splits.length - 1)
                 break;
             sb.append(select);
         }
-        System.out.println(beforeSelect);
-        System.out.println(splits[0]);
-        System.out.println(sb.toString());
-        return "";
-    }
 
-    private static String parseSubQuery(String whereString) {
-        return "";
+        sb = new StringBuilder(sb.toString());
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
     }
 
     public static JSONObject parseSelectJoin(Statement statement) {
@@ -293,7 +292,13 @@ public class SqlParser {
 
     private static void putToJson(JSONObject json, String key, String value) {
         try {
-            json.put(key, value);
+            System.out.println(value);
+            if (hasSubQuery(value) && !key.equals(Attribute.CRUD)) {
+                String subQuery = extractSubQuery(value);
+                System.out.println(subQuery);
+                json.put(key, new JSONObject(sqlToJsonString(subQuery)));
+            } else
+                json.put(key, value);
         } catch (JSONException e) {
             e.printStackTrace();
         }
