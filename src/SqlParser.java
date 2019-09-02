@@ -11,6 +11,7 @@ import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.util.TablesNamesFinder;
+import net.sf.jsqlparser.util.deparser.SelectDeParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Attr;
@@ -44,10 +45,69 @@ class pRes {
     static final String SQL_SYNTAX_ERROR = "sql syntax error";
 }
 
+class ParserTest {
+    public static void main__() throws JSQLParserException {
+        String sql = "SELECT * FROM myTable, (select * from myTable2) as data1, (select b from myTable3) as data2";
+        Select select = (Select)CCJSqlParserUtil.parse(sql);
+        System.out.println(select.toString());
+
+
+        System.out.println("Type 1: Visitor processing");
+        select.getSelectBody().accept(new SelectVisitorAdapter(){
+            @Override
+            public void visit(PlainSelect plainSelect) {
+                plainSelect.getFromItem().accept(fromVisitor);
+                if (plainSelect.getJoins()!=null)
+                    plainSelect.getJoins().forEach(join -> join.getRightItem().accept(fromVisitor));
+            }
+        });
+
+        System.out.println("Type 2: simple method calls");
+        processFromItem(((PlainSelect)select.getSelectBody()).getFromItem());
+        if (((PlainSelect)select.getSelectBody()).getJoins()!=null)
+            ((PlainSelect)select.getSelectBody()).getJoins().forEach(join -> processFromItem(join.getRightItem()));
+
+
+        System.out.println("Type 3: hierarchically process all subselects");
+        select.getSelectBody().accept(new SelectDeParser() {
+            @Override
+            public void visit(SubSelect subSelect) {
+                System.out.println("  found subselect=" + subSelect.toString());
+                super.visit(subSelect);             }
+        });
+    }
+
+    private final static FromItemVisitorAdapter fromVisitor = new FromItemVisitorAdapter() {
+        @Override
+        public void visit(SubSelect subSelect) {
+            System.out.println("subselect=" + subSelect);
+        }
+
+        @Override
+        public void visit(Table table) {
+            System.out.println("table=" + table);
+        }
+    } ;
+
+    private static void processFromItem(FromItem fromItem) {
+        System.out.println("fromItem=" + fromItem);
+    }
+}
+
 public class SqlParser {
     public static void main(String[] args) {
+        try {
+            ParserTest.main__();
+        } catch (JSQLParserException e) {
+            e.printStackTrace();
+        }
+
+        System.exit(9);
+
         String sql = readSqlFromFile();
         System.out.println("input sql\n\n" + sql);
+
+
 
         String jsonString = sqlToJsonString(sql);
         System.out.println("output json\n\n" + jsonString);
@@ -262,8 +322,27 @@ public class SqlParser {
             sb.append(select);
         }
 
-        sb = new StringBuilder(sb.toString());
-        sb.deleteCharAt(sb.length() - 1);
+        // validate bracket
+        int cnt = 0;
+        int bracketStack = 0;
+        char[] iso = sb.toString().toCharArray();
+        for(char c : iso) {
+            if(c == '(')
+                ++bracketStack;
+            else if (c == ')')
+                --bracketStack;
+
+            if(bracketStack < 0)
+                break;
+
+            ++cnt;
+        }
+
+        // remove end ')' if bracket stack is not empty
+        if(cnt != iso.length) {
+            sb = new StringBuilder(sb.toString());
+            sb.deleteCharAt(sb.length() - 1);
+        }
         return sb.toString();
     }
 
