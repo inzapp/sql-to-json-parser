@@ -1,5 +1,6 @@
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.JsonExpression;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
@@ -12,6 +13,7 @@ import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.util.TablesNamesFinder;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Attr;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -154,8 +156,13 @@ public class SqlParser {
 
         // add where
         Expression whereExpression = plain.getWhere();
-        if (whereExpression != null)
-            putToJson(json, Attribute.WHERE, whereExpression.toString());
+        if (whereExpression != null) {
+            String whereString = whereExpression.toString();
+            if (hasSubQuery(whereString)) {
+                String subQuery = extractSubQuery(whereString);
+            }
+            putToJson(json, Attribute.WHERE, whereString);
+        }
 
         // add group by
         GroupByElement groupByElement = plain.getGroupBy();
@@ -223,12 +230,43 @@ public class SqlParser {
 
         // add where
         Expression whereExpression = delete.getWhere();
-        if(whereExpression != null)
+        if (whereExpression != null)
             putToJson(json, Attribute.WHERE, whereExpression.toString());
 
         return json;
     }
 
+    private static boolean hasSubQuery(String whereString) {
+        return whereString.toUpperCase().contains(Attribute.SELECT.toUpperCase()) || whereString.contains(Attribute.SELECT);
+    }
+
+    private static String extractSubQuery(String whereString) {
+        boolean upperCase = false;
+        String[] splits = whereString.split(Attribute.SELECT);
+        if (splits.length == 1) {
+            splits = whereString.split(Attribute.SELECT.toUpperCase());
+            upperCase = true;
+        }
+
+        String beforeSelect = splits[0];
+        String select = upperCase ? Attribute.SELECT.toUpperCase() : Attribute.SELECT;
+        StringBuilder sb = new StringBuilder();
+        sb.append(select);
+        for (int i = 1; i < splits.length; ++i) {
+            sb.append(splits[i]);
+            if(i == splits.length - 1)
+                break;
+            sb.append(select);
+        }
+        System.out.println(beforeSelect);
+        System.out.println(splits[0]);
+        System.out.println(sb.toString());
+        return "";
+    }
+
+    private static String parseSubQuery(String whereString) {
+        return "";
+    }
 
     public static JSONObject parseSelectJoin(Statement statement) {
         // add crud
