@@ -1,5 +1,1 @@
-{
-    "TABLE": "[myTable, myTable2, myTable3]",
-    "CRUD": "SELECT",
-    "COLUMN": "[*]"
-}
+{}
