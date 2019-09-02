@@ -47,7 +47,7 @@ public class SqlParser {
         System.out.println("input sql\n\n" + sql);
 
         String jsonString = sqlToJsonString(sql);
-        System.out.println("output json string\n\n" + jsonString);
+        System.out.println("output json\n\n" + jsonString);
         saveFile(jsonString);
     }
 
