@@ -9,6 +9,7 @@ import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.update.Update;
+import net.sf.jsqlparser.statement.values.ValuesStatement;
 import net.sf.jsqlparser.util.TablesNamesFinder;
 import org.json.JSONArray;
 import org.json.JSONException;

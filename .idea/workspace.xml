@@ -18,8 +18,8 @@
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/pRes.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/pRes.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql-sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sql-sample.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SqlParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SqlParser.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
