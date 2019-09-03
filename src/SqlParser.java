@@ -21,14 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 class JsonKey {
+    static final String CRUD = "CRUD";
     static final String INSERT = "INSERT";
     static final String SELECT = "SELECT";
     static final String UPDATE = "UPDATE";
     static final String DELETE = "DELETE";
-    static final String CRUD = "CRUD";
     static final String COLUMN = "COLUMN";
     static final String TABLE = "TABLE";
+    static final String TABLE_SUB_QUERY = "TABLE SUB QUERY";
+    static final String TABLE_SUB_QUERY_ANALYSE = "TABLE SUB QUERY ANALYSE";
     static final String WHERE = "WHERE";
+    static final String WHERE_SUB_QUERY = "WHERE SUB QUERY";
+    static final String WHERE_SUB_QUERY_ANALYSE = "WHERE SUB QUERY ANALYSE";
     static final String VALUE = "VALUE";
     static final String GROUP_BY = "GROUP_BY";
     static final String ORDER_BY = "ORDER_BY";
@@ -66,7 +70,7 @@ class SqlToJsonParser {
 
         @Override
         public void visit(Select select) {
-            System.out.println("select : " + select);
+            putToJson(JsonKey.CRUD, JsonKey.SELECT);
             PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
 
             // column
@@ -83,7 +87,7 @@ class SqlToJsonParser {
             Expression whereExpression = plainSelect.getWhere();
             if (whereExpression != null) {
                 String whereString = whereExpression.toString();
-                System.out.println("where : " + whereString);
+                putToJson(JsonKey.WHERE, whereString);
                 whereExpression.accept(expressionVisitor);
             }
 
@@ -122,7 +126,6 @@ class SqlToJsonParser {
         @Override
         public void visit(SelectExpressionItem item) {
             putToJson(JsonKey.COLUMN, item.toString());
-//            System.out.println("column : " + item);
             super.visit(item);
         }
     };
@@ -130,13 +133,14 @@ class SqlToJsonParser {
     private final FromItemVisitorAdapter fromItemVisitor = new FromItemVisitorAdapter() {
         @Override
         public void visit(Table table) {
-            System.out.println("table : " + table);
+            putToJson(JsonKey.TABLE, table.toString());
             super.visit(table);
         }
 
         @Override
         public void visit(SubSelect subSelect) {
-            System.out.println("from sub select : " + subSelect);
+            putToJson(JsonKey.TABLE_SUB_QUERY, subSelect.toString());
+            putToJson(JsonKey.TABLE_SUB_QUERY_ANALYSE, new SqlToJsonParser().parse(subSelect.toString()));
             super.visit(subSelect);
         }
     };
@@ -144,8 +148,8 @@ class SqlToJsonParser {
     private final ExpressionVisitorAdapter expressionVisitor = new ExpressionVisitorAdapter() {
         @Override
         public void visit(SubSelect subSelect) {
-            System.out.println("where sub select : " + subSelect);
-            JSONObject json = new SqlToJsonParser().parse(subSelect.toString());
+            putToJson(JsonKey.WHERE_SUB_QUERY, subSelect.toString());
+            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, new SqlToJsonParser().parse(subSelect.toString()));
             super.visit(subSelect);
         }
     };
@@ -153,15 +157,14 @@ class SqlToJsonParser {
     private GroupByVisitor groupByVisitor = new GroupByVisitor() {
         @Override
         public void visit(GroupByElement groupByElement) {
-            System.out.println("group by : " + groupByElement);
-
+            putToJson(JsonKey.GROUP_BY, groupByElement.toString());
         }
     };
 
     private final OrderByVisitorAdapter orderByVisitor = new OrderByVisitorAdapter() {
         @Override
         public void visit(OrderByElement orderBy) {
-            System.out.println("order by : " + orderBy);
+            putToJson(JsonKey.ORDER_BY, orderBy.toString());
             super.visit(orderBy);
         }
     };
@@ -176,6 +179,14 @@ class SqlToJsonParser {
             this.json.put(key, list);
         } catch (JSONException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void putToJson(String key, JSONObject json) {
+        try {
+            this.json.put(key, json);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -195,7 +206,7 @@ class SqlToJsonParser {
 public class SqlParser {
     public static void main(String[] args) {
         String sql = readSqlFromFile();
-//        System.out.println("input sql\n\n" + sql);
+        System.out.println("input sql\n\n" + sql);
 
         JSONObject json = new SqlToJsonParser().parse(sql);
         try {
@@ -206,7 +217,6 @@ public class SqlParser {
             e.printStackTrace();
         }
     }
-
 
     private static String readSqlFromFile() {
         try {
