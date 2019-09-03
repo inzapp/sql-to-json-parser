@@ -1,1 +1,1 @@
-{}
+{"COLUMN": ["EC_CLPS_DV_CD AS STAFF_GBN"]}

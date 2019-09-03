@@ -7,14 +7,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3efaa97-ec05-4093-9248-3ac33d751bec" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Attribute.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/Visitor$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/Visitor$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/Visitor$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/Visitor$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/Visitor$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/Visitor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/Visitor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/pRes.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/pRes.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SqlParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SqlParser.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

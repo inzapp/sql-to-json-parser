@@ -19,8 +19,5 @@ SELECT
                                    AND TO_DATE (SYSDATE, 'YYYY-MM-DD')
                            )
                   GROUP BY EC_DV
-                  UNION
-                  SELECT EC_CLPS_DV_CD as staff_gbn
-                    FROM ETCH005M
-                   WHERE NVL (USE_AYN, 'Y') <> 'N'   )
+                    )
       ORDER BY ODR
