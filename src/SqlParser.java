@@ -90,40 +90,64 @@ class SqlToJsonParser {
         public void visit(Select select) {
             // crud
             putToJson(JsonKey.CRUD, JsonKey.SELECT);
-            PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
+            select.getSelectBody().accept(new SelectVisitor() {
+                @Override
+                public void visit(PlainSelect plainSelect) {
+                    // column
+                    List<SelectItem> selectItems = plainSelect.getSelectItems();
+                    if (selectItems != null)
+                        selectItems.forEach(selectItem -> selectItem.accept(selectItemVisitor));
 
-            // column
-            List<SelectItem> selectItems = plainSelect.getSelectItems();
-            if (selectItems != null)
-                selectItems.forEach(selectItem -> selectItem.accept(selectItemVisitor));
+                    // table
+                    FromItem fromItem = plainSelect.getFromItem();
+                    if (fromItem != null)
+                        fromItem.accept(fromItemVisitor);
 
-            // table
-            FromItem fromItem = plainSelect.getFromItem();
-            if (fromItem != null)
-                fromItem.accept(fromItemVisitor);
+                    // where
+                    Expression whereExpression = plainSelect.getWhere();
+                    if (whereExpression != null) {
+                        putToJson(JsonKey.WHERE, whereExpression.toString());
+                        whereExpression.accept(expressionVisitor);
+                    }
 
-            // where
-            Expression whereExpression = plainSelect.getWhere();
-            if (whereExpression != null) {
-                putToJson(JsonKey.WHERE, whereExpression.toString());
-                whereExpression.accept(expressionVisitor);
-            }
+                    // group by
+                    GroupByElement groupByElement = plainSelect.getGroupBy();
+                    if (groupByElement != null)
+                        groupByElement.accept(groupByVisitor);
 
-            // group by
-            GroupByElement groupByElement = plainSelect.getGroupBy();
-            if (groupByElement != null)
-                groupByElement.accept(groupByVisitor);
+                    // order by
+                    List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
+                    if (orderByElements != null)
+                        orderByElements.forEach(orderByElement -> orderByElement.accept(orderByVisitor));
 
-            // order by
-            List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
-            if (orderByElements != null)
-                orderByElements.forEach(orderByElement -> orderByElement.accept(orderByVisitor));
+                    // joins
+                    List<Join> joins = plainSelect.getJoins();
+                    if (joins != null)
+                        joins.forEach(join -> join.getRightItem().accept(fromItemVisitor));
+                }
 
-            // joins
-            List<Join> joins = plainSelect.getJoins();
-            if (joins != null)
-                joins.forEach(join -> join.getRightItem().accept(fromItemVisitor));
+                @Override
+                public void visit(SetOperationList setOperationList) {
+                    List<SelectBody> selectBodies = setOperationList.getSelects();
+                    if(selectBodies != null) {
+                        selectBodies.forEach(selectBody -> {
+                            putToJson(JsonKey.WHERE_SUB_QUERY, 1, selectBody.toString());
+                            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new SqlToJsonParser().parse(selectBody.toString()));
+                        });
+                    }
 
+                }
+
+                @Override
+                public void visit(WithItem withItem) {
+
+                }
+
+                @Override
+                public void visit(ValuesStatement valuesStatement) {
+
+                }
+            });
             super.visit(select);
         }
 
