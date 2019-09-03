@@ -1,8 +1,3 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
@@ -16,7 +11,6 @@ import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.statement.values.ValuesStatement;
-import net.sf.jsqlparser.util.TablesNamesFinder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +18,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.*;
 
 class JsonKey {
@@ -43,7 +36,7 @@ class JsonKey {
     static final String VALUE = "VALUE";
     static final String GROUP_BY = "GROUP_BY";
     static final String ORDER_BY = "ORDER_BY";
-    static final String JOIN = "JOIN";
+    static final String JOIN = "JOIN ";
     static final String JOIN_EXPRESSION = "JOIN_EXPRESSION";
 }
 
@@ -53,31 +46,6 @@ class pRes {
     static final String SQL_SYNTAX_ERROR = "sql syntax error";
 }
 
-class PrettyPrintingMap<K, V> {
-    private Map<K, V> map;
-
-    PrettyPrintingMap(Map<K, V> map) {
-        this.map = map;
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        Iterator<Map.Entry<K, V>> iter = map.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry<K, V> entry = iter.next();
-            sb.append(entry.getKey());
-            sb.append('=').append('"');
-            sb.append(entry.getValue());
-            sb.append('"');
-            if (iter.hasNext()) {
-                sb.append(',').append(' ');
-            }
-        }
-        return sb.toString();
-
-    }
-}
-
 class SqlToJsonParser {
     private JSONObject json = new JSONObject();
 
@@ -85,8 +53,8 @@ class SqlToJsonParser {
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
             statement.accept(statementVisitor);
-            return sortJsonByKey();
-//            return json;
+            sortJsonByKey();
+            return this.json;
         } catch (Exception e) {
             // sql parse failure
             e.printStackTrace();
@@ -155,11 +123,12 @@ class SqlToJsonParser {
                     // joins
                     List<Join> joins = plainSelect.getJoins();
                     if (joins != null)
-                        joins.forEach(join -> join.getRightItem().accept(fromItemVisitor));
+                        joins.forEach(join -> putToJson(JsonKey.JOIN, 1, join.toString()));
                 }
 
                 @Override
                 public void visit(SetOperationList setOperationList) {
+                    // where sub query
                     List<SelectBody> selectBodies = setOperationList.getSelects();
                     if (selectBodies != null) {
                         selectBodies.forEach(selectBody -> {
@@ -172,12 +141,12 @@ class SqlToJsonParser {
 
                 @Override
                 public void visit(WithItem withItem) {
-
+                    System.out.println("[NEED DEBUG -> visit(WithItem withItem)]");
                 }
 
                 @Override
                 public void visit(ValuesStatement valuesStatement) {
-
+                    System.out.println("[NEED DEBUG -> visit(ValuesStatement valuesStatement)]");
                 }
             });
             super.visit(select);
@@ -203,7 +172,7 @@ class SqlToJsonParser {
             if (expressions != null)
                 expressions.forEach(expression -> putToJson(JsonKey.VALUE, expression.toString()));
 
-            // add where
+            // where
             Expression whereExpression = update.getWhere();
             if (whereExpression != null)
                 putToJson(JsonKey.WHERE, whereExpression.toString());
@@ -336,42 +305,17 @@ class SqlToJsonParser {
         }
     }
 
-    private JSONObject sortJsonByKey() {
+    private void sortJsonByKey() {
         try {
             Iterator keys = json.keys();
-            Map<String, Object> treeMap = new LinkedHashMap<>();
+            Map<String, Object> treeMap = new TreeMap<>(String::compareTo);
             while (keys.hasNext()) {
                 String key = (String) keys.next();
                 treeMap.put(key, json.get(key));
             }
-
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            String jsonString = gson.toJson(treeMap);
-            System.out.println(jsonString);
-//
-//            // tree map to indent string 1
-//            System.out.println(new PrettyPrintingMap<>(treeMap));
-//
-//            // tree map to indent string 2
-//            System.out.println(Arrays.toString(treeMap.entrySet().toArray()));
-//
-//            // tree map to indent string 3
-//            System.out.println(new GsonBuilder().setPrettyPrinting().create().toJsonTree(treeMap).getAsJsonObject());
-//
-//            // tree map to json string 4
-//            Type type = new TypeToken<Map<String, String>>(){}.getType();
-//            Map<String, String> myMap = new Gson().fromJson(json.toString(), type);
-//            System.out.println(myMap);
-
-
-//            JSONObject sortedJson = new JSONObject(treeMap);
-//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//            String googleJson = gson.toJson(sortedJson);
-//            System.out.println(googleJson);
-
-            return new JSONObject(json);
+            this.json = new JSONObject(treeMap);
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
         }
     }
 }
@@ -387,7 +331,7 @@ public class SqlParser {
             System.out.println("output json\n\n" + jsonString);
             saveFile(jsonString);
         } catch (JSONException e) {
-            e.printStackTrace();
+            saveFile(pRes.SQL_SYNTAX_ERROR);
         }
     }
 
@@ -405,259 +349,6 @@ public class SqlParser {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }
-    }
-
-//    private static String sqlToJsonString(String sql) {
-//        // parse sql
-//        Statement statement;
-//        try {
-//            statement = CCJSqlParserUtil.parse(sql);
-//        } catch (JSQLParserException e) {
-//            // sql parse failure
-//            e.printStackTrace();
-//            return pRes.SQL_SYNTAX_ERROR;
-//        }
-//
-//        statement.accept(statementVisitor);
-//
-//        // convert sql string to json
-//        JSONObject json = new JSONObject();
-////        if (statement instanceof Insert) {
-////            Insert insert = (Insert) statement;
-//////            json = parseInsert(insert);
-////        } else if (statement instanceof Select) {
-////            Select select = (Select) statement;
-//////            json = parseSelect(select);
-////        } else if (statement instanceof Update) {
-////            Update update = (Update) statement;
-//////            json = parseUpdate(update);
-////        } else if (statement instanceof Delete) {
-////            Delete delete = (Delete) statement;
-//////            json = parseDelete(delete);
-////        }
-//
-//
-//        // return json string with indent
-//        try {
-//            return json.toString(4);
-//        } catch (JSONException e) {
-//            return null;
-//        }
-//    }
-
-    private static JSONObject parseInsert(Insert insert) {
-        // add crud
-        JSONObject json = new JSONObject();
-        putToJson(json, JsonKey.CRUD, JsonKey.INSERT);
-
-        // add column
-        List<Column> columnList = insert.getColumns();
-        List<String> columnNameList = new ArrayList<>();
-        if (columnList != null) {
-            columnList.forEach(column -> columnNameList.add(column.getColumnName()));
-            putToJson(json, JsonKey.COLUMN, columnNameList.toString());
-        }
-
-        // add table
-        String tableName = insert.getTable().getName();
-        if (tableName != null)
-            putToJson(json, JsonKey.TABLE, tableName);
-
-        // add value
-        List<Expression> insertValueExpressionList = ((ExpressionList) insert.getItemsList()).getExpressions();
-        List<String> insertValueList = new ArrayList<>();
-        insertValueExpressionList.forEach(expression -> insertValueList.add(expression.toString()));
-        if (!insertValueList.isEmpty())
-            putToJson(json, JsonKey.VALUE, insertValueList.toString());
-
-        return json;
-    }
-
-    private static JSONObject parseSelect(Select select) {
-        // add crud
-        JSONObject json = new JSONObject();
-        putToJson(json, JsonKey.CRUD, JsonKey.SELECT);
-
-        // convert plain select
-        PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
-
-        // add column
-        List<SelectItem> selectItems = plainSelect.getSelectItems();
-        List<String> columnList = new ArrayList<>();
-        if (selectItems != null) {
-            for (SelectItem selectItem : selectItems)
-                columnList.add(selectItem.toString());
-            putToJson(json, JsonKey.COLUMN, columnList.toString());
-        }
-
-        // add table
-        TablesNamesFinder tablesNamesFinder = new TablesNamesFinder();
-        List<String> tableList = tablesNamesFinder.getTableList(select);
-        if (!tableList.isEmpty())
-            putToJson(json, JsonKey.TABLE, tableList.toString());
-
-        // add where
-        Expression whereExpression = plainSelect.getWhere();
-        if (whereExpression != null) {
-            String whereString = whereExpression.toString();
-            putToJson(json, JsonKey.WHERE, whereString);
-        }
-
-        // add group by
-        GroupByElement groupByElement = plainSelect.getGroupBy();
-        List<String> groupByList = new ArrayList<>();
-        if (groupByElement != null) {
-            List<Expression> groupByExpressions = groupByElement.getGroupByExpressions();
-            if (groupByExpressions != null) {
-                groupByExpressions.forEach(groupByExpression -> groupByList.add(groupByExpression.toString()));
-                putToJson(json, JsonKey.GROUP_BY, groupByList.toString());
-            }
-        }
-
-        // add order by
-        List<OrderByElement> orderByElementList = plainSelect.getOrderByElements();
-        List<String> orderByList = new ArrayList<>();
-        if (orderByElementList != null) {
-            orderByElementList.forEach(orderByElement -> orderByList.add(orderByElement.getExpression().toString()));
-            putToJson(json, JsonKey.ORDER_BY, orderByList.toString());
-        }
-
-        return json;
-    }
-
-    private static JSONObject parseUpdate(Update update) {
-        // add crud
-        JSONObject json = new JSONObject();
-        putToJson(json, JsonKey.CRUD, JsonKey.UPDATE);
-
-        // add column
-        List<Column> columnList = update.getColumns();
-        List<String> columnNameList = new ArrayList<>();
-        if (columnList != null) {
-            columnList.forEach(column -> columnNameList.add(column.getColumnName()));
-            putToJson(json, JsonKey.COLUMN, columnNameList.toString());
-        }
-
-        // add table
-        List<Table> tableList = update.getTables();
-        List<String> tableNameList = new ArrayList<>();
-        tableList.forEach(table -> tableNameList.add(table.getName()));
-        putToJson(json, JsonKey.TABLE, tableNameList.toString());
-
-        // add value
-        List<Expression> expressions = update.getExpressions();
-        List<String> valueList = new ArrayList<>();
-        expressions.forEach(expression -> valueList.add(expression.toString()));
-        putToJson(json, JsonKey.VALUE, valueList.toString());
-
-        // add where
-        Expression whereExpression = update.getWhere();
-        if (whereExpression != null)
-            putToJson(json, JsonKey.WHERE, whereExpression.toString());
-
-        return json;
-    }
-
-    private static JSONObject parseDelete(Delete delete) {
-        // add crud
-        JSONObject json = new JSONObject();
-        putToJson(json, JsonKey.CRUD, JsonKey.DELETE);
-
-        // add table
-        Table table = delete.getTable();
-        putToJson(json, JsonKey.TABLE, table.toString());
-
-        // add where
-        Expression whereExpression = delete.getWhere();
-        if (whereExpression != null)
-            putToJson(json, JsonKey.WHERE, whereExpression.toString());
-
-        return json;
-    }
-
-    private static boolean hasSubQuery(String whereString) {
-        return (whereString.toUpperCase().contains(JsonKey.SELECT.toUpperCase()) || whereString.contains(JsonKey.SELECT));
-    }
-
-    private static String extractSubQuery(String whereString) {
-        boolean upperCase = false;
-        String[] splits = whereString.split(JsonKey.SELECT);
-        if (splits.length == 0)
-            return "";
-
-        if (splits.length == 1) {
-            splits = whereString.split(JsonKey.SELECT.toUpperCase());
-            upperCase = true;
-        }
-
-        String beforeSelect = splits[0];
-        String select = upperCase ? JsonKey.SELECT.toUpperCase() : JsonKey.SELECT;
-        StringBuilder sb = new StringBuilder();
-        sb.append(select);
-        for (int i = 1; i < splits.length; ++i) {
-            sb.append(splits[i]);
-            if (i == splits.length - 1)
-                break;
-            sb.append(select);
-        }
-
-        // validate bracket
-        int cnt = 0;
-        int bracketStack = 0;
-        char[] iso = sb.toString().toCharArray();
-        for (char c : iso) {
-            if (c == '(')
-                ++bracketStack;
-            else if (c == ')')
-                --bracketStack;
-
-            if (bracketStack < 0)
-                break;
-
-            ++cnt;
-        }
-
-        // remove end ')' if bracket stack is not empty
-        if (cnt != iso.length) {
-            sb = new StringBuilder(sb.toString());
-            sb.deleteCharAt(sb.length() - 1);
-        }
-        return sb.toString();
-    }
-
-    public static JSONObject parseSelectJoin(Statement statement) {
-        // add crud
-        JSONObject json = new JSONObject();
-        putToJson(json, JsonKey.CRUD, JsonKey.SELECT);
-
-        // add join, join expression
-        Select select = (Select) statement;
-        PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
-        List<Join> joins = plainSelect.getJoins();
-        List<String> joinList = new ArrayList<>();
-        List<String> joinExpressionList = new ArrayList<>();
-        if (joins != null) {
-            for (Join join : joins) {
-                joinList.add(join.toString());
-                joinExpressionList.add(join.getOnExpression().toString());
-            }
-            putToJson(json, JsonKey.JOIN, joinList.toString());
-            putToJson(json, JsonKey.JOIN_EXPRESSION, joinExpressionList.toString());
-        }
-
-        return json;
-    }
-
-    private static void putToJson(JSONObject json, String key, String value) {
-        try {
-            if (hasSubQuery(value) && !key.equals(JsonKey.CRUD)) {
-                String subQuery = extractSubQuery(value);
-//                json.put(key, new JSONObject(sqlToJsonString(subQuery)));
-            } else
-                json.put(key, value);
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 
