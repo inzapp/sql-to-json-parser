@@ -7,8 +7,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3efaa97-ec05-4093-9248-3ac33d751bec" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/gson_2_6_2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/JsonKey.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/JsonKey.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$3.class" afterDir="false" />
@@ -16,7 +20,9 @@
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/pRes.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/pRes.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql-parser.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sql-parser.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SqlParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SqlParser.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -39,8 +45,8 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../sql2json" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gson-2.6.2.jar!/" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>

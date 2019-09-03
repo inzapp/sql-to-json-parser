@@ -1,8 +1,8 @@
 {
-    "TABLE": ["ETCH005M"],
-    "ORDER_BY": ["ODR"],
-    "CRUD": ["SELECT"],
-    "COLUMN": [
+    "ORDER_BY": {"myArrayList": ["ODR"]},
+    "TABLE": {"myArrayList": ["ETCH005M"]},
+    "CRUD": {"myArrayList": ["SELECT"]},
+    "COLUMN": {"myArrayList": [
         "EC_CLPS_DV_CD AS STAFF_GBN",
         "EC_NM AS STAFF_CLASS",
         "EC_GRP AS ORG_STAFF_GBN",
@@ -15,37 +15,19 @@
         "UPDT_DTM",
         "UTUR_ID",
         "EC_CLPS_DV_CD"
-    ],
-    "WHERE": ["EC_CLPS_DV_CD IN (SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV UNION SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N')"],
-    "WHERE SUB QUERY ANALYSE 1": {
-        "CRUD": ["SELECT"],
-        "WHERE SUB QUERY ANALYSE 1": {
-            "CRUD": ["SELECT"],
-            "WHERE SUB QUERY ANALYSE 2": {
-                "TABLE": ["ETCH005M"],
-                "CRUD": ["SELECT"],
-                "COLUMN": [
-                    "EC_CLPS_DV_CD AS staff_gbn",
-                    "USE_AYN"
-                ],
-                "WHERE": ["NVL(USE_AYN, 'Y') <> 'N'"]
-            },
-            "WHERE SUB QUERY ANALYSE 1": {
-                "TABLE": ["ETCH004M"],
-                "CRUD": ["SELECT"],
-                "GROUP_BY": ["GROUP BY EC_DV"],
-                "COLUMN": [
-                    "EC_DV AS staff_gbn",
-                    "SCH_REG_DT",
-                    "SYSDATE",
-                    "SYSDATE"
-                ],
-                "WHERE": ["(TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD'))"]
-            },
-            "WHERE SUB QUERY 1": ["SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV"],
-            "WHERE SUB QUERY 2": ["SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N'"]
-        },
-        "WHERE SUB QUERY 1": ["SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV UNION SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N'"]
-    },
-    "WHERE SUB QUERY 1": ["(SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV UNION SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N')"]
+    ]},
+    "WHERE": {"myArrayList": ["EC_CLPS_DV_CD IN (SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV)"]},
+    "WHERE SUB QUERY ANALYSE 1": {"map": {
+        "TABLE": {"map": {"myArrayList": {"myArrayList": ["ETCH004M"]}}},
+        "CRUD": {"map": {"myArrayList": {"myArrayList": ["SELECT"]}}},
+        "GROUP_BY": {"map": {"myArrayList": {"myArrayList": ["GROUP BY EC_DV"]}}},
+        "COLUMN": {"map": {"myArrayList": {"myArrayList": [
+            "EC_DV AS staff_gbn",
+            "SCH_REG_DT",
+            "SYSDATE",
+            "SYSDATE"
+        ]}}},
+        "WHERE": {"map": {"myArrayList": {"myArrayList": ["(TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD'))"]}}}
+    }},
+    "WHERE SUB QUERY 1": {"myArrayList": ["(SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV)"]}
 }

@@ -1,3 +1,9 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import jdk.nashorn.internal.parser.JSONParser;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.relational.*;
@@ -13,13 +19,17 @@ import net.sf.jsqlparser.statement.values.ValuesStatement;
 import net.sf.jsqlparser.util.TablesNamesFinder;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONML;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Type;
+import java.util.*;
+
+import static java.util.Map.Entry.comparingByKey;
+import static java.util.stream.Collectors.toMap;
 
 class JsonKey {
     static final String CRUD = "CRUD";
@@ -54,8 +64,9 @@ class SqlToJsonParser {
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
             statement.accept(statementVisitor);
-            return json;
-        } catch (JSQLParserException e) {
+            return sortJsonByKey();
+//            return json;
+        } catch (Exception e) {
             // sql parse failure
             e.printStackTrace();
             return null;
@@ -129,7 +140,7 @@ class SqlToJsonParser {
                 @Override
                 public void visit(SetOperationList setOperationList) {
                     List<SelectBody> selectBodies = setOperationList.getSelects();
-                    if(selectBodies != null) {
+                    if (selectBodies != null) {
                         selectBodies.forEach(selectBody -> {
                             putToJson(JsonKey.WHERE_SUB_QUERY, 1, selectBody.toString());
                             putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new SqlToJsonParser().parse(selectBody.toString()));
@@ -299,6 +310,49 @@ class SqlToJsonParser {
             for (int i = 0; i < jsonArray.length(); ++i)
                 list.add((String) jsonArray.get(i));
             return list;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private JSONObject sortJsonByKey() {
+
+        try {
+            Iterator keys = json.keys();
+            Map<String, Object> hashMap = new HashMap<>();
+            Map<String, Object> treeMap = new TreeMap<>(String::compareTo);
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                treeMap.put(key, json.get(key));
+            }
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String jsonString = gson.toJson(treeMap);
+
+            System.out.println(jsonString);
+
+//            Map<String, Object> treeMap = new TreeMap<>(hashMap);
+//            nameList.sort(Comparator.naturalOrder());
+//            nameList.forEach(name -> System.out.println(name));
+//            System.out.println();
+
+//
+//            Map<String, Object> map = new HashMap<>();
+//            JSONObject sortedJson = new JSONObject();
+//            for (String name : nameList) {
+////                sortedJson.put(name, json.get(name));
+//                map.put(name, json.get(name));
+//            }
+//
+//            Map<String, Object> treeMap = new TreeMap<>(map);
+//            map = map.entrySet().stream().sorted(comparingByKey()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2));
+
+            return new JSONObject(jsonString);
+
+
+//            System.out.println(jsonMap.toString());
+//
+//            return sortedJson;
         } catch (Exception e) {
             return null;
         }
