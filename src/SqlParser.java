@@ -78,9 +78,9 @@ class SqlToJsonParser {
                 columns.forEach(column -> column.accept(expressionVisitor));
 
             // values
-            List<Expression> insertValueExpressionList = ((ExpressionList) insert.getItemsList()).getExpressions();
-            if (insertValueExpressionList != null)
-                insertValueExpressionList.forEach(expression -> putToJson(JsonKey.VALUE, expression.toString()));
+            List<Expression> expressions = ((ExpressionList) insert.getItemsList()).getExpressions();
+            if (expressions != null)
+                expressions.forEach(expression -> putToJson(JsonKey.VALUE, expression.toString()));
             super.visit(insert);
         }
 
@@ -103,8 +103,7 @@ class SqlToJsonParser {
             // where
             Expression whereExpression = plainSelect.getWhere();
             if (whereExpression != null) {
-                String whereString = whereExpression.toString();
-                putToJson(JsonKey.WHERE, whereString);
+                putToJson(JsonKey.WHERE, whereExpression.toString());
                 whereExpression.accept(expressionVisitor);
             }
 
@@ -127,7 +126,29 @@ class SqlToJsonParser {
 
         @Override
         public void visit(Update update) {
-            System.out.println("update : " + update);
+            // crud
+            putToJson(JsonKey.CRUD, JsonKey.UPDATE);
+
+            // columns
+            List<Column> columns = update.getColumns();
+            if (columns != null)
+                columns.forEach(column -> column.accept(expressionVisitor));
+
+            // tables
+            List<Table> tables = update.getTables();
+            if (tables != null)
+                tables.forEach(table -> table.accept(fromItemVisitor));
+
+            // values
+            List<Expression> expressions = update.getExpressions();
+            if (expressions != null)
+                expressions.forEach(expression -> putToJson(JsonKey.VALUE, expression.toString()));
+
+            // add where
+            Expression whereExpression = update.getWhere();
+            if (whereExpression != null)
+                putToJson(JsonKey.WHERE, whereExpression.toString());
+
             super.visit(update);
         }
 
