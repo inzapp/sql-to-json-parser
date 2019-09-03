@@ -168,12 +168,9 @@ class SqlToJsonParser {
 
     private void putToJson(String key, String value) {
         List<String> list = getConvertedJsonArray(key);
-        if (list != null) {
-            list.add(value);
-            return;
-        }
+        if (list == null)
+            list = new ArrayList<>();
 
-        list = new ArrayList<>();
         list.add(value);
         try {
             this.json.put(key, list);

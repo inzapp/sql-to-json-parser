@@ -1,1 +1,13 @@
-{"COLUMN": ["EC_CLPS_DV_CD AS STAFF_GBN"]}
+{"COLUMN": [
+    "EC_CLPS_DV_CD AS STAFF_GBN",
+    "EC_NM AS STAFF_CLASS",
+    "EC_GRP AS ORG_STAFF_GBN",
+    "ODR AS ORDER_SEQ",
+    "ORGZ_ID AS ORG_ID",
+    "EMP_NO AS STAFF_EMP_ID",
+    "USE_AYN AS USE_YN",
+    "REG_DTM",
+    "RGR_ID",
+    "UPDT_DTM",
+    "UTUR_ID"
+]}
