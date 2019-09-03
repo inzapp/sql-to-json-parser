@@ -1,3 +1,11 @@
-DELETE FROM TABLE
-WHERE CONDITION = 'ALL'
-AND VALUE = (SELECT VALUE FROM TAB)
+SELECT COUNT (*)
+  FROM (SELECT *
+                               FROM etch002m
+                              WHERE masking_yb = 'Y')
+ WHERE rgr_id = '1507030'
+   AND reg_no = NVL ((SELECT reg_no
+                        FROM etch002m
+                       WHERE masking_yb = 'Y'), -1)
+   AND reg_no2 = NVL ((SELECT reg_no
+                               FROM etch002m
+                              WHERE masking_yb = 'Y'), -1)

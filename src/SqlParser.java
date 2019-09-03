@@ -28,11 +28,11 @@ class JsonKey {
     static final String DELETE = "DELETE";
     static final String COLUMN = "COLUMN";
     static final String TABLE = "TABLE";
-    static final String TABLE_SUB_QUERY = "TABLE SUB QUERY";
-    static final String TABLE_SUB_QUERY_ANALYSE = "TABLE SUB QUERY ANALYSE";
+    static final String TABLE_SUB_QUERY = "TABLE SUB QUERY ";
+    static final String TABLE_SUB_QUERY_ANALYSE = "TABLE SUB QUERY ANALYSE ";
     static final String WHERE = "WHERE";
-    static final String WHERE_SUB_QUERY = "WHERE SUB QUERY";
-    static final String WHERE_SUB_QUERY_ANALYSE = "WHERE SUB QUERY ANALYSE";
+    static final String WHERE_SUB_QUERY = "WHERE SUB QUERY ";
+    static final String WHERE_SUB_QUERY_ANALYSE = "WHERE SUB QUERY ANALYSE ";
     static final String VALUE = "VALUE";
     static final String GROUP_BY = "GROUP_BY";
     static final String ORDER_BY = "ORDER_BY";
@@ -81,6 +81,7 @@ class SqlToJsonParser {
             List<Expression> expressions = ((ExpressionList) insert.getItemsList()).getExpressions();
             if (expressions != null)
                 expressions.forEach(expression -> putToJson(JsonKey.VALUE, expression.toString()));
+
             super.visit(insert);
         }
 
@@ -121,6 +122,7 @@ class SqlToJsonParser {
             List<Join> joins = plainSelect.getJoins();
             if (joins != null)
                 joins.forEach(join -> join.getRightItem().accept(fromItemVisitor));
+
             super.visit(select);
         }
 
@@ -159,12 +161,12 @@ class SqlToJsonParser {
 
             // table
             Table table = delete.getTable();
-            if(table != null)
+            if (table != null)
                 table.accept(fromItemVisitor);
 
             // where
             Expression whereExpression = delete.getWhere();
-            if(whereExpression != null) {
+            if (whereExpression != null) {
                 putToJson(JsonKey.WHERE, whereExpression.toString());
                 whereExpression.accept(expressionVisitor);
             }
@@ -190,8 +192,8 @@ class SqlToJsonParser {
 
         @Override
         public void visit(SubSelect subSelect) {
-            putToJson(JsonKey.TABLE_SUB_QUERY, subSelect.toString());
-            putToJson(JsonKey.TABLE_SUB_QUERY_ANALYSE, new SqlToJsonParser().parse(subSelect.toString()));
+            putToJson(JsonKey.TABLE_SUB_QUERY, 1, subSelect.toString());
+            putToJson(JsonKey.TABLE_SUB_QUERY_ANALYSE, 1, new SqlToJsonParser().parse(subSelect.toString()));
             super.visit(subSelect);
         }
     };
@@ -199,8 +201,8 @@ class SqlToJsonParser {
     private final ExpressionVisitorAdapter expressionVisitor = new ExpressionVisitorAdapter() {
         @Override
         public void visit(SubSelect subSelect) {
-            putToJson(JsonKey.WHERE_SUB_QUERY, subSelect.toString());
-            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, new SqlToJsonParser().parse(subSelect.toString()));
+            putToJson(JsonKey.WHERE_SUB_QUERY, 1, subSelect.toString());
+            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new SqlToJsonParser().parse(subSelect.toString()));
             super.visit(subSelect);
         }
 
@@ -239,11 +241,29 @@ class SqlToJsonParser {
         }
     }
 
+    private void putToJson(String key, int idx, String value) {
+        List<String> list = getConvertedJsonArray(key + idx);
+        if (list != null) {
+            putToJson(key + (idx + 1), value);
+        } else {
+            putToJson(key + idx, value);
+        }
+    }
+
     private void putToJson(String key, JSONObject json) {
         try {
             this.json.put(key, json);
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void putToJson(String key, int idx, JSONObject json) {
+        try {
+            this.json.getJSONObject(key + idx);
+            putToJson(key, (idx + 1), json);
+        } catch (Exception e) {
+            putToJson(key + idx, json);
         }
     }
 

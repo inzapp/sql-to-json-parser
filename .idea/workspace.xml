@@ -9,6 +9,7 @@
     <list default="true" id="f3efaa97-ec05-4093-9248-3ac33d751bec" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/JsonKey.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/JsonKey.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$2.class" afterDir="false" />
