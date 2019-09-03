@@ -2,6 +2,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.lang.reflect.Type;
 import java.util.*;
 
 class JsonKey {
@@ -49,6 +51,31 @@ class pRes {
     static final String INPUT_FILE_NAME = "input.txt";
     static final String OUTPUT_FILE_NAME = "output.txt";
     static final String SQL_SYNTAX_ERROR = "sql syntax error";
+}
+
+class PrettyPrintingMap<K, V> {
+    private Map<K, V> map;
+
+    PrettyPrintingMap(Map<K, V> map) {
+        this.map = map;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Iterator<Map.Entry<K, V>> iter = map.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<K, V> entry = iter.next();
+            sb.append(entry.getKey());
+            sb.append('=').append('"');
+            sb.append(entry.getValue());
+            sb.append('"');
+            if (iter.hasNext()) {
+                sb.append(',').append(' ');
+            }
+        }
+        return sb.toString();
+
+    }
 }
 
 class SqlToJsonParser {
@@ -312,18 +339,37 @@ class SqlToJsonParser {
     private JSONObject sortJsonByKey() {
         try {
             Iterator keys = json.keys();
-            Map<String, Object> treeMap = new TreeMap<>(String::compareTo);
+            Map<String, Object> treeMap = new LinkedHashMap<>();
             while (keys.hasNext()) {
                 String key = (String) keys.next();
                 treeMap.put(key, json.get(key));
             }
 
-            JSONObject sortedJson = new JSONObject(treeMap);
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            String googleJson = gson.toJson(sortedJson);
-            System.out.println(googleJson);
-            
-            return new JSONObject(googleJson);
+            String jsonString = gson.toJson(treeMap);
+            System.out.println(jsonString);
+//
+//            // tree map to indent string 1
+//            System.out.println(new PrettyPrintingMap<>(treeMap));
+//
+//            // tree map to indent string 2
+//            System.out.println(Arrays.toString(treeMap.entrySet().toArray()));
+//
+//            // tree map to indent string 3
+//            System.out.println(new GsonBuilder().setPrettyPrinting().create().toJsonTree(treeMap).getAsJsonObject());
+//
+//            // tree map to json string 4
+//            Type type = new TypeToken<Map<String, String>>(){}.getType();
+//            Map<String, String> myMap = new Gson().fromJson(json.toString(), type);
+//            System.out.println(myMap);
+
+
+//            JSONObject sortedJson = new JSONObject(treeMap);
+//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//            String googleJson = gson.toJson(sortedJson);
+//            System.out.println(googleJson);
+
+            return new JSONObject(json);
         } catch (Exception e) {
             return null;
         }
