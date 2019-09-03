@@ -1,7 +1,4 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import jdk.nashorn.internal.parser.JSONParser;
 import net.sf.jsqlparser.JSQLParserException;
@@ -316,43 +313,21 @@ class SqlToJsonParser {
     }
 
     private JSONObject sortJsonByKey() {
-
         try {
             Iterator keys = json.keys();
-            Map<String, Object> hashMap = new HashMap<>();
             Map<String, Object> treeMap = new TreeMap<>(String::compareTo);
             while (keys.hasNext()) {
                 String key = (String) keys.next();
                 treeMap.put(key, json.get(key));
             }
-
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            String jsonString = gson.toJson(treeMap);
+            Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+            String jsonString = gson.toJson(json);
 
             System.out.println(jsonString);
 
-//            Map<String, Object> treeMap = new TreeMap<>(hashMap);
-//            nameList.sort(Comparator.naturalOrder());
-//            nameList.forEach(name -> System.out.println(name));
-//            System.out.println();
-
-//
-//            Map<String, Object> map = new HashMap<>();
-//            JSONObject sortedJson = new JSONObject();
-//            for (String name : nameList) {
-////                sortedJson.put(name, json.get(name));
-//                map.put(name, json.get(name));
-//            }
-//
-//            Map<String, Object> treeMap = new TreeMap<>(map);
-//            map = map.entrySet().stream().sorted(comparingByKey()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2));
-
-            return new JSONObject(jsonString);
-
-
-//            System.out.println(jsonMap.toString());
-//
-//            return sortedJson;
+//            System.out.println(treeMap);
+            JSONObject sortedJson = new JSONObject(treeMap);
+            return sortedJson;
         } catch (Exception e) {
             return null;
         }
