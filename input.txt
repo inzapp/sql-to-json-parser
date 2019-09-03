@@ -1,1 +1,26 @@
-SELECT * FROM myTable, (select * from myTable2) as data1, (select b from myTable3) as data2
+SELECT
+         EC_CLPS_DV_CD         as   STAFF_GBN,
+         EC_NM            as   STAFF_CLASS,
+         EC_GRP            as   ORG_STAFF_GBN,
+         ODR            as   ORDER_SEQ,
+         ORGZ_ID            as   ORG_ID,
+         EMP_NO            as   STAFF_EMP_ID,
+         USE_AYN            as   USE_YN,
+         REG_DTM,
+         RGR_ID,
+         UPDT_DTM,
+         UTUR_ID
+      FROM ETCH005M
+         WHERE EC_CLPS_DV_CD IN (
+                  SELECT   EC_DV as staff_gbn
+                      FROM ETCH004M
+                     WHERE (TO_DATE (SCH_REG_DT , 'YYYY-MM-DD')
+                               BETWEEN TO_DATE (SYSDATE, 'YYYY-MM-DD')
+                                   AND TO_DATE (SYSDATE, 'YYYY-MM-DD')
+                           )
+                  GROUP BY EC_DV
+                  UNION
+                  SELECT EC_CLPS_DV_CD as staff_gbn
+                    FROM ETCH005M
+                   WHERE NVL (USE_AYN, 'Y') <> 'N'   )
+      ORDER BY ODR

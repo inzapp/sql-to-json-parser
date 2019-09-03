@@ -1,27 +1,23 @@
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.JsonExpression;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.*;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.util.TablesNamesFinder;
-import net.sf.jsqlparser.util.deparser.SelectDeParser;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Attr;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 class Attribute {
     static final String INSERT = "INSERT";
@@ -45,77 +41,97 @@ class pRes {
     static final String SQL_SYNTAX_ERROR = "sql syntax error";
 }
 
-class ParserTest {
-    public static void main__() throws JSQLParserException {
-        String sql = "SELECT * FROM myTable, (select * from myTable2) as data1, (select b from myTable3) as data2";
-        Select select = (Select) CCJSqlParserUtil.parse(sql);
-        System.out.println(select.toString());
+//class ParserTest {
+//    public static void main__() throws JSQLParserException {
+//        String sql = "SELECT * FROM myTable, (select * from myTable2) as data1, (select b from myTable3) as data2";
+//        Select select = (Select) CCJSqlParserUtil.parse(sql);
+//        System.out.println(select.toString());
+//
+//        System.out.println("Type 1: Visitor processing");
+//        select.getSelectBody().accept(new SelectVisitorAdapter() {
+//            @Override
+//            public void visit(PlainSelect plainSelect) {
+//                plainSelect.getFromItem().accept(fromVisitor);
+//                if (plainSelect.getJoins() != null)
+//                    plainSelect.getJoins().forEach(join -> join.getRightItem().accept(fromVisitor));
+//            }
+//        });
+//
+//        System.out.println("Type 2: simple method calls");
+//        processFromItem(((PlainSelect) select.getSelectBody()).getFromItem());
+//        if (((PlainSelect) select.getSelectBody()).getJoins() != null)
+//            ((PlainSelect) select.getSelectBody()).getJoins().forEach(join -> processFromItem(join.getRightItem()));
+//
+//        System.out.println("Type 3: hierarchically process all subselects");
+//        select.getSelectBody().accept(new SelectDeParser() {
+//            @Override
+//            public void visit(SubSelect subSelect) {
+//                System.out.println("  found subselect=" + subSelect.toString());
+//                super.visit(subSelect);
+//            }
+//        });
+//    }
+//
+//    private final static FromItemVisitorAdapter fromVisitor = new FromItemVisitorAdapter() {
+//        @Override
+//        public void visit(SubSelect subSelect) {
+//            System.out.println("subselect=" + subSelect);
+//        }
+//
+//        @Override
+//        public void visit(Table table) {
+//            System.out.println("table=" + table);
+//        }
+//    };
+//
+//    private static void processFromItem(FromItem fromItem) {
+//        System.out.println("fromItem=" + fromItem);
+//    }
+//}
 
-        System.out.println("Type 1: Visitor processing");
-        select.getSelectBody().accept(new SelectVisitorAdapter() {
-            @Override
-            public void visit(PlainSelect plainSelect) {
-                plainSelect.getFromItem().accept(fromVisitor);
-                if (plainSelect.getJoins() != null)
-                    plainSelect.getJoins().forEach(join -> join.getRightItem().accept(fromVisitor));
-            }
-        });
-
-        System.out.println("Type 2: simple method calls");
-        processFromItem(((PlainSelect) select.getSelectBody()).getFromItem());
-        if (((PlainSelect) select.getSelectBody()).getJoins() != null)
-            ((PlainSelect) select.getSelectBody()).getJoins().forEach(join -> processFromItem(join.getRightItem()));
-
-        System.out.println("Type 3: hierarchically process all subselects");
-        select.getSelectBody().accept(new SelectDeParser() {
-            @Override
-            public void visit(SubSelect subSelect) {
-                System.out.println("  found subselect=" + subSelect.toString());
-                super.visit(subSelect);
-            }
-        });
-    }
-
-    private final static FromItemVisitorAdapter fromVisitor = new FromItemVisitorAdapter() {
+class Visitor {
+    static final StatementVisitorAdapter statementVisitor = new StatementVisitorAdapter() {
         @Override
-        public void visit(SubSelect subSelect) {
-            System.out.println("subselect=" + subSelect);
+        public void visit(Insert insert) {
+            System.out.println("insert : " + insert);
+            super.visit(insert);
         }
 
         @Override
-        public void visit(Table table) {
-            System.out.println("table=" + table);
+        public void visit(Select select) {
+            System.out.println("select : " + select);
+            PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
+            plainSelect.accept(plainSelectVisitor);
+            super.visit(select);
+        }
+
+        @Override
+        public void visit(Update update) {
+            System.out.println("update : " + update);
+            super.visit(update);
+        }
+
+        @Override
+        public void visit(Delete delete) {
+            System.out.println("delete : " + delete);
+            super.visit(delete);
         }
     };
 
-    private static void processFromItem(FromItem fromItem) {
-        System.out.println("fromItem=" + fromItem);
-    }
-}
-
-public class SqlParser {
-    public static void main(String[] args) {
-//        try {
-//            ParserTest.main__();
-//        } catch (JSQLParserException e) {
-//            e.printStackTrace();
-//        }
-//        System.exit(9);
-
-        String sql = readSqlFromFile();
-        System.out.println("input sql\n\n" + sql);
-
-        String jsonString = sqlToJsonString(sql);
-        System.out.println("output json\n\n" + jsonString);
-        saveFile(jsonString);
-    }
-
-    private static final SelectVisitorAdapter selectVisitor = new SelectVisitorAdapter(){
+    private static final SelectVisitorAdapter plainSelectVisitor = new SelectVisitorAdapter() {
         @Override
         public void visit(PlainSelect plainSelect) {
             plainSelect.getFromItem().accept(fromVisitor);
+            plainSelect.getSelectItems().forEach(selectItem -> selectItem.accept(selectItemVisitor));
+
+            // order by
+            List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
+            if (orderByElements != null)
+                orderByElements.forEach(orderByElement -> orderByElement.accept(orderByVisitor));
+
+            // joins
             List<Join> joins = plainSelect.getJoins();
-            if(joins != null)
+            if (joins != null)
                 joins.forEach(join -> join.getRightItem().accept(fromVisitor));
 
             super.visit(plainSelect);
@@ -135,6 +151,40 @@ public class SqlParser {
             super.visit(subSelect);
         }
     };
+
+    private static final SelectItemVisitorAdapter selectItemVisitor = new SelectItemVisitorAdapter() {
+        @Override
+        public void visit(SelectExpressionItem item) {
+            System.out.println("column : " + item);
+            super.visit(item);
+        }
+    };
+
+    private static final OrderByVisitorAdapter orderByVisitor = new OrderByVisitorAdapter() {
+        @Override
+        public void visit(OrderByElement orderBy) {
+            System.out.println("order by : " + orderBy);
+            super.visit(orderBy);
+        }
+    };
+}
+
+public class SqlParser {
+    public static void main(String[] args) {
+//        try {
+//            ParserTest.main__();
+//        } catch (JSQLParserException e) {
+//            e.printStackTrace();
+//        }
+//        System.exit(9);
+
+        String sql = readSqlFromFile();
+//        System.out.println("input sql\n\n" + sql);
+
+        String jsonString = sqlToJsonString(sql);
+        System.out.println("output json\n\n" + jsonString);
+        saveFile(jsonString);
+    }
 
     private static String readSqlFromFile() {
         try {
@@ -164,24 +214,23 @@ public class SqlParser {
             return pRes.SQL_SYNTAX_ERROR;
         }
 
+        statement.accept(Visitor.statementVisitor);
+
         // convert sql string to json
         JSONObject json = new JSONObject();
-        if (statement instanceof Insert) {
-            Insert insert = (Insert) statement;
-
-//            json = parseInsert(insert);
-        } else if (statement instanceof Select) {
-            Select select = (Select) statement;
-            select.getSelectBody().accept(selectVisitor);
-//            json = parseSelect(select);
-        } else if (statement instanceof Update) {
-            Update update = (Update) statement;
-//            json = parseUpdate(update);
-        } else if (statement instanceof Delete) {
-            Delete delete = (Delete) statement;
-//            json = parseDelete(delete);
-        }
-
+//        if (statement instanceof Insert) {
+//            Insert insert = (Insert) statement;
+////            json = parseInsert(insert);
+//        } else if (statement instanceof Select) {
+//            Select select = (Select) statement;
+////            json = parseSelect(select);
+//        } else if (statement instanceof Update) {
+//            Update update = (Update) statement;
+////            json = parseUpdate(update);
+//        } else if (statement instanceof Delete) {
+//            Delete delete = (Delete) statement;
+////            json = parseDelete(delete);
+//        }
 
 
         // return json string with indent
