@@ -1,5 +1,6 @@
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
@@ -101,7 +102,37 @@ class Visitor {
         public void visit(Select select) {
             System.out.println("select : " + select);
             PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
-            plainSelect.accept(plainSelectVisitor);
+
+            // column
+            List<SelectItem> selectItems = plainSelect.getSelectItems();
+            if (selectItems != null)
+                selectItems.forEach(selectItem -> selectItem.accept(selectItemVisitor));
+
+            // table
+            FromItem fromItem = plainSelect.getFromItem();
+            if (fromItem != null)
+                fromItem.accept(fromItemVisitor);
+
+            // where
+            Expression whereExpression = plainSelect.getWhere();
+            if(whereExpression != null)
+                whereExpression.accept(expressionVisitor);
+
+            // order by
+            List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
+            if (orderByElements != null)
+                orderByElements.forEach(orderByElement -> orderByElement.accept(orderByVisitor));
+
+            // joins
+            List<Join> joins = plainSelect.getJoins();
+            if (joins != null)
+                joins.forEach(join -> join.getRightItem().accept(fromItemVisitor));
+
+            // group by
+            GroupByElement groupByElement = plainSelect.getGroupBy();
+            if (groupByElement != null)
+                groupByElement.accept(groupByVisitor);
+
             super.visit(select);
         }
 
@@ -118,27 +149,15 @@ class Visitor {
         }
     };
 
-    private static final SelectVisitorAdapter plainSelectVisitor = new SelectVisitorAdapter() {
+    private static final SelectItemVisitorAdapter selectItemVisitor = new SelectItemVisitorAdapter() {
         @Override
-        public void visit(PlainSelect plainSelect) {
-            plainSelect.getFromItem().accept(fromVisitor);
-            plainSelect.getSelectItems().forEach(selectItem -> selectItem.accept(selectItemVisitor));
-
-            // order by
-            List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
-            if (orderByElements != null)
-                orderByElements.forEach(orderByElement -> orderByElement.accept(orderByVisitor));
-
-            // joins
-            List<Join> joins = plainSelect.getJoins();
-            if (joins != null)
-                joins.forEach(join -> join.getRightItem().accept(fromVisitor));
-
-            super.visit(plainSelect);
+        public void visit(SelectExpressionItem item) {
+            System.out.println("column : " + item);
+            super.visit(item);
         }
     };
 
-    private static final FromItemVisitorAdapter fromVisitor = new FromItemVisitorAdapter() {
+    private static final FromItemVisitorAdapter fromItemVisitor = new FromItemVisitorAdapter() {
         @Override
         public void visit(Table table) {
             System.out.println("table : " + table);
@@ -152,11 +171,14 @@ class Visitor {
         }
     };
 
-    private static final SelectItemVisitorAdapter selectItemVisitor = new SelectItemVisitorAdapter() {
+    private static final ExpressionVisitorAdapter expressionVisitor = new ExpressionVisitorAdapter(){
+
+    };
+
+    private static GroupByVisitor groupByVisitor = new GroupByVisitor() {
         @Override
-        public void visit(SelectExpressionItem item) {
-            System.out.println("column : " + item);
-            super.visit(item);
+        public void visit(GroupByElement groupByElement) {
+            System.out.println("group by : " + groupByElement);
         }
     };
 
