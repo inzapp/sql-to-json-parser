@@ -1,27 +1,32 @@
 {
-    "TABLE": ["ETCH005M"],
-    "ORDER_BY": ["ODR"],
-    "CRUD": ["SELECT"],
+    "TABLE": ["etob004m"],
+    "CRUD": ["INSERT"],
     "COLUMN": [
-        "EC_CLPS_DV_CD AS STAFF_GBN",
-        "EC_NM AS STAFF_CLASS",
-        "EC_GRP AS ORG_STAFF_GBN",
-        "ODR AS ORDER_SEQ",
-        "ORGZ_ID AS ORG_ID",
-        "EMP_NO AS STAFF_EMP_ID",
-        "USE_AYN AS USE_YN",
-        "REG_DTM",
-        "RGR_ID",
-        "UPDT_DTM",
-        "UTUR_ID"
+        "tsk_no",
+        "dept_cd",
+        "tsk_dv_cd",
+        "tsk_nm",
+        "oppb_gd_cd",
+        "txt",
+        "stt_dtm",
+        "end_dtm",
+        "rgr_id",
+        "reg_dtm",
+        "utur_id",
+        "updt_dtm"
     ],
-    "WHERE": ["EC_CLPS_DV_CD IN (SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV)"],
-    "WHERE SUB QUERY": ["(SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV)"],
-    "WHERE SUB QUERY ANALYSE": {
-        "TABLE": ["ETCH004M"],
-        "CRUD": ["SELECT"],
-        "GROUP_BY": ["GROUP BY EC_DV"],
-        "COLUMN": ["EC_DV AS staff_gbn"],
-        "WHERE": ["(TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD'))"]
-    }
+    "VALUE": [
+        "'2019-00436'",
+        "'015000'",
+        "'001'",
+        "'test'",
+        "'001'",
+        "'<p>123<\/p>'",
+        "TO_DATE('2019-08-08 09:00:00', 'yyyy-MM-dd HH24:mi:ss')",
+        "TO_DATE('2019-08-08 18:00:00', 'yyyy-MM-dd HH24:mi:ss')",
+        "'1507030'",
+        "SYSDATE",
+        "'1507030'",
+        "SYSDATE"
+    ]
 }

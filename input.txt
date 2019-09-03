@@ -1,23 +1,7 @@
-SELECT
-         EC_CLPS_DV_CD         as   STAFF_GBN,
-         EC_NM            as   STAFF_CLASS,
-         EC_GRP            as   ORG_STAFF_GBN,
-         ODR            as   ORDER_SEQ,
-         ORGZ_ID            as   ORG_ID,
-         EMP_NO            as   STAFF_EMP_ID,
-         USE_AYN            as   USE_YN,
-         REG_DTM,
-         RGR_ID,
-         UPDT_DTM,
-         UTUR_ID
-      FROM ETCH005M
-         WHERE EC_CLPS_DV_CD IN (
-                  SELECT   EC_DV as staff_gbn
-                      FROM ETCH004M
-                     WHERE (TO_DATE (SCH_REG_DT , 'YYYY-MM-DD')
-                               BETWEEN TO_DATE (SYSDATE, 'YYYY-MM-DD')
-                                   AND TO_DATE (SYSDATE, 'YYYY-MM-DD')
-                           )
-                  GROUP BY EC_DV
-                    )
-      ORDER BY ODR
+ INSERT INTO etob004m
+            (tsk_no, dept_cd, tsk_dv_cd, tsk_nm, oppb_gd_cd, txt, stt_dtm,
+             end_dtm, rgr_id, reg_dtm, utur_id, updt_dtm
+            )
+     VALUES ('2019-00436', '015000', '001', 'test', '001', '<p>123</p>', TO_DATE ('2019-08-08 09:00:00', 'yyyy-MM-dd HH24:mi:ss'),
+             TO_DATE ('2019-08-08 18:00:00', 'yyyy-MM-dd HH24:mi:ss'), '1507030', SYSDATE, '1507030', SYSDATE
+            )

@@ -49,7 +49,7 @@ class pRes {
 class SqlToJsonParser {
     private JSONObject json = new JSONObject();
 
-    public JSONObject parse(String sql) {
+    JSONObject parse(String sql) {
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
             statement.accept(statementVisitor);
@@ -64,12 +64,29 @@ class SqlToJsonParser {
     private final StatementVisitorAdapter statementVisitor = new StatementVisitorAdapter() {
         @Override
         public void visit(Insert insert) {
-            System.out.println("insert : " + insert);
+            // crud
+            putToJson(JsonKey.CRUD, JsonKey.INSERT);
+
+            // table
+            Table table = insert.getTable();
+            if (table != null)
+                table.accept(fromItemVisitor);
+
+            // columns
+            List<Column> columns = insert.getColumns();
+            if (columns != null)
+                columns.forEach(column -> column.accept(expressionVisitor));
+
+            // values
+            List<Expression> insertValueExpressionList = ((ExpressionList) insert.getItemsList()).getExpressions();
+            if (insertValueExpressionList != null)
+                insertValueExpressionList.forEach(expression -> putToJson(JsonKey.VALUE, expression.toString()));
             super.visit(insert);
         }
 
         @Override
         public void visit(Select select) {
+            // crud
             putToJson(JsonKey.CRUD, JsonKey.SELECT);
             PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
 
@@ -91,6 +108,11 @@ class SqlToJsonParser {
                 whereExpression.accept(expressionVisitor);
             }
 
+            // group by
+            GroupByElement groupByElement = plainSelect.getGroupBy();
+            if (groupByElement != null)
+                groupByElement.accept(groupByVisitor);
+
             // order by
             List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
             if (orderByElements != null)
@@ -100,12 +122,6 @@ class SqlToJsonParser {
             List<Join> joins = plainSelect.getJoins();
             if (joins != null)
                 joins.forEach(join -> join.getRightItem().accept(fromItemVisitor));
-
-            // group by
-            GroupByElement groupByElement = plainSelect.getGroupBy();
-            if (groupByElement != null)
-                groupByElement.accept(groupByVisitor);
-
             super.visit(select);
         }
 
@@ -151,6 +167,12 @@ class SqlToJsonParser {
             putToJson(JsonKey.WHERE_SUB_QUERY, subSelect.toString());
             putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, new SqlToJsonParser().parse(subSelect.toString()));
             super.visit(subSelect);
+        }
+
+        @Override
+        public void visit(Column column) {
+            putToJson(JsonKey.COLUMN, column.toString());
+            super.visit(column);
         }
     };
 
