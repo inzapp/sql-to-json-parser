@@ -17,6 +17,12 @@ WHERE CONDITION = 'ALL'
 
 -----------------------------------------------------------------------------------------------------------
 
+DELETE FROM TABLE
+WHERE CONDITION = 'ALL'
+AND VALUE = (SELECT VALUE FROM TAB)
+
+-----------------------------------------------------------------------------------------------------------
+
 
 SELECT ORG_ID, ORG_NM 
          FROM OM_ORGANIZATION

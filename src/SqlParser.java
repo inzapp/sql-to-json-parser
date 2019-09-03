@@ -154,7 +154,21 @@ class SqlToJsonParser {
 
         @Override
         public void visit(Delete delete) {
-            System.out.println("delete : " + delete);
+            // crud
+            putToJson(JsonKey.CRUD, JsonKey.DELETE);
+
+            // table
+            Table table = delete.getTable();
+            if(table != null)
+                table.accept(fromItemVisitor);
+
+            // where
+            Expression whereExpression = delete.getWhere();
+            if(whereExpression != null) {
+                putToJson(JsonKey.WHERE, whereExpression.toString());
+                whereExpression.accept(expressionVisitor);
+            }
+
             super.visit(delete);
         }
     };

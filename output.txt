@@ -1,25 +1,15 @@
 {
-    "TABLE": ["etch002m"],
-    "CRUD": ["UPDATE"],
+    "TABLE": ["TABLE"],
+    "CRUD": ["DELETE"],
     "COLUMN": [
-        "updt_dtm",
-        "utur_id",
-        "anw_nm",
-        "anw_id",
-        "ans_dt",
-        "txt",
-        "atc_fl",
-        "titl"
+        "CONDITION",
+        "VALUE"
     ],
-    "VALUE": [
-        "SYSDATE",
-        "0912026",
-        "''",
-        "''",
-        "''",
-        "'<p>testㅏ<\/p><p><br><\/p><p>asd,asdfaasd~!@#%@W%sdfsdfsdd\"\"\"\"''''<\/p>'",
-        "''",
-        "test"
-    ],
-    "WHERE": ["reg_no = 24831"]
+    "WHERE": ["CONDITION = 'ALL' AND VALUE = (SELECT VALUE FROM TAB)"],
+    "WHERE SUB QUERY": ["(SELECT VALUE FROM TAB)"],
+    "WHERE SUB QUERY ANALYSE": {
+        "TABLE": ["TAB"],
+        "CRUD": ["SELECT"],
+        "COLUMN": ["VALUE"]
+    }
 }
