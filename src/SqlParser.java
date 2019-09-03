@@ -1,13 +1,15 @@
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import jdk.nashorn.internal.parser.JSONParser;
-import net.sf.jsqlparser.JSQLParserException;
-import net.sf.jsqlparser.expression.*;
-import net.sf.jsqlparser.expression.operators.relational.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.*;
+import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.StatementVisitorAdapter;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
@@ -16,17 +18,12 @@ import net.sf.jsqlparser.statement.values.ValuesStatement;
 import net.sf.jsqlparser.util.TablesNamesFinder;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONML;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.*;
-
-import static java.util.Map.Entry.comparingByKey;
-import static java.util.stream.Collectors.toMap;
 
 class JsonKey {
     static final String CRUD = "CRUD";
@@ -320,14 +317,13 @@ class SqlToJsonParser {
                 String key = (String) keys.next();
                 treeMap.put(key, json.get(key));
             }
-            Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-            String jsonString = gson.toJson(json);
 
-            System.out.println(jsonString);
-
-//            System.out.println(treeMap);
             JSONObject sortedJson = new JSONObject(treeMap);
-            return sortedJson;
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String googleJson = gson.toJson(sortedJson);
+            System.out.println(googleJson);
+            
+            return new JSONObject(googleJson);
         } catch (Exception e) {
             return null;
         }
