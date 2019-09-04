@@ -63,6 +63,7 @@ class SqlToJsonParser {
     }
 
     private final StatementVisitorAdapter statementVisitor = new StatementVisitorAdapter() {
+        // insert
         @Override
         public void visit(Insert insert) {
             // crud
@@ -86,6 +87,7 @@ class SqlToJsonParser {
             super.visit(insert);
         }
 
+        // select
         @Override
         public void visit(Select select) {
             // crud
@@ -127,6 +129,7 @@ class SqlToJsonParser {
                         joins.forEach(join -> putToJson(JsonKey.JOIN, 1, join.toString()));
                 }
 
+                // union
                 @Override
                 public void visit(SetOperationList setOperationList) {
                     // where sub query
@@ -137,7 +140,6 @@ class SqlToJsonParser {
                             putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new SqlToJsonParser().parse(selectBody.toString()));
                         });
                     }
-
                 }
 
                 @Override
@@ -153,6 +155,7 @@ class SqlToJsonParser {
             super.visit(select);
         }
 
+        // update
         @Override
         public void visit(Update update) {
             // crud
@@ -181,6 +184,7 @@ class SqlToJsonParser {
             super.visit(update);
         }
 
+        // delete
         @Override
         public void visit(Delete delete) {
             // crud
@@ -228,7 +232,6 @@ class SqlToJsonParser {
         }
     };
 
-
     private final ExpressionVisitorAdapter expressionVisitor = new ExpressionVisitorAdapter() {
         // search sub query in where statement
         @Override
@@ -241,7 +244,6 @@ class SqlToJsonParser {
         // column for select, set
         @Override
         public void visit(Column column) {
-            // TODO : does where column needed?
             putToJson(JsonKey.COLUMN, column.toString());
             super.visit(column);
         }
