@@ -4,6 +4,9 @@ SQL to org.json.JSONObject parser using JsqlParser
 ## Video
 https://www.youtube.com/watch?v=a24L_8GETLY
 
+## Download
+https://github.com/inzapp/sql-to-json-parser/releases
+
 ## Usage
 ```
 $ java -jar SqlToJsonParser.jar
