@@ -1,13 +1,25 @@
 SELECT * FROM TAB
 
+-----------------------------------------------------------------------------------------------------------
+
 INSERT INTO TABLENAME VALUE ('TESTVALUE')
+
+-----------------------------------------------------------------------------------------------------------
 
 UPDATE TABLENAME 
 SET COLNAME = 1
 WHERE CONDITION = 2
 
+-----------------------------------------------------------------------------------------------------------
+
 DELETE FROM TABLE
 WHERE CONDITION = 'ALL'
+
+-----------------------------------------------------------------------------------------------------------
+
+DELETE FROM TABLE
+WHERE CONDITION = 'ALL'
+AND VALUE = (SELECT VALUE FROM TAB)
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -47,7 +59,7 @@ SELECT
                   UNION
                   SELECT EC_CLPS_DV_CD as staff_gbn
                     FROM ETCH005M
-                   WHERE NVL (USE_AYN, 'Y') <> 'N'   )
+                   WHERE NVL (USE_AYN, 'Y') <> 'N'   )	
       ORDER BY ODR
 
 
@@ -111,7 +123,7 @@ UPDATE etch002m
 
  ------------------------------------------
 
-// 이거 안됨 : esms_action_history_room_seq.NEXTVAL 의 . 에서 문법오류발생
+// 이거 안됨
 INSERT INTO etob015m
             (pk_seq, emp_no, orgz_cd, cnn_eqpm, cnn_ip_addr, client_typ,
              cnn_env, mnu_nm, txt, emp_nm, reg_dtm, rgr_id, updt_dtm, utur_id
@@ -133,3 +145,63 @@ DELETE FROM ETCH006M
 
 DELETE FROM ETCH009M
           WHERE PK_SEQ = '2019-00370'
+
+ ------------------------------------------
+
+SELECT ROWNUM ROW_NUMBER, seq,
+       TO_CHAR (regdate, 'YYYY-MM-DD HH24:mi') AS regdate, content, subject,
+       send_email, send_flag, send_name, dept_code, dept_name, list_seq,
+       email, NAME, send_date
+  FROM 
+   ( 
+       SELECT   
+                 a.seq, a.regdate, a.content, a.subject, a.send_email,
+                 a.send_flag, a.send_name, a.dept_code, a.dept_name,
+                 b.list_seq, b.email, b.NAME, b.send_date
+
+       FROM ev_send_form a INNER JOIN ev_send_list b ON a.seq = b.seq
+       ORDER BY a.seq DESC, list_seq
+   )
+
+ ------------------------------------------
+
+
+SELECT COUNT (*)
+  FROM etch013m
+ WHERE rgr_id = '1507030'
+   AND reg_no = NVL ((SELECT reg_no
+                        FROM etch002m
+                       WHERE masking_yb = 'Y'), -1)
+   AND reg_dtm + 7 > SYSDATE
+
+
+------------------------------------------------------------------------------------
+
+
+   SELECT COUNT (*)
+     FROM etch013m
+    WHERE rgr_id = '1507030'
+      AND reg_no = NVL ((SELECT reg_no
+                           FROM etch002m
+                          WHERE masking_yb = 'Y'), -1)
+      AND reg_no2 = NVL ((SELECT reg_no
+                                  FROM etch002m
+                                 WHERE masking_yb = 'Y'), -1)
+
+
+
+------------------------------------------------------------------------------------
+
+
+
+SELECT COUNT (*)
+  FROM (SELECT *
+                               FROM etch002m
+                              WHERE masking_yb = 'Y')
+ WHERE rgr_id = '1507030'
+   AND reg_no = NVL ((SELECT reg_no
+                        FROM etch002m
+                       WHERE masking_yb = 'Y'), -1)
+   AND reg_no2 = NVL ((SELECT reg_no
+                               FROM etch002m
+                              WHERE masking_yb = 'Y'), -1)

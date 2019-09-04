@@ -1,26 +1,5 @@
 {
+    "TABLE": ["TAB"],
     "CRUD": ["SELECT"],
-    "TABLE SUB QUERY ANALYSE 1": {
-        "TABLE": ["etch002m"],
-        "CRUD": ["SELECT"],
-        "COLUMN": ["*"],
-        "WHERE": ["masking_yb = 'Y'"]
-    },
-    "COLUMN": ["COUNT(*)"],
-    "TABLE SUB QUERY 1": ["(SELECT * FROM etch002m WHERE masking_yb = 'Y')"],
-    "WHERE SUB QUERY ANALYSE 2": {
-        "TABLE": ["etch002m"],
-        "CRUD": ["SELECT"],
-        "COLUMN": ["reg_no"],
-        "WHERE": ["masking_yb = 'Y'"]
-    },
-    "WHERE": ["rgr_id = '1507030' AND reg_no = NVL((SELECT reg_no FROM etch002m WHERE masking_yb = 'Y'), -1) AND reg_no2 = NVL((SELECT reg_no FROM etch002m WHERE masking_yb = 'Y'), -1)"],
-    "WHERE SUB QUERY ANALYSE 1": {
-        "TABLE": ["etch002m"],
-        "CRUD": ["SELECT"],
-        "COLUMN": ["reg_no"],
-        "WHERE": ["masking_yb = 'Y'"]
-    },
-    "WHERE SUB QUERY 1": ["(SELECT reg_no FROM etch002m WHERE masking_yb = 'Y')"],
-    "WHERE SUB QUERY 2": ["(SELECT reg_no FROM etch002m WHERE masking_yb = 'Y')"]
+    "COLUMN": ["*"]
 }
