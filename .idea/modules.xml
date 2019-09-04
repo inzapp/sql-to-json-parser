@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/sql-parser.iml" filepath="$PROJECT_DIR$/sql-parser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SqlToJsonParser.iml" filepath="$PROJECT_DIR$/SqlToJsonParser.iml" />
     </modules>
   </component>
 </project>

@@ -7,22 +7,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3efaa97-ec05-4093-9248-3ac33d751bec" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/com/inzapp/sqltojson/core/SqlToJsonParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/sql_parser_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/sql_parser_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/sql_parser_jar/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/sql_parser_jar/output.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/sql_parser_jar/run.bat" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/sql_parser_jar/run.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/sql_parser_jar/sql-parser.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$7.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/JsonKey.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$7.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/pRes.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql-parser.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SqlToJsonParser.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SqlParser.java" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -41,7 +45,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1P7h6LbGFKp3dILB9GLNkyHzALx" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/gson-2.6.2.jar!/" />
@@ -62,16 +68,63 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="SqlParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="SqlParser" />
-      <module name="sql-parser" />
+    <configuration name="SqlToJsonParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.inzapp.sqlToJsonParser.core.SqlToJsonParser" />
+      <module name="SqlToJsonParser" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <module name="SqlToJsonParser" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+      <module name="SqlToJsonParser" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.SqlParser" />
+        <item itemvalue="Application.SqlToJsonParser" />
       </list>
     </recent_temporary>
   </component>
