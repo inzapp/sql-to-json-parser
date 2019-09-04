@@ -1,7 +1,1 @@
-{
-    "TABLE": ["TABLENAME"],
-    "CRUD": ["UPDATE"],
-    "COLUMN": ["COLNAME"],
-    "VALUE": ["1"],
-    "WHERE": ["CONDITION = 2"]
-}
+sql syntax error

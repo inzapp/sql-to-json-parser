@@ -203,13 +203,13 @@ class SqlToJsonParser {
         }
     };
 
-    private final SelectItemVisitorAdapter selectItemVisitor = new SelectItemVisitorAdapter() {
-        @Override
-        public void visit(SelectExpressionItem item) {
-            putToJson(JsonKey.COLUMN, item.toString());
-            super.visit(item);
-        }
-    };
+//    private final SelectItemVisitorAdapter selectItemVisitor = new SelectItemVisitorAdapter() {
+//        @Override
+//        public void visit(SelectExpressionItem item) {
+//            putToJson(JsonKey.COLUMN, item.toString());
+//            super.visit(item);
+//        }
+//    };
 
     private final FromItemVisitorAdapter fromItemVisitor = new FromItemVisitorAdapter() {
         @Override
@@ -339,12 +339,12 @@ public class SqlParser {
         String sql = readSqlFromFile();
         System.out.println("input sql\n\n" + sql);
 
-        JSONObject json = new SqlToJsonParser().parse(sql);
         try {
+            JSONObject json = new SqlToJsonParser().parse(sql);
             String jsonString = json.toString(4);
             System.out.println("output json\n\n" + jsonString);
             saveFile(jsonString);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             saveFile(pRes.SQL_SYNTAX_ERROR);
         }
     }
