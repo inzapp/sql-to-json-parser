@@ -193,3 +193,11 @@ SELECT COUNT (*)
    AND reg_no2 = NVL ((SELECT reg_no
                                FROM etch002m
                               WHERE masking_yb = 'Y'), -1)
+
+
+------------------------------------------------------------------------------------
+
+
+SELECT A, B FROM (SELECT A, B FROM FROMTABLE WHERE SUBCONDITION = 'SUBCONDITION')
+WHERE C = (SELECT C FROM WHERETABLE WHERE WHERECONDITION = 'WHERECONDITION')
+ORDER BY A
