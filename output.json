@@ -1,1 +1,26 @@
-sql syntax error
+{
+    "CRUD": ["SELECT"],
+    "COLUMN": [
+      "A",
+      "B"
+    ],
+    "TABLE SUB QUERY 1": ["(SELECT A, B FROM FROMTABLE WHERE SUBCONDITION = 'SUBCONDITION')"],
+    "TABLE SUB QUERY ANALYSE 1": {
+        "CRUD": ["SELECT"],
+        "COLUMN": [
+          "A",
+          "B"
+        ],
+        "TABLE": ["FROMTABLE"],
+        "WHERE": ["SUBCONDITION = 'SUBCONDITION'"]
+    },
+    "WHERE": ["C = (SELECT C FROM WHERETABLE WHERE WHERECONDITION = 'WHERECONDITION')"],
+    "WHERE SUB QUERY 1": ["(SELECT C FROM WHERETABLE WHERE WHERECONDITION = 'WHERECONDITION')"],
+    "WHERE SUB QUERY ANALYSE 1": {
+        "CRUD": ["SELECT"],
+        "COLUMN": ["C"],
+        "TABLE": ["WHERETABLE"],
+        "WHERE": ["WHERECONDITION = 'WHERECONDITION'"]
+    },
+    "ORDER_BY": ["A"]
+}
