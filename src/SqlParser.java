@@ -42,7 +42,7 @@ class JsonKey {
 
 class pRes {
     static final String INPUT_FILE_NAME = "input.txt";
-    static final String OUTPUT_FILE_NAME = "output.txt";
+    static final String OUTPUT_FILE_NAME = "output.json";
     static final String SQL_SYNTAX_ERROR = "sql syntax error";
 }
 

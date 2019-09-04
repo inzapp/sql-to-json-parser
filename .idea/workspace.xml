@@ -8,7 +8,21 @@
   <component name="ChangeListManager">
     <list default="true" id="f3efaa97-ec05-4093-9248-3ac33d751bec" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SqlParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SqlParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/sql_parser_jar/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/sql_parser_jar/output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/sql_parser_jar/run.bat" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/sql_parser_jar/run.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/sql_parser_jar/sql-parser.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-parser/SqlToJsonParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
