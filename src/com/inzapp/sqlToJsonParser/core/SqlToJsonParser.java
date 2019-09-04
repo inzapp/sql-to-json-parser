@@ -37,7 +37,7 @@ public class SqlToJsonParser {
             return sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "input file does not exist";
         }
     }
 
