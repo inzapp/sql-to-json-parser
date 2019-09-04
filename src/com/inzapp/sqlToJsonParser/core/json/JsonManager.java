@@ -29,7 +29,6 @@ public class JsonManager {
         }
     }
 
-
     /**
      * only used for sub query and sub query analyse
      * add index to json key

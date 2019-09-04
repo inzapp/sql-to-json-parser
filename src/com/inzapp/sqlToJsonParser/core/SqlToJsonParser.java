@@ -13,11 +13,11 @@ public class SqlToJsonParser {
         SqlVisitor sqlVisitor = new SqlVisitor();
         try {
             String sql = sqlToJsonParser.readSqlFromFile();
-            if(sql == null)
+            if (sql == null)
                 throw new Exception("input file does not exist");
 
             JSONObject json = sqlVisitor.parse(sql);
-            if(json == null)
+            if (json == null)
                 throw new Exception("sql syntax error");
 
             String jsonString = json.toString(4);
