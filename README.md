@@ -6,15 +6,15 @@ https://www.youtube.com/watch?v=a24L_8GETLY
 
 ## Usage
 ```
-java -jar SqlToJsonParser.jar
+$ java -jar SqlToJsonParser.jar
 ```
 ## Select
 input.txt
-```
+```sql
 SELECT * FROM TAB
 ```
 output.json
-```
+```json
 {
     "CRUD": ["SELECT"],
     "COLUMN": ["*"],
@@ -23,11 +23,11 @@ output.json
 ```
 ## Insert
 input.txt
-```
+```sql
 INSERT INTO TABLENAME VALUE ('TESTVALUE')
 ```
 output.json
-```
+```json
 {
     "CRUD": ["INSERT"],
     "TABLE": ["TABLENAME"],
@@ -36,13 +36,13 @@ output.json
 ```
 ## Update
 input.txt
-```
+```sql
 UPDATE TABLENAME
 SET COLNAME = 1
 WHERE CONDITION = 2
 ```
 output.json
-```
+```json
 {
     "CRUD": ["UPDATE"],
     "TABLE": ["TABLENAME"],
@@ -53,12 +53,12 @@ output.json
 ```
 ## Delete
 input.txt
-```
+```sql
 DELETE FROM TABLE
 WHERE CONDITION = 'ALL'
 ```
 output.json
-```
+```json
 {
     "CRUD": ["DELETE"],
     "TABLE": ["TABLE"],
@@ -67,13 +67,13 @@ output.json
 ```
 ## Sub Query
 input.txt
-```
+```sql
 SELECT A, B FROM (SELECT A, B FROM FROMTABLE WHERE FROMCONDITION = 'FROMCONDITION')
 WHERE C = (SELECT C FROM WHERETABLE WHERE WHERECONDITION = 'WHERECONDITION')
 ORDER BY A
 ```
 output.json
-```
+```json
 {
     "CRUD": ["SELECT"],
     "COLUMN": [
