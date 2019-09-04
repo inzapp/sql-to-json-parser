@@ -8,6 +8,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 
 public class SqlToJsonParser {
+    /**
+     * main method
+     *
+     * @param args not used
+     */
     public static void main(String[] args) {
         SqlToJsonParser sqlToJsonParser = new SqlToJsonParser();
         SqlVisitor sqlVisitor = new SqlVisitor();
@@ -32,6 +37,12 @@ public class SqlToJsonParser {
         }
     }
 
+    /**
+     * read sql from com.inzapp.SqlToJsonParser.config.Config.INPUT_FILE_NAME
+     *
+     * @return sql from file
+     * return null if not exist file
+     */
     private String readSqlFromFile() {
         try {
             BufferedReader br = new BufferedReader(new FileReader(Config.INPUT_FILE_NAME));
@@ -48,6 +59,13 @@ public class SqlToJsonParser {
         }
     }
 
+    /**
+     * save json string as file
+     * file name is com.inzapp.SqlToJsonParser.config.Config.OUTPUT_FILE_NAME
+     *
+     * @param jsonString org.json.JSONObject().toString()
+     *                   parsed json object
+     */
     private void saveFile(String jsonString) {
         try {
             FileOutputStream fos = new FileOutputStream(Config.OUTPUT_FILE_NAME);

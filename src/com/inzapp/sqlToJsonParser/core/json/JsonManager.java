@@ -7,14 +7,16 @@ import org.json.JSONObject;
 import java.util.*;
 
 public class JsonManager {
+    /**
+     * for saving parsed sql
+     */
     protected JSONObject json = new JSONObject();
 
     /**
      * add json to value if exist key, else make new list and add value
-     * @param key
-     * com.inzapp.sqlToJsonParser.config.JsonKey
-     * @param value
-     * java.util.list.toString();
+     *
+     * @param key   com.inzapp.sqlToJsonParser.config.JsonKey
+     * @param value java.util.list.toString();
      */
     protected void putToJson(String key, String value) {
         List<String> list = getConvertedJsonArray(key);
@@ -33,11 +35,11 @@ public class JsonManager {
      * only used for sub query and sub query analyse
      * add index to json key
      * if exist json key "SUB QUERY 1", make new key with next index("SUB QUERY 2")
-     * @param key
-     * com.inzapp.sqlToJsonParser.config.JsonKey
-     * @param idx
-     * fixed value with 1, only used in recursion
-     * @param value
+     *
+     * @param key   com.inzapp.sqlToJsonParser.config.JsonKey
+     * @param idx   fixed value with 1, only used in recursion
+     * @param value java.util.List<>().toString()
+     *              list value as string
      */
     protected void putToJson(String key, int idx, String value) {
         List<String> list = getConvertedJsonArray(key + idx);
@@ -50,10 +52,9 @@ public class JsonManager {
 
     /**
      * add json object as json value : used for recursive sub query analyse
-     * @param key
-     * com.inzapp.sqlToJsonParser.config.JsonKey
-     * @param json
-     * analysed sub query json object
+     *
+     * @param key  com.inzapp.sqlToJsonParser.config.JsonKey
+     * @param json analysed sub query json object
      */
     private void putToJson(String key, JSONObject json) {
         try {
@@ -67,12 +68,10 @@ public class JsonManager {
      * only used for sub query and sub query analyse
      * add index to json key
      * if exist json key "SUB QUERY 1", make new key with next index("SUB QUERY 2")
-     * @param key
-     * com.inzapp.sqlToJsonParser.config.JsonKey
-     * @param idx
-     * fixed value with 1, only used in recursion
-     * @param json
-     * analysed sub query json object
+     *
+     * @param key  com.inzapp.sqlToJsonParser.config.JsonKey
+     * @param idx  fixed value with 1, only used in recursion
+     * @param json analysed sub query json object
      */
     protected void putToJson(String key, int idx, JSONObject json) {
         try {
@@ -85,10 +84,9 @@ public class JsonManager {
 
     /**
      * json array to java list converter
-     * @param key
-     * com.inzapp.sqlToJsonParser.config.JsonKey
-     * @return
-     * org.json.JSONArray -> java.util.list
+     *
+     * @param key com.inzapp.sqlToJsonParser.config.JsonKey
+     * @return org.json.JSONArray -> java.util.list
      * return null if failed to convert or json key does not exist
      */
     private List<String> getConvertedJsonArray(String key) {
