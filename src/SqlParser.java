@@ -57,7 +57,7 @@ class SqlToJsonParser {
             return this.json;
         } catch (Exception e) {
             // sql parse failure
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         }
     }
@@ -94,7 +94,6 @@ class SqlToJsonParser {
                 @Override
                 public void visit(PlainSelect plainSelect) {
                     // column
-                    // TODO : select * column test
                     List<SelectItem> selectItems = plainSelect.getSelectItems();
                     if (selectItems != null)
 //                        selectItems.forEach(selectItem -> selectItem.accept(selectItemVisitor));
@@ -203,21 +202,24 @@ class SqlToJsonParser {
         }
     };
 
-//    private final SelectItemVisitorAdapter selectItemVisitor = new SelectItemVisitorAdapter() {
-//        @Override
-//        public void visit(SelectExpressionItem item) {
-//            putToJson(JsonKey.COLUMN, item.toString());
-//            super.visit(item);
-//        }
-//    };
+    // for testing
+    private final SelectItemVisitorAdapter selectItemVisitor = new SelectItemVisitorAdapter() {
+        @Override
+        public void visit(SelectExpressionItem item) {
+            putToJson(JsonKey.COLUMN, item.toString());
+            super.visit(item);
+        }
+    };
 
     private final FromItemVisitorAdapter fromItemVisitor = new FromItemVisitorAdapter() {
+        // search table name
         @Override
         public void visit(Table table) {
             putToJson(JsonKey.TABLE, table.toString());
             super.visit(table);
         }
 
+        // search sub query in from statement
         @Override
         public void visit(SubSelect subSelect) {
             putToJson(JsonKey.TABLE_SUB_QUERY, 1, subSelect.toString());
@@ -226,7 +228,9 @@ class SqlToJsonParser {
         }
     };
 
+
     private final ExpressionVisitorAdapter expressionVisitor = new ExpressionVisitorAdapter() {
+        // search sub query in where statement
         @Override
         public void visit(SubSelect subSelect) {
             putToJson(JsonKey.WHERE_SUB_QUERY, 1, subSelect.toString());
@@ -244,16 +248,19 @@ class SqlToJsonParser {
     };
 
     // used for only where expression (need no where column)
-    private final ExpressionVisitorAdapter whereExpressionVisitor = new ExpressionVisitorAdapter(){
+    private final ExpressionVisitorAdapter whereExpressionVisitor = new ExpressionVisitorAdapter() {
         @Override
         public void visit(SubSelect subSelect) {
             putToJson(JsonKey.WHERE_SUB_QUERY, 1, subSelect.toString());
             putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new SqlToJsonParser().parse(subSelect.toString()));
             super.visit(subSelect);
         }
+
+        // do not override column visit method here
     };
 
     private GroupByVisitor groupByVisitor = new GroupByVisitor() {
+        // search group by
         @Override
         public void visit(GroupByElement groupByElement) {
             putToJson(JsonKey.GROUP_BY, groupByElement.toString());
@@ -261,6 +268,7 @@ class SqlToJsonParser {
     };
 
     private final OrderByVisitorAdapter orderByVisitor = new OrderByVisitorAdapter() {
+        // search order by
         @Override
         public void visit(OrderByElement orderBy) {
             putToJson(JsonKey.ORDER_BY, orderBy.toString());
@@ -268,6 +276,7 @@ class SqlToJsonParser {
         }
     };
 
+    // add json to value if exist key, else make new list and add value
     private void putToJson(String key, String value) {
         List<String> list = getConvertedJsonArray(key);
         if (list == null)
@@ -281,15 +290,19 @@ class SqlToJsonParser {
         }
     }
 
+    // only used for sub query and sub query analyse
+    // add index to json key
+    // if exist json key "SUB QUERY 1", make new key with next index("SUB QUERY 2")
     private void putToJson(String key, int idx, String value) {
         List<String> list = getConvertedJsonArray(key + idx);
-        if (list != null) {
+        if (list != null)
             putToJson(key + (idx + 1), value);
-        } else {
+        else
             putToJson(key + idx, value);
-        }
+
     }
 
+    // add json object as json value : used for recursive sub query analyse
     private void putToJson(String key, JSONObject json) {
         try {
             this.json.put(key, json);
@@ -298,15 +311,19 @@ class SqlToJsonParser {
         }
     }
 
+    // only used for sub query and sub query analyse
+    // add index to json key
+    // if exist json key "SUB QUERY 1", make new key with next index("SUB QUERY 2")
     private void putToJson(String key, int idx, JSONObject json) {
         try {
-            this.json.getJSONObject(key + idx);
+            this.json.getJSONObject(key + idx); // only used for exception check
             putToJson(key, (idx + 1), json);
         } catch (Exception e) {
             putToJson(key + idx, json);
         }
     }
 
+    // json array to java list converter
     private List<String> getConvertedJsonArray(String key) {
         try {
             JSONArray jsonArray = this.json.getJSONArray(key);
@@ -319,6 +336,7 @@ class SqlToJsonParser {
         }
     }
 
+    // sort json by key
     private void sortJsonByKey() {
         try {
             Iterator keys = json.keys();
