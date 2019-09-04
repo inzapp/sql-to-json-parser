@@ -32,7 +32,7 @@ class SqlVisitor extends JsonManager {
         }
     }
 
-    final StatementVisitorAdapter statementVisitor = new StatementVisitorAdapter() {
+    private final StatementVisitorAdapter statementVisitor = new StatementVisitorAdapter() {
         // insert
         @Override
         public void visit(Insert insert) {
