@@ -19,6 +19,14 @@ import org.json.JSONObject;
 import java.util.List;
 
 class SqlVisitor extends JsonManager {
+    /**
+     * parse sql string to org.json.JSONObject
+     * @param sql
+     * read from file in com.inzapp.sqlToJsonParser.SqlToJsonParser.readFromFile()
+     * @return
+     * converted json object
+     * return null if conversion failed
+     */
     JSONObject parse(String sql) {
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
@@ -33,7 +41,11 @@ class SqlVisitor extends JsonManager {
     }
 
     private final StatementVisitorAdapter statementVisitor = new StatementVisitorAdapter() {
-        // insert
+        /**
+         * insert
+         * @param insert
+         * visitor event listened
+         */
         @Override
         public void visit(Insert insert) {
             // crud
@@ -57,7 +69,11 @@ class SqlVisitor extends JsonManager {
             super.visit(insert);
         }
 
-        // select
+        /**
+         * select
+         * @param select
+         * visitor event listened
+         */
         @Override
         public void visit(Select select) {
             // crud
@@ -115,7 +131,11 @@ class SqlVisitor extends JsonManager {
             super.visit(select);
         }
 
-        // update
+        /**
+         * update
+         * @param update
+         * visitor event listened
+         */
         @Override
         public void visit(Update update) {
             // crud
@@ -144,7 +164,11 @@ class SqlVisitor extends JsonManager {
             super.visit(update);
         }
 
-        // delete
+        /**
+         * delete
+         * @param delete
+         * visitor event listened
+         */
         @Override
         public void visit(Delete delete) {
             // crud
@@ -166,8 +190,12 @@ class SqlVisitor extends JsonManager {
         }
     };
 
-    // for testing
     private final SelectItemVisitorAdapter selectItemVisitor = new SelectItemVisitorAdapter() {
+        /**
+         * for testing
+         * @param item
+         * visitor event listened
+         */
         @Override
         public void visit(SelectExpressionItem item) {
             putToJson(JsonKey.COLUMN, item.toString());
@@ -176,14 +204,22 @@ class SqlVisitor extends JsonManager {
     };
 
     private final FromItemVisitorAdapter fromItemVisitor = new FromItemVisitorAdapter() {
-        // search table name
+        /**
+         * search table name
+         * @param table
+         * visitor event listened
+         */
         @Override
         public void visit(Table table) {
             putToJson(JsonKey.TABLE, table.toString());
             super.visit(table);
         }
 
-        // search sub query in from statement
+        /**
+         * search sub query in from statement
+         * @param subSelect
+         * visitor event listened
+         */
         @Override
         public void visit(SubSelect subSelect) {
             putToJson(JsonKey.TABLE_SUB_QUERY, 1, subSelect.toString());
@@ -193,7 +229,11 @@ class SqlVisitor extends JsonManager {
     };
 
     private final ExpressionVisitorAdapter expressionVisitor = new ExpressionVisitorAdapter() {
-        // search sub query in where statement
+        /**
+         * search sub query in where statement
+         * @param subSelect
+         * visitor event listened
+         */
         @Override
         public void visit(SubSelect subSelect) {
             putToJson(JsonKey.WHERE_SUB_QUERY, 1, subSelect.toString());
@@ -201,7 +241,11 @@ class SqlVisitor extends JsonManager {
             super.visit(subSelect);
         }
 
-        // column for select, set
+        /**
+         * column for select, set
+         * @param column
+         * visitor event listened
+         */
         @Override
         public void visit(Column column) {
             putToJson(JsonKey.COLUMN, column.toString());
@@ -209,8 +253,12 @@ class SqlVisitor extends JsonManager {
         }
     };
 
-    // used for only where expression (need no where column)
     private final ExpressionVisitorAdapter whereExpressionVisitor = new ExpressionVisitorAdapter() {
+        /**
+         * used for only where expression (need no where column)
+         * @param subSelect
+         * visitor event listened
+         */
         @Override
         public void visit(SubSelect subSelect) {
             putToJson(JsonKey.WHERE_SUB_QUERY, 1, subSelect.toString());
@@ -222,7 +270,11 @@ class SqlVisitor extends JsonManager {
     };
 
     private GroupByVisitor groupByVisitor = new GroupByVisitor() {
-        // search group by
+        /**
+         * search group by
+         * @param groupByElement
+         * visitor event listened
+         */
         @Override
         public void visit(GroupByElement groupByElement) {
             putToJson(JsonKey.GROUP_BY, groupByElement.toString());
@@ -230,7 +282,11 @@ class SqlVisitor extends JsonManager {
     };
 
     private final OrderByVisitorAdapter orderByVisitor = new OrderByVisitorAdapter() {
-        // search order by
+        /**
+         * search order by
+         * @param orderBy
+         * visitor event listened
+         */
         @Override
         public void visit(OrderByElement orderBy) {
             putToJson(JsonKey.ORDER_BY, orderBy.toString());
