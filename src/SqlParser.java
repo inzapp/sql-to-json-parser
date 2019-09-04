@@ -94,9 +94,11 @@ class SqlToJsonParser {
                 @Override
                 public void visit(PlainSelect plainSelect) {
                     // column
+                    // TODO : select * column test
                     List<SelectItem> selectItems = plainSelect.getSelectItems();
                     if (selectItems != null)
-                        selectItems.forEach(selectItem -> selectItem.accept(selectItemVisitor));
+//                        selectItems.forEach(selectItem -> selectItem.accept(selectItemVisitor));
+                        selectItems.forEach(selectItem -> putToJson(JsonKey.COLUMN, selectItem.toString()));
 
                     // table
                     FromItem fromItem = plainSelect.getFromItem();
@@ -107,7 +109,7 @@ class SqlToJsonParser {
                     Expression whereExpression = plainSelect.getWhere();
                     if (whereExpression != null) {
                         putToJson(JsonKey.WHERE, whereExpression.toString());
-                        whereExpression.accept(expressionVisitor);
+                        whereExpression.accept(whereExpressionVisitor);
                     }
 
                     // group by
@@ -194,7 +196,7 @@ class SqlToJsonParser {
             Expression whereExpression = delete.getWhere();
             if (whereExpression != null) {
                 putToJson(JsonKey.WHERE, whereExpression.toString());
-                whereExpression.accept(expressionVisitor);
+                whereExpression.accept(whereExpressionVisitor);
             }
 
             super.visit(delete);
@@ -232,10 +234,22 @@ class SqlToJsonParser {
             super.visit(subSelect);
         }
 
+        // column for select, set
         @Override
         public void visit(Column column) {
+            // TODO : does where column needed?
             putToJson(JsonKey.COLUMN, column.toString());
             super.visit(column);
+        }
+    };
+
+    // used for only where expression (need no where column)
+    private final ExpressionVisitorAdapter whereExpressionVisitor = new ExpressionVisitorAdapter(){
+        @Override
+        public void visit(SubSelect subSelect) {
+            putToJson(JsonKey.WHERE_SUB_QUERY, 1, subSelect.toString());
+            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new SqlToJsonParser().parse(subSelect.toString()));
+            super.visit(subSelect);
         }
     };
 
