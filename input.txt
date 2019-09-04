@@ -1,4 +1,4 @@
-SELECT
+aSELECT
          EC_CLPS_DV_CD         as   STAFF_GBN,
          EC_NM            as   STAFF_CLASS,
          EC_GRP            as   ORG_STAFF_GBN,

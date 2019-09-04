@@ -11,16 +11,24 @@ public class SqlToJsonParser {
     public static void main(String[] args) {
         SqlToJsonParser sqlToJsonParser = new SqlToJsonParser();
         SqlVisitor sqlVisitor = new SqlVisitor();
-        String sql = sqlToJsonParser.readSqlFromFile();
-        System.out.println("input sql\n\n" + sql);
-
         try {
+            String sql = sqlToJsonParser.readSqlFromFile();
+            if(sql == null)
+                throw new Exception("input file does not exist");
+
             JSONObject json = sqlVisitor.parse(sql);
+            if(json == null)
+                throw new Exception("sql syntax error");
+
             String jsonString = json.toString(4);
+            System.out.println("input sql\n\n" + sql);
             System.out.println("output json\n\n" + jsonString);
+
             sqlToJsonParser.saveFile(jsonString);
+            System.out.println("parse success");
         } catch (Exception e) {
             sqlToJsonParser.saveFile(Config.SQL_SYNTAX_ERROR);
+            System.out.println(e.getMessage());
         }
     }
 
@@ -36,8 +44,7 @@ public class SqlToJsonParser {
             }
             return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
-            return "input file does not exist";
+            return null;
         }
     }
 
@@ -45,10 +52,6 @@ public class SqlToJsonParser {
         try {
             FileOutputStream fos = new FileOutputStream(Config.OUTPUT_FILE_NAME);
             fos.write(jsonString.getBytes());
-            if (jsonString.equals(Config.SQL_SYNTAX_ERROR))
-                System.out.println("\nparse failure");
-            else
-                System.out.println("\nparse success");
         } catch (Exception e) {
             e.printStackTrace();
         }
