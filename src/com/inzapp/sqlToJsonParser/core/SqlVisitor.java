@@ -57,7 +57,6 @@ class SqlVisitor extends JsonManager {
                 putToJson(JsonKey.TABLE, table.toString());
             }
 
-
             // columns
             List<Column> columns = insert.getColumns();
             if (columns != null)
@@ -192,7 +191,6 @@ class SqlVisitor extends JsonManager {
                 putToJson(JsonKey.TABLE, table.toString());
             }
 
-
             // where
             Expression whereExpression = delete.getWhere();
             if (whereExpression != null) {
@@ -204,29 +202,7 @@ class SqlVisitor extends JsonManager {
         }
     };
 
-    private final SelectItemVisitorAdapter selectItemVisitor = new SelectItemVisitorAdapter() {
-        /**
-         * for testing
-         * @param item visitor event listened
-         */
-        @Override
-        public void visit(SelectExpressionItem item) {
-            putToJson(JsonKey.COLUMN, item.toString());
-            super.visit(item);
-        }
-    };
-
     private final FromItemVisitorAdapter fromItemVisitor = new FromItemVisitorAdapter() {
-        /**
-         * search table name
-         * @param table visitor event listened
-         */
-//        @Override
-//        public void visit(Table table) {
-//            putToJson(JsonKey.TABLE, table.toString());
-//            super.visit(table);
-//        }
-
         /**
          * search sub query in from statement
          * @param subSelect visitor event listened
@@ -237,6 +213,8 @@ class SqlVisitor extends JsonManager {
             putToJson(JsonKey.TABLE_SUB_QUERY_ANALYSE, 1, new SqlVisitor().parse(subSelect.toString()));
             super.visit(subSelect);
         }
+
+        // do not override table visit method
     };
 
     private final ExpressionVisitorAdapter expressionVisitor = new ExpressionVisitorAdapter() {
