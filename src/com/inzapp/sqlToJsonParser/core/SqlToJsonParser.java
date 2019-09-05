@@ -93,7 +93,7 @@ public class SqlToJsonParser {
      */
     private void saveFile(String jsonString, String fileName) {
         try {
-            FileOutputStream fos = new FileOutputStream(Config.OUTPUT_FILE_NAME);
+            FileOutputStream fos = new FileOutputStream(fileName);
             fos.write(jsonString.getBytes());
         } catch (Exception e) {
             e.printStackTrace();
