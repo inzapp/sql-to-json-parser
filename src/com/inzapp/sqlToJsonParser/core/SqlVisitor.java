@@ -52,8 +52,11 @@ class SqlVisitor extends JsonManager {
 
             // table
             Table table = insert.getTable();
-            if (table != null)
+            if (table != null) {
                 table.accept(fromItemVisitor);
+                putToJson(JsonKey.TABLE, table.toString());
+            }
+
 
             // columns
             List<Column> columns = insert.getColumns();
@@ -91,8 +94,10 @@ class SqlVisitor extends JsonManager {
 
                     // table
                     FromItem fromItem = plainSelect.getFromItem();
-                    if (fromItem != null)
+                    if (fromItem != null) {
                         fromItem.accept(fromItemVisitor);
+                        putToJson(JsonKey.TABLE, fromItem.toString());
+                    }
 
                     // where
                     Expression whereExpression = plainSelect.getWhere();
@@ -152,8 +157,11 @@ class SqlVisitor extends JsonManager {
 
             // tables
             List<Table> tables = update.getTables();
-            if (tables != null)
+            if (tables != null) {
                 tables.forEach(table -> table.accept(fromItemVisitor));
+                tables.forEach(table -> putToJson(JsonKey.TABLE, table.toString()));
+            }
+
 
             // values
             List<Expression> expressions = update.getExpressions();
@@ -179,8 +187,11 @@ class SqlVisitor extends JsonManager {
 
             // table
             Table table = delete.getTable();
-            if (table != null)
+            if (table != null) {
                 table.accept(fromItemVisitor);
+                putToJson(JsonKey.TABLE, table.toString());
+            }
+
 
             // where
             Expression whereExpression = delete.getWhere();
@@ -210,11 +221,11 @@ class SqlVisitor extends JsonManager {
          * search table name
          * @param table visitor event listened
          */
-        @Override
-        public void visit(Table table) {
-            putToJson(JsonKey.TABLE, table.toString());
-            super.visit(table);
-        }
+//        @Override
+//        public void visit(Table table) {
+//            putToJson(JsonKey.TABLE, table.toString());
+//            super.visit(table);
+//        }
 
         /**
          * search sub query in from statement
