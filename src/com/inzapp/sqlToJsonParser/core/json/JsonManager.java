@@ -20,8 +20,26 @@ public class JsonManager {
             String jsonKey;
             int val = Integer.MAX_VALUE;
 
+            jsonKey = JsonKey.JOIN;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey))
+                return -val;
+            else if(b.contains(jsonKey))
+                return val;
+            --val;
+
             jsonKey = JsonKey.CRUD;
-            if(a.equals(b) && a.equals(jsonKey))
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey))
+                return -val;
+            else if(b.contains(jsonKey))
+                return val;
+            --val;
+
+            jsonKey = JsonKey.COLUMN;
+            if(a.equals(b) && a.contains(jsonKey))
                 return 0;
             else if(a.contains(jsonKey))
                 return -val;
