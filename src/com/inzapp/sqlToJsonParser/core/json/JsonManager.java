@@ -17,20 +17,18 @@ public class JsonManager {
 
     public JsonManager() {
         json = new JSONObject((Comparator<String>) (a, b) -> {
+            String jsonKey;
             int val = Integer.MAX_VALUE;
 
-            if(a.contains(JsonKey.CRUD))
+            jsonKey = JsonKey.CRUD;
+            if(a.equals(b) && a.equals(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey))
                 return -val;
-            else if(b.contains(JsonKey.CRUD))
+            else if(b.contains(jsonKey))
                 return val;
             --val;
 
-
-            if(a.contains(JsonKey.JOIN))
-                return -val;
-            else if(b.contains(JsonKey.JOIN))
-                return val;
-            --val;
 
             return a.compareTo(b);
         });
