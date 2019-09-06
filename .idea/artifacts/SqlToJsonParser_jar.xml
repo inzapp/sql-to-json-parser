@@ -3,9 +3,8 @@
     <output-path>$PROJECT_DIR$/out/artifacts/SqlToJsonParser_jar</output-path>
     <root id="archive" name="SqlToJsonParser.jar">
       <element id="module-output" name="SqlToJsonParser" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/java-json.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/gson-2.6.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/jsqlparser-2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jsqlparser-2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/java-json.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
