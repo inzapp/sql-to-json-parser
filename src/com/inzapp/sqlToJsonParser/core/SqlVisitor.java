@@ -32,20 +32,6 @@ public class SqlVisitor extends JsonManager {
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
             statement.accept(statementVisitor);
-
-            while(true) {
-                try {
-                    String pop = stack.pop();
-                    String[] splits = pop.split(SplitKey.SPLIT_KEY);
-                    String key = splits[0];
-                    String value = splits[1];
-                    System.out.printf("[%s] [%s]\n", key, value);
-                }catch(Exception e) {
-                    break;
-                }
-            }
-            System.out.println();
-
             return json;
         } catch (Exception e) {
             // sql parse failure

@@ -1,20 +1,31 @@
 package com.inzapp.sqlToJsonParser.core.json;
 
-import com.inzapp.sqlToJsonParser.config.SplitKey;
+import com.inzapp.sqlToJsonParser.config.JsonKey;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Stack;
 
 public class JsonManager {
     /**
      * for saving parsed sql
      */
     protected JSONObject json = new JSONObject();
-    protected Stack<String> stack = new Stack<>();
+
+    public JsonManager() {
+        json = new JSONObject(new Comparator<String>() {
+            @Override
+            public int compare(String a, String b) {
+//                if(a.equals(JsonKey.CRUD))
+//                    return 0;
+
+                return b.compareTo(a);
+            }
+        });
+    }
 
     /**
      * add json to value if exist key, else make new list and add value
@@ -27,7 +38,6 @@ public class JsonManager {
         if (list == null)
             list = new ArrayList<>();
 
-        stack.push(String.format("%s%s%s", key, SplitKey.SPLIT_KEY, value));
         list.add(value);
         try {
             json.put(key, list);
