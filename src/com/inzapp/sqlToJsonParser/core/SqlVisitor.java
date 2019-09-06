@@ -161,7 +161,6 @@ class SqlVisitor extends JsonManager {
                 tables.forEach(table -> putToJson(JsonKey.TABLE, table.toString()));
             }
 
-
             // values
             List<Expression> expressions = update.getExpressions();
             if (expressions != null)

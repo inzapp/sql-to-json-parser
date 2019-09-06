@@ -46,21 +46,6 @@ public class SqlToJsonParser {
     }
 
     /**
-     * used for java code
-     *
-     * @param sql raw sql query
-     * @return parsed json string
-     * return null if exception was caught
-     */
-    public String parse(String sql) {
-        try {
-            return new SqlVisitor().parse(sql).toString(4);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
      * read sql from com.inzapp.SqlToJsonParser.config.Config.INPUT_FILE_NAME
      * used for executable jar
      *
