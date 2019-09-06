@@ -1,6 +1,7 @@
 package com.inzapp.sqlToJsonParser.core;
 
 import com.inzapp.sqlToJsonParser.config.JsonKey;
+import com.inzapp.sqlToJsonParser.config.SplitKey;
 import com.inzapp.sqlToJsonParser.core.json.JsonManager;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
@@ -18,7 +19,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-class SqlVisitor extends JsonManager {
+public class SqlVisitor extends JsonManager {
     /**
      * parse sql string to org.json.JSONObject
      *
@@ -27,12 +28,25 @@ class SqlVisitor extends JsonManager {
      * converted json object
      * return null if conversion failed
      */
-    JSONObject parse(String sql) {
+    public JSONObject parse(String sql) {
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
             statement.accept(statementVisitor);
-            sortJsonByKey();
-            return this.json;
+
+            while(true) {
+                try {
+                    String pop = stack.pop();
+                    String[] splits = pop.split(SplitKey.SPLIT_KEY);
+                    String key = splits[0];
+                    String value = splits[1];
+                    System.out.printf("[%s] [%s]\n", key, value);
+                }catch(Exception e) {
+                    break;
+                }
+            }
+            System.out.println();
+
+            return json;
         } catch (Exception e) {
             // sql parse failure
 //            e.printStackTrace();

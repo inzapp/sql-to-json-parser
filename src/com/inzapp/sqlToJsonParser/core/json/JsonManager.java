@@ -1,16 +1,20 @@
 package com.inzapp.sqlToJsonParser.core.json;
 
+import com.inzapp.sqlToJsonParser.config.SplitKey;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 public class JsonManager {
     /**
      * for saving parsed sql
      */
     protected JSONObject json = new JSONObject();
+    protected Stack<String> stack = new Stack<>();
 
     /**
      * add json to value if exist key, else make new list and add value
@@ -23,9 +27,10 @@ public class JsonManager {
         if (list == null)
             list = new ArrayList<>();
 
+        stack.push(String.format("%s%s%s", key, SplitKey.SPLIT_KEY, value));
         list.add(value);
         try {
-            this.json.put(key, list);
+            json.put(key, list);
         } catch (JSONException ex) {
             ex.printStackTrace();
         }
@@ -57,7 +62,7 @@ public class JsonManager {
      */
     private void putToJson(String key, JSONObject json) {
         try {
-            this.json.put(key, json);
+            json.put(key, json);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -74,7 +79,7 @@ public class JsonManager {
      */
     protected void putToJson(String key, int idx, JSONObject json) {
         try {
-            this.json.getJSONObject(key + idx); // only used for exception check
+            json.getJSONObject(key + idx); // only used for exception check
             putToJson(key, (idx + 1), json);
         } catch (Exception e) {
             putToJson(key + idx, json);
@@ -90,31 +95,13 @@ public class JsonManager {
      */
     private List<String> getConvertedJsonArray(String key) {
         try {
-            JSONArray jsonArray = this.json.getJSONArray(key);
+            JSONArray jsonArray = json.getJSONArray(key);
             List<String> list = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); ++i)
                 list.add((String) jsonArray.get(i));
             return list;
         } catch (Exception e) {
             return null;
-        }
-    }
-
-    /**
-     * sort json by key
-     * not supported yet
-     */
-    protected void sortJsonByKey() {
-        try {
-            Iterator<?> keys = this.json.keys();
-            Map<String, Object> treeMap = new TreeMap<>(String::compareTo);
-            while (keys.hasNext()) {
-                String key = (String) keys.next();
-                treeMap.put(key, this.json.get(key));
-            }
-            this.json = new JSONObject(treeMap);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
