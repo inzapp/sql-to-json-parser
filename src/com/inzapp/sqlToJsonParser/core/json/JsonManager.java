@@ -1,12 +1,13 @@
 package com.inzapp.sqlToJsonParser.core.json;
 
+import com.inzapp.sqlToJsonParser.config.SplitKey;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
 
-public class JsonManager {
+public class JsonManager extends JsonValueAccumulator {
     /**
      * for saving parsed sql
      */
@@ -47,7 +48,6 @@ public class JsonManager {
             putToJson(key + (idx + 1), value);
         else
             putToJson(key + idx, value);
-
     }
 
     /**
@@ -107,11 +107,11 @@ public class JsonManager {
      */
     protected void sortJsonByKey() {
         try {
-            Iterator keys = json.keys();
+            Iterator<?> keys = this.json.keys();
             Map<String, Object> treeMap = new TreeMap<>(String::compareTo);
             while (keys.hasNext()) {
                 String key = (String) keys.next();
-                treeMap.put(key, json.get(key));
+                treeMap.put(key, this.json.get(key));
             }
             this.json = new JSONObject(treeMap);
         } catch (Exception e) {

@@ -12,7 +12,8 @@ public class SqlToJsonParser {
      * main method
      * used for executable jar
      *
-     * @param args not used
+     * @param args [0] : specified input file name
+     *             [1] : specified output file name
      */
     public static void main(String[] args) {
         String inputFileName = Config.INPUT_FILE_NAME;

@@ -53,8 +53,8 @@ class SqlVisitor extends JsonManager {
             // table
             Table table = insert.getTable();
             if (table != null) {
+                putToJson(JsonKey.FROM, table.toString());
                 table.accept(fromItemVisitor);
-                putToJson(JsonKey.TABLE, table.toString());
             }
 
             // columns
@@ -94,8 +94,8 @@ class SqlVisitor extends JsonManager {
                     // table
                     FromItem fromItem = plainSelect.getFromItem();
                     if (fromItem != null) {
+                        putToJson(JsonKey.FROM, fromItem.toString());
                         fromItem.accept(fromItemVisitor);
-                        putToJson(JsonKey.TABLE, fromItem.toString());
                     }
 
                     // where
@@ -157,8 +157,8 @@ class SqlVisitor extends JsonManager {
             // tables
             List<Table> tables = update.getTables();
             if (tables != null) {
+                tables.forEach(table -> putToJson(JsonKey.FROM, table.toString()));
                 tables.forEach(table -> table.accept(fromItemVisitor));
-                tables.forEach(table -> putToJson(JsonKey.TABLE, table.toString()));
             }
 
             // values
@@ -186,8 +186,8 @@ class SqlVisitor extends JsonManager {
             // table
             Table table = delete.getTable();
             if (table != null) {
+                putToJson(JsonKey.FROM, table.toString());
                 table.accept(fromItemVisitor);
-                putToJson(JsonKey.TABLE, table.toString());
             }
 
             // where
@@ -208,8 +208,8 @@ class SqlVisitor extends JsonManager {
          */
         @Override
         public void visit(SubSelect subSelect) {
-            putToJson(JsonKey.TABLE_SUB_QUERY, 1, subSelect.toString());
-            putToJson(JsonKey.TABLE_SUB_QUERY_ANALYSE, 1, new SqlVisitor().parse(subSelect.toString()));
+            putToJson(JsonKey.FROM_SUB_QUERY, 1, subSelect.toString());
+            putToJson(JsonKey.FROM_SUB_QUERY_ANALYSE, 1, new SqlVisitor().parse(subSelect.toString()));
             super.visit(subSelect);
         }
 
