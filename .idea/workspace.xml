@@ -7,25 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3efaa97-ec05-4093-9248-3ac33d751bec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/java_json.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SqlToJsonParser.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SqlToJsonParser.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/java-json.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/config/SplitKey.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/config/SplitKey.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlToJsonParser.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$1$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/json/JsonManager$1.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/json/JsonManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/json/JsonManager.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/output.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/SqlVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/SqlVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/json/JsonManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/json/JsonManager.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -50,7 +36,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/TreemapJson.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../TreemapJson" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />

@@ -13,17 +13,26 @@ public class JsonManager {
     /**
      * for saving parsed sql
      */
-    protected JSONObject json = new JSONObject();
+    protected JSONObject json;
 
     public JsonManager() {
-        json = new JSONObject(new Comparator<String>() {
-            @Override
-            public int compare(String a, String b) {
-//                if(a.equals(JsonKey.CRUD))
-//                    return 0;
+        json = new JSONObject((Comparator<String>) (a, b) -> {
+            int val = Integer.MAX_VALUE;
 
-                return b.compareTo(a);
-            }
+            if(a.contains(JsonKey.CRUD))
+                return -val;
+            else if(b.contains(JsonKey.CRUD))
+                return val;
+            --val;
+
+
+            if(a.contains(JsonKey.JOIN))
+                return -val;
+            else if(b.contains(JsonKey.JOIN))
+                return val;
+            --val;
+
+            return a.compareTo(b);
         });
     }
 
@@ -72,7 +81,7 @@ public class JsonManager {
      */
     private void putToJson(String key, JSONObject json) {
         try {
-            json.put(key, json);
+            this.json.put(key, json);
         } catch (JSONException e) {
             e.printStackTrace();
         }
