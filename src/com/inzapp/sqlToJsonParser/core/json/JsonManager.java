@@ -1,13 +1,12 @@
 package com.inzapp.sqlToJsonParser.core.json;
 
-import com.inzapp.sqlToJsonParser.config.SplitKey;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
 
-public class JsonManager extends JsonValueAccumulator {
+public class JsonManager {
     /**
      * for saving parsed sql
      */
