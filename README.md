@@ -6,8 +6,8 @@ https://github.com/inzapp/sql-to-json-parser/releases
 
 ## Usage
 Run as default file name<br>
-Input file name : input.txt<br>
-Output file name : output.json<br>
+Default input file name : input.txt<br>
+Default output file name : output.json<br>
 ```bash
 $ java -jar SqlToJsonParser.jar
 ```
@@ -24,11 +24,11 @@ String jsonString = sqlToJsonParse.parse("SELECT * FROM TAB");
 ```
 
 ## Select
-input.txt
+input
 ```sql
 SELECT * FROM TAB
 ```
-output.json
+output
 ```json
 {
     "CRUD": ["SELECT"],
@@ -36,12 +36,13 @@ output.json
     "TABLE": ["TAB"]
 }
 ```
+
 ## Insert
-input.txt
+input
 ```sql
 INSERT INTO TABLENAME VALUE ('TESTVALUE')
 ```
-output.json
+output
 ```json
 {
     "CRUD": ["INSERT"],
@@ -49,14 +50,15 @@ output.json
     "VALUE": ["'TESTVALUE'"]
 }
 ```
+
 ## Update
-input.txt
+input
 ```sql
 UPDATE TABLENAME
 SET COLNAME = 1
 WHERE CONDITION = 2
 ```
-output.json
+output
 ```json
 {
     "CRUD": ["UPDATE"],
@@ -66,13 +68,14 @@ output.json
     "WHERE": ["CONDITION = 2"]
 }
 ```
+
 ## Delete
-input.txt
+input
 ```sql
 DELETE FROM TABLE
 WHERE CONDITION = 'ALL'
 ```
-output.json
+output
 ```json
 {
     "CRUD": ["DELETE"],
@@ -80,16 +83,16 @@ output.json
     "WHERE": ["CONDITION = 'ALL'"]
 }
 ```
-## Sub Query
 
-input.txt
+## Sub Query
+input
 ```sql
 SELECT A, B FROM (SELECT A, B FROM FROMTABLE WHERE FROMCONDITION = 'FROMCONDITION')
 WHERE C = (SELECT C FROM WHERETABLE WHERE WHERECONDITION = 'WHERECONDITION')
 ORDER BY A
 ```
 
-output.json
+output
 ```json
 {
     "CRUD": ["SELECT"],
