@@ -1,16 +1,28 @@
 # sql-to-json-parser
 SQL to org.json.JSONObject parser using JsqlParser
 
-## Video
-https://www.youtube.com/watch?v=a24L_8GETLY
-
 ## Download
 https://github.com/inzapp/sql-to-json-parser/releases
 
 ## Usage
-```
+Run as default file name<br>
+Input file name : input.txt<br>
+Output file name : output.json<br>
+```bash
 $ java -jar SqlToJsonParser.jar
 ```
+
+Run as specified file name
+```bash
+$ java -jar SqlToJsonParser.jar yourInputFileName yourOutputFileName
+```
+
+In Java
+```java
+SqlToJsonParser sqlToJsonParser = new SqlToJsonParser();
+String jsonString = sqlToJsonParse.parse("SELECT * FROM TAB");
+```
+
 ## Select
 input.txt
 ```sql
@@ -69,12 +81,14 @@ output.json
 }
 ```
 ## Sub Query
+
 input.txt
 ```sql
 SELECT A, B FROM (SELECT A, B FROM FROMTABLE WHERE FROMCONDITION = 'FROMCONDITION')
 WHERE C = (SELECT C FROM WHERETABLE WHERE WHERECONDITION = 'WHERECONDITION')
 ORDER BY A
 ```
+
 output.json
 ```json
 {
@@ -83,6 +97,7 @@ output.json
       "A",
       "B"
     ],
+    "TABLE": ["(SELECT A, B FROM FROMTABLE WHERE SUBCONDITION = 'SUBCONDITION')"],
     "TABLE SUB QUERY 1": ["(SELECT A, B FROM FROMTABLE WHERE FROMCONDITION = 'FROMCONDITION')"],
     "TABLE SUB QUERY ANALYSE 1": {
         "CRUD": ["SELECT"],
