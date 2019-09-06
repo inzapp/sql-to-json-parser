@@ -1,10 +1,50 @@
 package com.inzapp.sqlToJsonParser.core;
 
+import com.inzapp.sqlToJsonParser.config.Config;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 
 public class SqlToJsonParser {
+    /**
+     * main method
+     * used for executable jar
+     *
+     * @param args not used
+     */
+    public static void main(String[] args) {
+        String inputFileName = Config.INPUT_FILE_NAME;
+        String outputFileName = Config.OUTPUT_FILE_NAME;
+        if (args != null && args.length == 2) {
+            inputFileName = args[0];
+            outputFileName = args[1];
+        }
+
+        SqlToJsonParser sqlToJsonParser = new SqlToJsonParser();
+        SqlVisitor sqlVisitor = new SqlVisitor();
+        try {
+            String sql = sqlToJsonParser.readSqlFromFile(inputFileName);
+            if (sql == null)
+                throw new Exception("input file does not exist");
+
+            JSONObject json = sqlVisitor.parse(sql);
+            if (json == null)
+                throw new Exception("sql syntax error");
+
+            String jsonString = json.toString(4);
+            System.out.println("input sql\n\n" + sql);
+            System.out.println("output json\n\n" + jsonString);
+
+            sqlToJsonParser.saveFile(jsonString, outputFileName);
+            System.out.println("parse success");
+        } catch (Exception e) {
+            sqlToJsonParser.saveFile(Config.SQL_SYNTAX_ERROR, outputFileName);
+            System.out.println(e.getMessage());
+        }
+    }
+
     /**
      * used for java code
      *
