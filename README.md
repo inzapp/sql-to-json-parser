@@ -1,5 +1,5 @@
 # SQL to JSON parser
-SQL to org.json.JSONObject parser using JsqlParser
+SQL to org.json.JSONObject parser using [**JsqlParser**](https://github.com/JSQLParser/JSqlParser)
 
 ## Download
 https://github.com/inzapp/sql-to-json-parser/releases
