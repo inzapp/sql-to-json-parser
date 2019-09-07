@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.TreeMap;
 
 public class JsonManager {
     /**
@@ -34,15 +35,6 @@ public class JsonManager {
 
     public JsonManager() {
         this.json = new JSONObject((Comparator<String>) (a, b) -> {
-
-            for(String jsonKey : this.jsonKeyOrders) {
-                if(a.equals(b) && a.contains(jsonKey))
-                    return 0;
-                else if(a.contains(jsonKey))
-                    return -1;
-                else if(b.contains(jsonKey))
-                    return 1;
-            }
 //            String jsonKey;
 //
 //            jsonKey = JsonKey.CRUD;
@@ -142,6 +134,14 @@ public class JsonManager {
 //                return 1;
 //
 //            jsonKey = JsonKey.JOIN;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.contains(jsonKey) && !a.equals(JsonKey.JOIN_ALIAS))
+//                return -1;
+//            else if(b.contains(jsonKey) && !a.equals(JsonKey.JOIN_ALIAS))
+//                return 1;
+//
+//            jsonKey = JsonKey.JOIN_ALIAS;
 //            if(a.equals(b) && a.contains(jsonKey))
 //                return 0;
 //            else if(a.contains(jsonKey))

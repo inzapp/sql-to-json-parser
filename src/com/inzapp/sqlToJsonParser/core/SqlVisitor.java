@@ -134,8 +134,18 @@ public class SqlVisitor extends JsonManager {
 
                     // joins
                     List<Join> joins = plainSelect.getJoins();
-                    if (joins != null)
-                        joins.forEach(join -> putToJson(JsonKey.JOIN, 1, join.toString()));
+                    if (joins != null) {
+                        joins.forEach(join -> {
+                            Alias joinAlias = join.getRightItem().getAlias();
+                            if(joinAlias != null) {
+                                String joinAliasName = joinAlias.getName();
+                                putToJson(JsonKey.JOIN_ALIAS, 1, joinAliasName);
+                                joinAlias.setUseAs(false);
+                                join.getRightItem().setAlias(null);
+                            }
+                            putToJson(JsonKey.JOIN, 1, join.toString());
+                        });
+                    }
                 }
 
                 /**
