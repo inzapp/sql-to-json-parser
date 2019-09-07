@@ -236,3 +236,24 @@ SELECT AAA.EQUIP_ID, C.SESSION_ID, E.COLLECT_ITEM_ID
 		       INNER JOIN TB_EQUIP_COLLECT_ITEM E
 
 		          ON D.COLLECT_ITEM_ID = E.COLLECT_ITEM_ID
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT A.a, C.b, E.c
+FROM
+(
+    SELECT A.a, A.select_id, B.id
+    FROM table A
+    INNER JOIN joinTable B ON A.id = B.id
+    INNER JOIN joinTable2 C ON B.id2 = C.id2
+    WHERE A.yn = 'Y' AND C.id2 = 'id' AND A.select_id =
+    (
+        SELECT select_id
+        FROM selector_table
+        WHERE c_name = 'con_name' AND gateway = 'gateway' AND CONTAINER = 'container'
+    )
+) A
+LEFT OUTER JOIN table_resource C ON A.select_id = C.select_id
+INNER JOIN item D ON A.id = D.id
+INNER JOIN table_item E
+ON D.c = E.c

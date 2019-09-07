@@ -1,31 +1,18 @@
-SELECT AAA.EQUIP_ID, C.SESSION_ID, E.COLLECT_ITEM_ID
-
-		  FROM (SELECT A.EQUIP_ID, A.SECTOR_ID, B.EQUIP_MODEL_ID
-
-		          FROM TB_EQUIP A
-
-		               INNER JOIN TB_EQUIP_MODEL B
-
-		                  ON A.EQUIP_MODEL_ID = B.EQUIP_MODEL_ID
-
-		               INNER JOIN TB_EQUIP_TYPE C
-
-		                  ON B.EQUIP_TYPE_ID = C.EQUIP_TYPE_ID
-
-		         WHERE     A.USE_YN = 'Y' AND C.EQUIP_TYPE_ID = 'equipTypeId'
-
-		               AND A.SECTOR_ID = (SELECT SECTOR_ID
-
-		                                    FROM TB_SECTOR
-
-		                                   WHERE CONTAINER_NAME = 'containerName' AND GATEWAY = 'gateway' AND CONTAINER = 'container'))
-
-		       AAA
-
-		       LEFT OUTER JOIN TB_RESOURCE C ON AAA.SECTOR_ID = C.SECTOR_ID
-
-		       INNER JOIN TB_EQUIP_ITEM D ON AAA.EQUIP_MODEL_ID = D.EQUIP_MODEL_ID
-
-		       INNER JOIN TB_EQUIP_COLLECT_ITEM E
-
-		          ON D.COLLECT_ITEM_ID = E.COLLECT_ITEM_ID
+SELECT A.a, C.b, E.c
+FROM
+(
+    SELECT A.a, A.select_id, B.id
+    FROM table A
+    INNER JOIN joinTable B ON A.id = B.id
+    INNER JOIN joinTable2 C ON B.id2 = C.id2
+    WHERE A.yn = 'Y' AND C.id2 = 'id' AND A.select_id =
+    (
+        SELECT select_id
+        FROM selector_table
+        WHERE c_name = 'con_name' AND gateway = 'gateway' AND CONTAINER = 'container'
+    )
+) A
+LEFT OUTER JOIN table_resource C ON A.select_id = C.select_id
+INNER JOIN item D ON A.id = D.id
+INNER JOIN table_item E
+ON D.c = E.c
