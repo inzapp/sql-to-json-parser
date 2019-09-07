@@ -16,37 +16,120 @@ public class JsonManager {
     protected JSONObject json;
 
     public JsonManager() {
-        json = new JSONObject((Comparator<String>) (a, b) -> {
+        this.json = new JSONObject((Comparator<String>) (a, b) -> {
             String jsonKey;
-            int val = Integer.MAX_VALUE;
-
-            jsonKey = JsonKey.JOIN;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey))
-                return -val;
-            else if(b.contains(jsonKey))
-                return val;
-            --val;
 
             jsonKey = JsonKey.CRUD;
             if(a.equals(b) && a.contains(jsonKey))
                 return 0;
             else if(a.contains(jsonKey))
-                return -val;
+                return -1;
             else if(b.contains(jsonKey))
-                return val;
-            --val;
+                return 1;
+
+            jsonKey = JsonKey.DISTINCT;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey))
+                return -1;
+            else if(b.contains(jsonKey))
+                return 1;
 
             jsonKey = JsonKey.COLUMN;
             if(a.equals(b) && a.contains(jsonKey))
                 return 0;
             else if(a.contains(jsonKey))
-                return -val;
+                return -1;
             else if(b.contains(jsonKey))
-                return val;
-            --val;
+                return 1;
 
+            jsonKey = JsonKey.VALUE;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey))
+                return -1;
+            else if(b.contains(jsonKey))
+                return 1;
+
+            jsonKey = JsonKey.COLUMN;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey))
+                return -1;
+            else if(b.contains(jsonKey))
+                return 1;
+
+            jsonKey = JsonKey.FROM;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.equals(jsonKey))
+                return -1;
+            else if(b.equals(jsonKey))
+                return 1;
+
+            jsonKey = JsonKey.FROM_SUB_QUERY;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey) && !a.contains(JsonKey.FROM_SUB_QUERY_ANALYSE))
+                return -1;
+            else if(b.contains(jsonKey) && !b.contains(JsonKey.FROM_SUB_QUERY_ANALYSE))
+                return 1;
+
+            jsonKey = JsonKey.FROM_SUB_QUERY_ANALYSE;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey))
+                return -1;
+            else if(b.contains(jsonKey))
+                return 1;
+
+            jsonKey = JsonKey.WHERE;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.equals(jsonKey))
+                return -1;
+            else if(b.equals(jsonKey))
+                return 1;
+
+            jsonKey = JsonKey.WHERE_SUB_QUERY;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey) && !a.contains(JsonKey.WHERE_SUB_QUERY_ANALYSE))
+                return -1;
+            else if(b.contains(jsonKey) && !b.contains(JsonKey.WHERE_SUB_QUERY_ANALYSE))
+                return 1;
+
+            jsonKey = JsonKey.WHERE_SUB_QUERY_ANALYSE;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey))
+                return -1;
+            else if(b.contains(jsonKey))
+                return 1;
+
+            jsonKey = JsonKey.GROUP_BY;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.equals(jsonKey))
+                return -1;
+            else if(b.equals(jsonKey))
+                return 1;
+
+            jsonKey = JsonKey.JOIN;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.contains(jsonKey))
+                return -1;
+            else if(b.contains(jsonKey))
+                return 1;
+
+            jsonKey = JsonKey.ORDER_BY;
+            if(a.equals(b) && a.contains(jsonKey))
+                return 0;
+            else if(a.equals(jsonKey))
+                return -1;
+            else if(b.equals(jsonKey))
+                return 1;
 
             return a.compareTo(b);
         });
@@ -65,7 +148,7 @@ public class JsonManager {
 
         list.add(value);
         try {
-            json.put(key, list);
+            this.json.put(key, list);
         } catch (JSONException ex) {
             ex.printStackTrace();
         }
@@ -114,7 +197,7 @@ public class JsonManager {
      */
     protected void putToJson(String key, int idx, JSONObject json) {
         try {
-            json.getJSONObject(key + idx); // only used for exception check
+            this.json.getJSONObject(key + idx); // only used for exception check
             putToJson(key, (idx + 1), json);
         } catch (Exception e) {
             putToJson(key + idx, json);
@@ -130,7 +213,7 @@ public class JsonManager {
      */
     private List<String> getConvertedJsonArray(String key) {
         try {
-            JSONArray jsonArray = json.getJSONArray(key);
+            JSONArray jsonArray = this.json.getJSONArray(key);
             List<String> list = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); ++i)
                 list.add((String) jsonArray.get(i));

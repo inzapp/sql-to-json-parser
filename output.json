@@ -1,45 +1,43 @@
 {
     "CRUD": ["SELECT"],
+    "DISTINCT": ["TRUE"],
     "COLUMN": [
-        "ROWNUM ROW_NUMBER",
-        "seq",
-        "TO_CHAR(regdate, 'YYYY-MM-DD HH24:mi') AS regdate",
-        "content",
-        "subject",
-        "send_email",
-        "send_flag",
-        "send_name",
-        "dept_code",
-        "dept_name",
-        "list_seq",
-        "email",
-        "NAME",
-        "send_date"
+        "EC_CLPS_DV_CD AS STAFF_GBN",
+        "EC_NM AS STAFF_CLASS",
+        "EC_GRP AS ORG_STAFF_GBN",
+        "ODR AS ORDER_SEQ",
+        "ORGZ_ID AS ORG_ID",
+        "EMP_NO AS STAFF_EMP_ID",
+        "USE_AYN AS USE_YN",
+        "REG_DTM",
+        "RGR_ID",
+        "UPDT_DTM",
+        "UTUR_ID"
     ],
-    "FROM": ["(SELECT a.seq, a.regdate, a.content, a.subject, a.send_email, a.send_flag, a.send_name, a.dept_code, a.dept_name, b.list_seq, b.email, b.NAME, b.send_date FROM ev_send_form a INNER JOIN ev_send_list b ON a.seq = b.seq ORDER BY a.seq DESC, list_seq)"],
-    "FROM SUB QUERY 1": ["(SELECT a.seq, a.regdate, a.content, a.subject, a.send_email, a.send_flag, a.send_name, a.dept_code, a.dept_name, b.list_seq, b.email, b.NAME, b.send_date FROM ev_send_form a INNER JOIN ev_send_list b ON a.seq = b.seq ORDER BY a.seq DESC, list_seq)"],
-    "FROM SUB QUERY ANALYSE 1": {
-        "JOIN 1": ["INNER JOIN ev_send_list b ON a.seq = b.seq"],
+    "FROM": ["ETCH005M"],
+    "WHERE": ["EC_CLPS_DV_CD IN (SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV UNION SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N')"],
+    "WHERE SUB QUERY 1": ["(SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV UNION SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N')"],
+    "WHERE SUB QUERY ANALYSE 1": {
         "CRUD": ["SELECT"],
-        "COLUMN": [
-            "a.seq",
-            "a.regdate",
-            "a.content",
-            "a.subject",
-            "a.send_email",
-            "a.send_flag",
-            "a.send_name",
-            "a.dept_code",
-            "a.dept_name",
-            "b.list_seq",
-            "b.email",
-            "b.NAME",
-            "b.send_date"
-        ],
-        "FROM": ["ev_send_form a"],
-        "ORDER_BY": [
-            "a.seq DESC",
-            "list_seq"
-        ]
-    }
+        "WHERE SUB QUERY 1": ["SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV UNION SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N'"],
+        "WHERE SUB QUERY ANALYSE 1": {
+            "CRUD": ["SELECT"],
+            "WHERE SUB QUERY 2": ["SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N'"],
+            "WHERE SUB QUERY 1": ["SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV"],
+            "WHERE SUB QUERY ANALYSE 2": {
+                "CRUD": ["SELECT"],
+                "COLUMN": ["EC_CLPS_DV_CD AS staff_gbn"],
+                "FROM": ["ETCH005M"],
+                "WHERE": ["NVL(USE_AYN, 'Y') <> 'N'"]
+            },
+            "WHERE SUB QUERY ANALYSE 1": {
+                "CRUD": ["SELECT"],
+                "COLUMN": ["EC_DV AS staff_gbn"],
+                "FROM": ["ETCH004M"],
+                "WHERE": ["(TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD'))"],
+                "GROUP_BY": ["GROUP BY EC_DV"]
+            }
+        }
+    },
+    "ORDER_BY": ["ODR"]
 }

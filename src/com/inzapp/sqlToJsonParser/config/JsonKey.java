@@ -6,6 +6,7 @@ public class JsonKey {
     public static final String SELECT = "SELECT";
     public static final String UPDATE = "UPDATE";
     public static final String DELETE = "DELETE";
+    public static final String DISTINCT = "DISTINCT";
     public static final String COLUMN = "COLUMN";
     public static final String FROM = "FROM";
     public static final String FROM_SUB_QUERY = "FROM SUB QUERY ";

@@ -1,7 +1,6 @@
 package com.inzapp.sqlToJsonParser.core;
 
 import com.inzapp.sqlToJsonParser.config.JsonKey;
-import com.inzapp.sqlToJsonParser.config.SplitKey;
 import com.inzapp.sqlToJsonParser.core.json.JsonManager;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
@@ -114,6 +113,11 @@ public class SqlVisitor extends JsonManager {
                     List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
                     if (orderByElements != null)
                         orderByElements.forEach(orderByElement -> orderByElement.accept(orderByVisitor));
+
+                    Distinct distinct = plainSelect.getDistinct();
+                    if(distinct != null) {
+                        putToJson(JsonKey.DISTINCT, "TRUE");
+                    }
 
                     // joins
                     List<Join> joins = plainSelect.getJoins();
