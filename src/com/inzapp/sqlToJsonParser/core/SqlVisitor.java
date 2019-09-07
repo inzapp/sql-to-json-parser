@@ -2,6 +2,7 @@ package com.inzapp.sqlToJsonParser.core;
 
 import com.inzapp.sqlToJsonParser.config.JsonKey;
 import com.inzapp.sqlToJsonParser.core.json.JsonManager;
+import net.sf.jsqlparser.expression.Alias;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
@@ -34,7 +35,7 @@ public class SqlVisitor extends JsonManager {
             return json;
         } catch (Exception e) {
             // sql parse failure
-//            e.printStackTrace();
+            e.printStackTrace();
             return null;
         }
     }
@@ -85,6 +86,11 @@ public class SqlVisitor extends JsonManager {
                  */
                 @Override
                 public void visit(PlainSelect plainSelect) {
+                    // distinct
+                    Distinct distinct = plainSelect.getDistinct();
+                    if (distinct != null)
+                        putToJson(JsonKey.DISTINCT, "TRUE");
+
                     // column
                     List<SelectItem> selectItems = plainSelect.getSelectItems();
                     if (selectItems != null)
@@ -93,6 +99,18 @@ public class SqlVisitor extends JsonManager {
                     // table
                     FromItem fromItem = plainSelect.getFromItem();
                     if (fromItem != null) {
+                        Alias alias = fromItem.getAlias();
+                        if (alias != null) {
+                            String aliasName = alias.getName();
+                            putToJson(JsonKey.FROM_ALIAS, aliasName);
+                            alias.setUseAs(false);
+                            fromItem.setAlias(null);
+                        }
+
+                        Pivot pivot = fromItem.getPivot();
+                        if (pivot != null)
+                            System.out.println("pivot : " + pivot.toString());
+
                         putToJson(JsonKey.FROM, fromItem.toString());
                         fromItem.accept(fromItemVisitor);
                     }
@@ -113,11 +131,6 @@ public class SqlVisitor extends JsonManager {
                     List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
                     if (orderByElements != null)
                         orderByElements.forEach(orderByElement -> orderByElement.accept(orderByVisitor));
-
-                    Distinct distinct = plainSelect.getDistinct();
-                    if(distinct != null) {
-                        putToJson(JsonKey.DISTINCT, "TRUE");
-                    }
 
                     // joins
                     List<Join> joins = plainSelect.getJoins();

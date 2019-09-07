@@ -1,26 +1,31 @@
-SELECT  DISTINCT
-         EC_CLPS_DV_CD         as   STAFF_GBN,
-         EC_NM            as   STAFF_CLASS,
-         EC_GRP            as   ORG_STAFF_GBN,
-         ODR            as   ORDER_SEQ,
-         ORGZ_ID            as   ORG_ID,
-         EMP_NO            as   STAFF_EMP_ID,
-         USE_AYN            as   USE_YN,
-         REG_DTM,
-         RGR_ID,
-         UPDT_DTM,
-         UTUR_ID
-      FROM ETCH005M
-         WHERE EC_CLPS_DV_CD IN (
-                  SELECT   EC_DV as staff_gbn
-                      FROM ETCH004M
-                     WHERE (TO_DATE (SCH_REG_DT , 'YYYY-MM-DD')
-                               BETWEEN TO_DATE (SYSDATE, 'YYYY-MM-DD')
-                                   AND TO_DATE (SYSDATE, 'YYYY-MM-DD')
-                           )
-                  GROUP BY EC_DV
-                  UNION
-                  SELECT EC_CLPS_DV_CD as staff_gbn
-                    FROM ETCH005M
-                   WHERE NVL (USE_AYN, 'Y') <> 'N'   )
-      ORDER BY ODR
+SELECT AAA.EQUIP_ID, C.SESSION_ID, E.COLLECT_ITEM_ID
+
+		  FROM (SELECT A.EQUIP_ID, A.SECTOR_ID, B.EQUIP_MODEL_ID
+
+		          FROM TB_EQUIP A
+
+		               INNER JOIN TB_EQUIP_MODEL B
+
+		                  ON A.EQUIP_MODEL_ID = B.EQUIP_MODEL_ID
+
+		               INNER JOIN TB_EQUIP_TYPE C
+
+		                  ON B.EQUIP_TYPE_ID = C.EQUIP_TYPE_ID
+
+		         WHERE     A.USE_YN = 'Y' AND C.EQUIP_TYPE_ID = 'equipTypeId'
+
+		               AND A.SECTOR_ID = (SELECT SECTOR_ID
+
+		                                    FROM TB_SECTOR
+
+		                                   WHERE CONTAINER_NAME = 'containerName' AND GATEWAY = 'gateway' AND CONTAINER = 'container'))
+
+		       AAA
+
+		       LEFT OUTER JOIN TB_RESOURCE C ON AAA.SECTOR_ID = C.SECTOR_ID
+
+		       INNER JOIN TB_EQUIP_ITEM D ON AAA.EQUIP_MODEL_ID = D.EQUIP_MODEL_ID
+
+		       INNER JOIN TB_EQUIP_COLLECT_ITEM E
+
+		          ON D.COLLECT_ITEM_ID = E.COLLECT_ITEM_ID

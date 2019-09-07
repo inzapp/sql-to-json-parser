@@ -7,7 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3efaa97-ec05-4093-9248-3ac33d751bec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/config/JsonKey.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/config/JsonKey.class" afterDir="false" />
@@ -20,10 +19,7 @@
       <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/SqlVisitor.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/json/JsonManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/json/JsonManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-parser/META-INF/sql-parser.kotlin_module" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/output.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql-sample.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sql-sample.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/config/JsonKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/config/JsonKey.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/SqlVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/SqlVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/json/JsonManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/json/JsonManager.java" afterDir="false" />

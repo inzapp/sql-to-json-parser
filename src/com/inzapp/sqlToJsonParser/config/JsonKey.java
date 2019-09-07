@@ -8,9 +8,10 @@ public class JsonKey {
     public static final String DELETE = "DELETE";
     public static final String DISTINCT = "DISTINCT";
     public static final String COLUMN = "COLUMN";
-    public static final String FROM = "FROM";
-    public static final String FROM_SUB_QUERY = "FROM SUB QUERY ";
-    public static final String FROM_SUB_QUERY_ANALYSE = "FROM SUB QUERY ANALYSE ";
+    public static final String FROM = "TABLE";
+    public static final String FROM_ALIAS = "TABLE ALIAS";
+    public static final String FROM_SUB_QUERY = "TABLE SUB QUERY ";
+    public static final String FROM_SUB_QUERY_ANALYSE = "TABLE SUB QUERY ANALYSE ";
     public static final String WHERE = "WHERE";
     public static final String WHERE_SUB_QUERY = "WHERE SUB QUERY ";
     public static final String WHERE_SUB_QUERY_ANALYSE = "WHERE SUB QUERY ANALYSE ";

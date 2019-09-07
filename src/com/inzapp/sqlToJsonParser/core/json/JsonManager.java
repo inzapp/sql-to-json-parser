@@ -15,121 +15,147 @@ public class JsonManager {
      */
     protected JSONObject json;
 
+    private final String[] jsonKeyOrders = new String[]{
+            JsonKey.CRUD,
+            JsonKey.DISTINCT,
+            JsonKey.COLUMN,
+            JsonKey.VALUE,
+            JsonKey.FROM,
+            JsonKey.FROM_ALIAS,
+            JsonKey.FROM_SUB_QUERY,
+            JsonKey.FROM_SUB_QUERY_ANALYSE,
+            JsonKey.WHERE,
+            JsonKey.WHERE_SUB_QUERY,
+            JsonKey.WHERE_SUB_QUERY_ANALYSE,
+            JsonKey.GROUP_BY,
+            JsonKey.JOIN,
+            JsonKey.ORDER_BY
+    };
+
     public JsonManager() {
         this.json = new JSONObject((Comparator<String>) (a, b) -> {
-            String jsonKey;
 
-            jsonKey = JsonKey.CRUD;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey))
-                return -1;
-            else if(b.contains(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.DISTINCT;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey))
-                return -1;
-            else if(b.contains(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.COLUMN;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey))
-                return -1;
-            else if(b.contains(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.VALUE;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey))
-                return -1;
-            else if(b.contains(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.COLUMN;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey))
-                return -1;
-            else if(b.contains(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.FROM;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.equals(jsonKey))
-                return -1;
-            else if(b.equals(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.FROM_SUB_QUERY;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey) && !a.contains(JsonKey.FROM_SUB_QUERY_ANALYSE))
-                return -1;
-            else if(b.contains(jsonKey) && !b.contains(JsonKey.FROM_SUB_QUERY_ANALYSE))
-                return 1;
-
-            jsonKey = JsonKey.FROM_SUB_QUERY_ANALYSE;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey))
-                return -1;
-            else if(b.contains(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.WHERE;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.equals(jsonKey))
-                return -1;
-            else if(b.equals(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.WHERE_SUB_QUERY;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey) && !a.contains(JsonKey.WHERE_SUB_QUERY_ANALYSE))
-                return -1;
-            else if(b.contains(jsonKey) && !b.contains(JsonKey.WHERE_SUB_QUERY_ANALYSE))
-                return 1;
-
-            jsonKey = JsonKey.WHERE_SUB_QUERY_ANALYSE;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey))
-                return -1;
-            else if(b.contains(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.GROUP_BY;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.equals(jsonKey))
-                return -1;
-            else if(b.equals(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.JOIN;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.contains(jsonKey))
-                return -1;
-            else if(b.contains(jsonKey))
-                return 1;
-
-            jsonKey = JsonKey.ORDER_BY;
-            if(a.equals(b) && a.contains(jsonKey))
-                return 0;
-            else if(a.equals(jsonKey))
-                return -1;
-            else if(b.equals(jsonKey))
-                return 1;
+            for(String jsonKey : this.jsonKeyOrders) {
+                if(a.equals(b) && a.contains(jsonKey))
+                    return 0;
+                else if(a.contains(jsonKey))
+                    return -1;
+                else if(b.contains(jsonKey))
+                    return 1;
+            }
+//            String jsonKey;
+//
+//            jsonKey = JsonKey.CRUD;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.contains(jsonKey))
+//                return -1;
+//            else if(b.contains(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.DISTINCT;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.contains(jsonKey))
+//                return -1;
+//            else if(b.contains(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.COLUMN;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.contains(jsonKey))
+//                return -1;
+//            else if(b.contains(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.VALUE;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.contains(jsonKey))
+//                return -1;
+//            else if(b.contains(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.FROM;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.equals(jsonKey))
+//                return -1;
+//            else if(b.equals(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.FROM_ALIAS;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.equals(jsonKey))
+//                return -1;
+//            else if(b.equals(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.FROM_SUB_QUERY;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.contains(jsonKey) && !a.contains(JsonKey.FROM_SUB_QUERY_ANALYSE))
+//                return -1;
+//            else if(b.contains(jsonKey) && !b.contains(JsonKey.FROM_SUB_QUERY_ANALYSE))
+//                return 1;
+//
+//            jsonKey = JsonKey.FROM_SUB_QUERY_ANALYSE;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.contains(jsonKey))
+//                return -1;
+//            else if(b.contains(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.WHERE;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.equals(jsonKey))
+//                return -1;
+//            else if(b.equals(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.WHERE_SUB_QUERY;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.contains(jsonKey) && !a.contains(JsonKey.WHERE_SUB_QUERY_ANALYSE))
+//                return -1;
+//            else if(b.contains(jsonKey) && !b.contains(JsonKey.WHERE_SUB_QUERY_ANALYSE))
+//                return 1;
+//
+//            jsonKey = JsonKey.WHERE_SUB_QUERY_ANALYSE;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.contains(jsonKey))
+//                return -1;
+//            else if(b.contains(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.GROUP_BY;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.equals(jsonKey))
+//                return -1;
+//            else if(b.equals(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.JOIN;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.contains(jsonKey))
+//                return -1;
+//            else if(b.contains(jsonKey))
+//                return 1;
+//
+//            jsonKey = JsonKey.ORDER_BY;
+//            if(a.equals(b) && a.contains(jsonKey))
+//                return 0;
+//            else if(a.equals(jsonKey))
+//                return -1;
+//            else if(b.equals(jsonKey))
+//                return 1;
 
             return a.compareTo(b);
         });
