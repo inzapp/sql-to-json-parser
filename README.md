@@ -1,4 +1,4 @@
-# sql-to-json-parser
+# SQL to JSON parser
 SQL to org.json.JSONObject parser using JsqlParser
 
 ## Download
