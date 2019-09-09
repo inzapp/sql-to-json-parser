@@ -23,49 +23,58 @@ AND VALUE = (SELECT VALUE FROM TAB)
 
 -----------------------------------------------------------------------------------------------------------
 
-
 SELECT ORG_ID, ORG_NM 
          FROM OM_ORGANIZATION
         WHERE ORG_LEVEL = '3'
           AND (TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN ORG_STA_YMD AND END_YMD)
           ORDER BY ORG_SORT
 
-
 -----------------------------------------------------------------------------------------------------------
-
-
 
 SELECT  
-         EC_CLPS_DV_CD         as   STAFF_GBN,            
-         EC_NM            as   STAFF_CLASS,          
-         EC_GRP            as   ORG_STAFF_GBN,        
-         ODR            as   ORDER_SEQ,            
-         ORGZ_ID            as   ORG_ID,
-         EMP_NO            as   STAFF_EMP_ID,         
-         USE_AYN            as   USE_YN,         
-         REG_DTM,                          
-         RGR_ID,         
-         UPDT_DTM,       
-         UTUR_ID
-      FROM ETCH005M
-         WHERE EC_CLPS_DV_CD IN (
-                  SELECT   EC_DV as staff_gbn
-                      FROM ETCH004M
-                     WHERE (TO_DATE (SCH_REG_DT , 'YYYY-MM-DD')
-                               BETWEEN TO_DATE (SYSDATE, 'YYYY-MM-DD')
-                                   AND TO_DATE (SYSDATE, 'YYYY-MM-DD')
-                           )
-                  GROUP BY EC_DV 
-                  UNION
-                  SELECT EC_CLPS_DV_CD as staff_gbn
-                    FROM ETCH005M
-                   WHERE NVL (USE_AYN, 'Y') <> 'N'   )	
-      ORDER BY ODR
-
+EC_CLPS_DV_CD as STAFF_GBN,
+EC_NM as STAFF_CLASS,
+EC_GRP as ORG_STAFF_GBN,
+ODR as ORDER_SEQ,
+ORGZ_ID as ORG_ID,
+EMP_NO as STAFF_EMP_ID,
+USE_AYN as USE_YN,
+REG_DTM,
+RGR_ID,
+UPDT_DTM,
+UTUR_ID
+FROM ETCH005M
+WHERE EC_CLPS_DV_CD IN
+(
+    SELECT EC_DV as staff_gbn
+    FROM ETCH004M
+    WHERE
+    (
+        TO_DATE (SCH_REG_DT , 'YYYY-MM-DD') BETWEEN TO_DATE (SYSDATE, 'YYYY-MM-DD') AND
+        TO_DATE (SYSDATE, 'YYYY-MM-DD')
+    )
+    GROUP BY EC_DV
+    UNION SELECT EC_CLPS_DV_CD as staff_gbn
+    FROM ETCH005M
+    WHERE NVL (USE_AYN, 'Y') <> 'N'
+)
+ORDER BY ODR
 
 -----------------------------------------------------------------------------------------------------------
 
+SELECT EC_DV as staff_gbn
+FROM ETCH004M
+WHERE
+(
+    TO_DATE (SCH_REG_DT , 'YYYY-MM-DD') BETWEEN TO_DATE (SYSDATE, 'YYYY-MM-DD') AND
+    TO_DATE (SYSDATE, 'YYYY-MM-DD')
+)
+GROUP BY EC_DV
+UNION SELECT EC_CLPS_DV_CD as staff_gbn
+FROM ETCH005M
+WHERE NVL (USE_AYN, 'Y') <> 'N'
 
+-----------------------------------------------------------------------------------------------------------
 
 SELECT  
                 REG_NO AS REGIS_SEQNO,
@@ -89,13 +98,11 @@ SELECT
 
 ------------------------------------------
 
-
 UPDATE ETCH002M
        SET MASKING_YB = 'N'
        WHERE MASKING_YB = 'Y'
 
 ------------------------------------------
-
 
 UPDATE etch002m
    SET updt_dtm = SYSDATE,
@@ -108,9 +115,7 @@ UPDATE etch002m
        titl = test
  WHERE reg_no = 24831;
 
-
  ------------------------------------------
-
 
  INSERT INTO etob004m
             (tsk_no, dept_cd, tsk_dv_cd, tsk_nm, oppb_gd_cd, txt, stt_dtm,
@@ -120,16 +125,12 @@ UPDATE etch002m
              TO_DATE ('2019-08-08 18:00:00', 'yyyy-MM-dd HH24:mi:ss'), '1507030', SYSDATE, '1507030', SYSDATE
             )
 
-
- ------------------------------------------
-
+ -----------------------------------------
 
 DELETE FROM ETCH006M 
        WHERE EMP_NO IN ('123', '124', '125', '126', '127', '128')
 
-
  ------------------------------------------
-
 
 DELETE FROM ETCH009M
           WHERE PK_SEQ = '2019-00370'
@@ -153,7 +154,6 @@ SELECT ROWNUM ROW_NUMBER, seq,
 
  ------------------------------------------
 
-
 SELECT COUNT (*)
   FROM etch013m
  WHERE rgr_id = '1507030'
@@ -162,9 +162,7 @@ SELECT COUNT (*)
                        WHERE masking_yb = 'Y'), -1)
    AND reg_dtm + 7 > SYSDATE
 
-
 ------------------------------------------------------------------------------------
-
 
    SELECT COUNT (*)
      FROM etch013m
@@ -176,11 +174,7 @@ SELECT COUNT (*)
                                   FROM etch002m
                                  WHERE masking_yb = 'Y'), -1)
 
-
-
 ------------------------------------------------------------------------------------
-
-
 
 SELECT COUNT (*)
   FROM (SELECT *
@@ -194,48 +188,34 @@ SELECT COUNT (*)
                                FROM etch002m
                               WHERE masking_yb = 'Y'), -1)
 
-
 ------------------------------------------------------------------------------------
-
 
 SELECT A, B FROM (SELECT A, B FROM FROMTABLE WHERE SUBCONDITION = 'SUBCONDITION')
 WHERE C = (SELECT C FROM WHERETABLE WHERE WHERECONDITION = 'WHERECONDITION')
 ORDER BY A
 
-
 ------------------------------------------------------------------------------------
 
 SELECT AAA.EQUIP_ID, C.SESSION_ID, E.COLLECT_ITEM_ID
-
-		  FROM (SELECT A.EQUIP_ID, A.SECTOR_ID, B.EQUIP_MODEL_ID
-
-		          FROM TB_EQUIP A
-
-		               INNER JOIN TB_EQUIP_MODEL B
-
-		                  ON A.EQUIP_MODEL_ID = B.EQUIP_MODEL_ID
-
-		               INNER JOIN TB_EQUIP_TYPE C
-
-		                  ON B.EQUIP_TYPE_ID = C.EQUIP_TYPE_ID
-
-		         WHERE     A.USE_YN = 'Y' AND C.EQUIP_TYPE_ID = 'equipTypeId'
-
-		               AND A.SECTOR_ID = (SELECT SECTOR_ID
-
-		                                    FROM TB_SECTOR
-
-		                                   WHERE CONTAINER_NAME = 'containerName' AND GATEWAY = 'gateway' AND CONTAINER = 'container'))
-
-		       AAA
-
-		       LEFT OUTER JOIN TB_RESOURCE C ON AAA.SECTOR_ID = C.SECTOR_ID
-
-		       INNER JOIN TB_EQUIP_ITEM D ON AAA.EQUIP_MODEL_ID = D.EQUIP_MODEL_ID
-
-		       INNER JOIN TB_EQUIP_COLLECT_ITEM E
-
-		          ON D.COLLECT_ITEM_ID = E.COLLECT_ITEM_ID
+FROM
+(
+    SELECT A.EQUIP_ID, A.SECTOR_ID, B.EQUIP_MODEL_ID
+    FROM TB_EQUIP A
+    INNER JOIN TB_EQUIP_MODEL B ON A.EQUIP_MODEL_ID = B.EQUIP_MODEL_ID
+    INNER JOIN TB_EQUIP_TYPE C ON B.EQUIP_TYPE_ID = C.EQUIP_TYPE_ID
+    WHERE A.USE_YN = 'Y' AND
+    C.EQUIP_TYPE_ID = 'equipTypeId' AND
+    A.SECTOR_ID =
+    (
+        SELECT SECTOR_ID FROM TB_SECTOR
+        WHERE CONTAINER_NAME = 'containerName' AND
+        GATEWAY = 'gateway' AND
+        CONTAINER = 'container'
+    )
+) AAA
+LEFT OUTER JOIN TB_RESOURCE C ON AAA.SECTOR_ID = C.SECTOR_ID
+INNER JOIN TB_EQUIP_ITEM D ON AAA.EQUIP_MODEL_ID = D.EQUIP_MODEL_ID
+INNER JOIN TB_EQUIP_COLLECT_ITEM E ON D.COLLECT_ITEM_ID = E.COLLECT_ITEM_ID
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
 

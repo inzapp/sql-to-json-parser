@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class SqlVisitor extends JsonManager {
+public class Parser extends JsonManager {
     /**
      * parse sql string to org.json.JSONObject
      *
@@ -156,9 +156,22 @@ public class SqlVisitor extends JsonManager {
                     // where sub query
                     List<SelectBody> selectBodies = setOperationList.getSelects();
                     if (selectBodies != null) {
-                        selectBodies.forEach(selectBody -> {
-                            putToJson(JsonKey.WHERE_SUB_QUERY, 1, selectBody.toString());
-                            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new SqlVisitor().parse(selectBody.toString()));
+                        injectJson(new Parser().parse(selectBodies.get(0).toString()));
+                        for (int i = 1; i < selectBodies.size(); ++i) {
+
+                        }
+//                        selectBodies.forEach(selectBody -> {
+//                            System.out.println(selectBody);
+//                            putToJson(JsonKey.WHERE_SUB_QUERY, 1, selectBody.toString());
+//                            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new Parser().parse(selectBody.toString()));
+//                        });
+                    }
+
+                    // TODO : process union
+                    List<SetOperation> setOperations = setOperationList.getOperations();
+                    if (setOperations != null) {
+                        setOperations.forEach(setOperation -> {
+                            System.out.println(setOperation);
                         });
                     }
                 }
@@ -235,7 +248,7 @@ public class SqlVisitor extends JsonManager {
         @Override
         public void visit(SubSelect subSelect) {
             putToJson(JsonKey.FROM_SUB_QUERY, 1, subSelect.toString());
-            putToJson(JsonKey.FROM_SUB_QUERY_ANALYSE, 1, new SqlVisitor().parse(subSelect.toString()));
+            putToJson(JsonKey.FROM_SUB_QUERY_ANALYSE, 1, new Parser().parse(subSelect.toString()));
             super.visit(subSelect);
         }
 
@@ -250,7 +263,7 @@ public class SqlVisitor extends JsonManager {
         @Override
         public void visit(SubSelect subSelect) {
             putToJson(JsonKey.WHERE_SUB_QUERY, 1, subSelect.toString());
-            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new SqlVisitor().parse(subSelect.toString()));
+            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new Parser().parse(subSelect.toString()));
             super.visit(subSelect);
         }
 
@@ -273,7 +286,7 @@ public class SqlVisitor extends JsonManager {
         @Override
         public void visit(SubSelect subSelect) {
             putToJson(JsonKey.WHERE_SUB_QUERY, 1, subSelect.toString());
-            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new SqlVisitor().parse(subSelect.toString()));
+            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new Parser().parse(subSelect.toString()));
             super.visit(subSelect);
         }
 

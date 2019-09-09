@@ -1,7 +1,7 @@
 package com.inzapp.sqlToJsonParser;
 
 import com.inzapp.sqlToJsonParser.config.Config;
-import com.inzapp.sqlToJsonParser.core.SqlVisitor;
+import com.inzapp.sqlToJsonParser.core.Parser;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -25,13 +25,13 @@ public class SqlToJsonParser {
         }
 
         SqlToJsonParser sqlToJsonParser = new SqlToJsonParser();
-        SqlVisitor sqlVisitor = new SqlVisitor();
+        Parser parser = new Parser();
         try {
             String sql = sqlToJsonParser.readSqlFromFile(inputFileName);
             if (sql == null)
                 throw new Exception("input file does not exist");
 
-            JSONObject json = sqlVisitor.parse(sql);
+            JSONObject json = parser.parse(sql);
             if (json == null)
                 throw new Exception("sql syntax error");
 
@@ -56,7 +56,7 @@ public class SqlToJsonParser {
      */
     public String parse(String sql) {
         try {
-            return new SqlVisitor().parse(sql).toString(4);
+            return new Parser().parse(sql).toString(4);
         } catch (Exception e) {
             return null;
         }

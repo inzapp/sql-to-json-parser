@@ -14,7 +14,16 @@ public class JsonManager {
     /**
      * for saving parsed sql
      */
-    protected JSONObject json = new JSONObject();
+    private JSONObject json = new JSONObject();
+
+    /**
+     * inject new json from outside
+     *
+     * @param json specified json object from outside
+     */
+    protected void injectJson(JSONObject json) {
+        this.json = json;
+    }
 
     /**
      * add json to value if exist key, else make new list and add value
