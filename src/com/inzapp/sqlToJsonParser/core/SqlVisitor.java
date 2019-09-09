@@ -71,7 +71,7 @@ public class SqlVisitor extends JsonManager {
         }
 
         /**
-         * select
+             * select
          * @param select visitor event listened
          */
         @Override
@@ -99,19 +99,16 @@ public class SqlVisitor extends JsonManager {
                     // table
                     FromItem fromItem = plainSelect.getFromItem();
                     if (fromItem != null) {
+                        putToJson(JsonKey.FROM, fromItem.toString());
                         Alias alias = fromItem.getAlias();
                         if (alias != null) {
                             String aliasName = alias.getName();
                             putToJson(JsonKey.FROM_ALIAS, aliasName);
-                            alias.setUseAs(false);
+
+                            // remove table alias from table query
+                            fromItem.getAlias().setUseAs(false);
                             fromItem.setAlias(null);
                         }
-
-                        Pivot pivot = fromItem.getPivot();
-                        if (pivot != null)
-                            System.out.println("pivot : " + pivot.toString());
-
-                        putToJson(JsonKey.FROM, fromItem.toString());
                         fromItem.accept(fromItemVisitor);
                     }
 
@@ -136,15 +133,16 @@ public class SqlVisitor extends JsonManager {
                     List<Join> joins = plainSelect.getJoins();
                     if (joins != null) {
                         joins.forEach(join -> {
+                            putToJson(JsonKey.JOIN, 1, join.toString());
                             Alias joinAlias = join.getRightItem().getAlias();
                             if (joinAlias != null) {
                                 String joinAliasName = joinAlias.getName();
                                 putToJson(JsonKey.JOIN_ALIAS, 1, joinAliasName);
+
+                                // remove join alias in join query
                                 joinAlias.setUseAs(false);
                                 join.getRightItem().setAlias(null);
                             }
-
-                            putToJson(JsonKey.JOIN, 1, join.toString());
                         });
                     }
                 }
