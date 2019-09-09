@@ -71,7 +71,7 @@ public class SqlVisitor extends JsonManager {
         }
 
         /**
-             * select
+         * select
          * @param select visitor event listened
          */
         @Override
