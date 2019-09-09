@@ -14,7 +14,7 @@ public class JsonManager {
     /**
      * for saving parsed sql
      */
-    private JSONObject json = new JSONObject();
+    protected JSONObject json = new JSONObject();
 
     /**
      * inject new json from outside
@@ -68,7 +68,7 @@ public class JsonManager {
      * @param key  com.inzapp.sqlToJsonParser.config.JsonKey
      * @param json analysed sub query json object
      */
-    private void putToJson(String key, JSONObject json) {
+    protected void putToJson(String key, JSONObject json) {
         try {
             this.json.put(key, json);
         } catch (JSONException e) {

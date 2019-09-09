@@ -238,3 +238,29 @@ SELECT A.a, C.b, E.c FROM
 LEFT OUTER JOIN table_resource C ON A.select_id = C.select_id
 INNER JOIN item D ON A.id = D.id
 INNER JOIN table_item E ON D.c = E.c
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+select distinct val from
+(
+    (
+        select field1 as val
+        from table1
+        where somethingelse = someval
+    ) union all
+    (
+        select field2
+        from table1
+        where somethingelse = someval
+    ) union all
+    (
+        select field1
+        from table2
+        where somethingelse = someval
+    ) union all
+    (
+        select field2
+        from table2
+        where somethingelse = someval
+    )
+) t

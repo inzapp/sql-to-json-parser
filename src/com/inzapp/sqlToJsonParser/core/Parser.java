@@ -78,104 +78,7 @@ public class Parser extends JsonManager {
         public void visit(Select select) {
             // crud
             putToJson(JsonKey.CRUD, JsonKey.SELECT);
-            select.getSelectBody().accept(new SelectVisitorAdapter() {
-
-                /**
-                 * most select query is processed as plain select
-                 * @param plainSelect visitor event listened
-                 */
-                @Override
-                public void visit(PlainSelect plainSelect) {
-                    // distinct
-                    Distinct distinct = plainSelect.getDistinct();
-                    if (distinct != null)
-                        putToJson(JsonKey.DISTINCT, "TRUE");
-
-                    // column
-                    List<SelectItem> selectItems = plainSelect.getSelectItems();
-                    if (selectItems != null)
-                        selectItems.forEach(selectItem -> putToJson(JsonKey.COLUMN, selectItem.toString()));
-
-                    // table
-                    FromItem fromItem = plainSelect.getFromItem();
-                    if (fromItem != null) {
-                        putToJson(JsonKey.FROM, fromItem.toString());
-                        Alias alias = fromItem.getAlias();
-                        if (alias != null) {
-                            String aliasName = alias.getName();
-                            putToJson(JsonKey.FROM_ALIAS, aliasName);
-
-                            // remove table alias from table query
-                            fromItem.getAlias().setUseAs(false);
-                            fromItem.setAlias(null);
-                        }
-                        fromItem.accept(fromItemVisitor);
-                    }
-
-                    // where
-                    Expression whereExpression = plainSelect.getWhere();
-                    if (whereExpression != null) {
-                        putToJson(JsonKey.WHERE, whereExpression.toString());
-                        whereExpression.accept(whereExpressionVisitor);
-                    }
-
-                    // group by
-                    GroupByElement groupByElement = plainSelect.getGroupBy();
-                    if (groupByElement != null)
-                        groupByElement.accept(groupByVisitor);
-
-                    // order by
-                    List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
-                    if (orderByElements != null)
-                        orderByElements.forEach(orderByElement -> orderByElement.accept(orderByVisitor));
-
-                    // joins
-                    List<Join> joins = plainSelect.getJoins();
-                    if (joins != null) {
-                        joins.forEach(join -> {
-                            putToJson(JsonKey.JOIN, 1, join.toString());
-                            Alias joinAlias = join.getRightItem().getAlias();
-                            if (joinAlias != null) {
-                                String joinAliasName = joinAlias.getName();
-                                putToJson(JsonKey.JOIN_ALIAS, 1, joinAliasName);
-
-                                // remove join alias in join query
-                                joinAlias.setUseAs(false);
-                                join.getRightItem().setAlias(null);
-                            }
-                        });
-                    }
-                }
-
-                /**
-                 * select including union(and etc...)
-                 * @param setOperationList visitor event listened
-                 */
-                @Override
-                public void visit(SetOperationList setOperationList) {
-                    // where sub query
-                    List<SelectBody> selectBodies = setOperationList.getSelects();
-                    if (selectBodies != null) {
-                        injectJson(new Parser().parse(selectBodies.get(0).toString()));
-                        for (int i = 1; i < selectBodies.size(); ++i) {
-
-                        }
-//                        selectBodies.forEach(selectBody -> {
-//                            System.out.println(selectBody);
-//                            putToJson(JsonKey.WHERE_SUB_QUERY, 1, selectBody.toString());
-//                            putToJson(JsonKey.WHERE_SUB_QUERY_ANALYSE, 1, new Parser().parse(selectBody.toString()));
-//                        });
-                    }
-
-                    // TODO : process union
-                    List<SetOperation> setOperations = setOperationList.getOperations();
-                    if (setOperations != null) {
-                        setOperations.forEach(setOperation -> {
-                            System.out.println(setOperation);
-                        });
-                    }
-                }
-            });
+            select.getSelectBody().accept(selectVisitorAdapter);
             super.visit(select);
         }
 
@@ -237,6 +140,91 @@ public class Parser extends JsonManager {
             }
 
             super.visit(delete);
+        }
+    };
+
+    private final SelectVisitorAdapter selectVisitorAdapter = new SelectVisitorAdapter() {
+        /**
+         * most select query is processed as plain select
+         * @param plainSelect visitor event listened
+         */
+        @Override
+        public void visit(PlainSelect plainSelect) {
+            // distinct
+            Distinct distinct = plainSelect.getDistinct();
+            if (distinct != null)
+                putToJson(JsonKey.DISTINCT, "TRUE");
+
+            // column
+            List<SelectItem> selectItems = plainSelect.getSelectItems();
+            if (selectItems != null)
+                selectItems.forEach(selectItem -> putToJson(JsonKey.COLUMN, selectItem.toString()));
+
+            // table
+            FromItem fromItem = plainSelect.getFromItem();
+            if (fromItem != null) {
+                putToJson(JsonKey.FROM, fromItem.toString());
+                Alias alias = fromItem.getAlias();
+                if (alias != null) {
+                    String aliasName = alias.getName();
+                    putToJson(JsonKey.FROM_ALIAS, aliasName);
+
+                    // remove table alias from table query
+                    fromItem.getAlias().setUseAs(false);
+                    fromItem.setAlias(null);
+                }
+                fromItem.accept(fromItemVisitor);
+            }
+
+            // where
+            Expression whereExpression = plainSelect.getWhere();
+            if (whereExpression != null) {
+                putToJson(JsonKey.WHERE, whereExpression.toString());
+                whereExpression.accept(whereExpressionVisitor);
+            }
+
+            // group by
+            GroupByElement groupByElement = plainSelect.getGroupBy();
+            if (groupByElement != null)
+                groupByElement.accept(groupByVisitor);
+
+            // order by
+            List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
+            if (orderByElements != null)
+                orderByElements.forEach(orderByElement -> orderByElement.accept(orderByVisitor));
+
+            // joins
+            List<Join> joins = plainSelect.getJoins();
+            if (joins != null) {
+                joins.forEach(join -> {
+                    putToJson(JsonKey.JOIN, 1, join.toString());
+                    Alias joinAlias = join.getRightItem().getAlias();
+                    if (joinAlias != null) {
+                        String joinAliasName = joinAlias.getName();
+                        putToJson(JsonKey.JOIN_ALIAS, 1, joinAliasName);
+
+                        // remove join alias in join query
+                        joinAlias.setUseAs(false);
+                        join.getRightItem().setAlias(null);
+                    }
+                });
+            }
+        }
+
+        /**
+         * select including union(and etc...)
+         * @param setOperationList visitor event listened
+         */
+        @Override
+        public void visit(SetOperationList setOperationList) {
+            // where sub query
+            List<SelectBody> selectBodies = setOperationList.getSelects();
+            if (selectBodies != null) {
+                selectBodies.forEach(selectBody -> {
+                    putToJson("UNION SUB", new Parser().parse(selectBody.toString()));
+                    selectBody.accept(selectVisitorAdapter);
+                });
+            }
         }
     };
 

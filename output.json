@@ -1,7 +1,35 @@
 {
-    "COLUMN": ["EC_DV AS staff_gbn"],
+    "COLUMN": ["val"],
     "CRUD": ["SELECT"],
-    "GROUP_BY": ["GROUP BY EC_DV"],
-    "TABLE": ["ETCH004M"],
-    "WHERE": ["(TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD'))"]
+    "DISTINCT": ["TRUE"],
+    "TABLE": ["((SELECT field1 AS val FROM table1 WHERE somethingelse = someval) UNION ALL (SELECT field2 FROM table1 WHERE somethingelse = someval) UNION ALL (SELECT field1 FROM table2 WHERE somethingelse = someval) UNION ALL (SELECT field2 FROM table2 WHERE somethingelse = someval)) t"],
+    "TABLE ALIAS": ["t"],
+    "TABLE SUB QUERY 1": ["((SELECT field1 AS val FROM table1 WHERE somethingelse = someval) UNION ALL (SELECT field2 FROM table1 WHERE somethingelse = someval) UNION ALL (SELECT field1 FROM table2 WHERE somethingelse = someval) UNION ALL (SELECT field2 FROM table2 WHERE somethingelse = someval))"],
+    "TABLE SUB QUERY ANALYSE 1": {
+        "COLUMN": [
+            "field1 AS val",
+            "field2",
+            "field1",
+            "field2"
+        ],
+        "CRUD": ["SELECT"],
+        "TABLE": [
+            "table1",
+            "table1",
+            "table2",
+            "table2"
+        ],
+        "UNION SUB": {
+            "COLUMN": ["field2"],
+            "CRUD": ["SELECT"],
+            "TABLE": ["table2"],
+            "WHERE": ["somethingelse = someval"]
+        },
+        "WHERE": [
+            "somethingelse = someval",
+            "somethingelse = someval",
+            "somethingelse = someval",
+            "somethingelse = someval"
+        ]
+    }
 }
