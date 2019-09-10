@@ -1,34 +1,40 @@
 {
     "CRUD": ["SELECT"],
-    "COLUMN": [
-        "EC_CLPS_DV_CD AS STAFF_GBN",
-        "EC_NM AS STAFF_CLASS",
-        "EC_GRP AS ORG_STAFF_GBN",
-        "ODR AS ORDER_SEQ",
-        "ORGZ_ID AS ORG_ID",
-        "EMP_NO AS STAFF_EMP_ID",
-        "USE_AYN AS USE_YN",
-        "REG_DTM",
-        "RGR_ID",
-        "UPDT_DTM",
-        "UTUR_ID"
-    ],
-    "ORDER_BY": ["ODR"],
-    "TABLE": ["ETCH005M"],
-    "WHERE": ["EC_CLPS_DV_CD IN (SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV UNION SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N')"],
-    "WHERE SUB QUERY 1": ["(SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV UNION SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N')"],
-    "WHERE SUB QUERY ANALYSE 1": {
+    "COLUMN": ["*"],
+    "TABLE": ["(SELECT A, B, C FROM SUBQUERYTABLE WHERE CONDITION IN ('A', 'B', 'C') AND CONDITION IN (SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE))"],
+    "TABLE SUB QUERY 1": ["(SELECT A, B, C FROM SUBQUERYTABLE WHERE CONDITION IN ('A', 'B', 'C') AND CONDITION IN (SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE))"],
+    "TABLE SUB QUERY ANALYSE 1": {
         "CRUD": ["SELECT"],
-        "COLUMN": ["EC_DV AS staff_gbn"],
-        "GROUP_BY": ["GROUP BY EC_DV"],
-        "TABLE": ["ETCH004M"],
-        "UNION 1": ["SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N'"],
+        "COLUMN": [
+            "A",
+            "B",
+            "C"
+        ],
+        "TABLE": ["SUBQUERYTABLE"],
+        "WHERE": ["CONDITION IN ('A', 'B', 'C') AND CONDITION IN (SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE)"],
+        "WHERE SUB QUERY 1": ["(SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE)"],
+        "WHERE SUB QUERY ANALYSE 1": {
+            "CRUD": ["SELECT"],
+            "COLUMN": ["CONDITION"],
+            "TABLE": ["ANOTHER"],
+            "UNION 1": ["SELECT CONDITION FROM UNIONTABLE"],
+            "UNION ANALYSE 1": {
+                "CRUD": ["SELECT"],
+                "COLUMN": ["CONDITION"],
+                "TABLE": ["UNIONTABLE"]
+            }
+        }
+    },
+    "UNION ALL 1": ["SELECT * FROM TAB2 UNION SELECT * FROM TAB3"],
+    "UNION ALL ANALYSE 1": {
+        "CRUD": ["SELECT"],
+        "COLUMN": ["*"],
+        "TABLE": ["TAB2"],
+        "UNION 1": ["SELECT * FROM TAB3"],
         "UNION ANALYSE 1": {
             "CRUD": ["SELECT"],
-            "COLUMN": ["EC_CLPS_DV_CD AS staff_gbn"],
-            "TABLE": ["ETCH005M"],
-            "WHERE": ["NVL(USE_AYN, 'Y') <> 'N'"]
-        },
-        "WHERE": ["(TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD'))"]
+            "COLUMN": ["*"],
+            "TABLE": ["TAB3"]
+        }
     }
 }
