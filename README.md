@@ -257,14 +257,16 @@ output
             "CRUD": ["SELECT"],
             "COLUMN": ["CONDITION"],
             "TABLE": ["ANOTHER"],
-            "UNION 1": {
+            "UNION 1": ["SELECT CONDITION FROM UNIONTABLE"],
+            "UNION ANALYSE 1": {
                 "CRUD": ["SELECT"],
                 "COLUMN": ["CONDITION"],
                 "TABLE": ["UNIONTABLE"]
             }
         }
     },
-    "UNION ALL 1": {
+    "UNION ALL 1": ["SELECT DISTINCT VAL FROM ((SELECT FIELD1 AS VAL FROM TABLE1 WHERE CONDITION1 = 'CONDITION1') UNION ALL (SELECT FIELD2 FROM TABLE1 WHERE CONDITION2 = 'CONDITION2') UNION ALL (SELECT FIELD3 FROM TABLE3 WHERE CONDITION3 = 'CONDITION3') UNION ALL (SELECT FIELD3 FROM TABLE3 WHERE CONDITION3 = 'CONDITION3')) T"],
+    "UNION ALL ANALYSE 1": {
         "CRUD": ["SELECT"],
         "DISTINCT": ["TRUE"],
         "COLUMN": ["VAL"],
@@ -275,19 +277,22 @@ output
             "CRUD": ["SELECT"],
             "COLUMN": ["FIELD1 AS VAL"],
             "TABLE": ["TABLE1"],
-            "UNION ALL 1": {
+            "UNION ALL 1": ["SELECT FIELD2 FROM TABLE1 WHERE CONDITION2 = 'CONDITION2'"],
+            "UNION ALL 2": ["SELECT FIELD3 FROM TABLE3 WHERE CONDITION3 = 'CONDITION3'"],
+            "UNION ALL 3": ["SELECT FIELD3 FROM TABLE3 WHERE CONDITION3 = 'CONDITION3'"],
+            "UNION ALL ANALYSE 1": {
                 "CRUD": ["SELECT"],
                 "COLUMN": ["FIELD2"],
                 "TABLE": ["TABLE1"],
                 "WHERE": ["CONDITION2 = 'CONDITION2'"]
             },
-            "UNION ALL 2": {
+            "UNION ALL ANALYSE 2": {
                 "CRUD": ["SELECT"],
                 "COLUMN": ["FIELD3"],
                 "TABLE": ["TABLE3"],
                 "WHERE": ["CONDITION3 = 'CONDITION3'"]
             },
-            "UNION ALL 3": {
+            "UNION ALL ANALYSE 3": {
                 "CRUD": ["SELECT"],
                 "COLUMN": ["FIELD3"],
                 "TABLE": ["TABLE3"],
