@@ -24,10 +24,10 @@ AND VALUE = (SELECT VALUE FROM TAB)
 -----------------------------------------------------------------------------------------------------------
 
 SELECT ORG_ID, ORG_NM 
-         FROM OM_ORGANIZATION
-        WHERE ORG_LEVEL = '3'
-          AND (TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN ORG_STA_YMD AND END_YMD)
-          ORDER BY ORG_SORT
+FROM OM_ORGANIZATION
+WHERE ORG_LEVEL = '3'
+AND (TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN ORG_STA_YMD AND END_YMD)
+ORDER BY ORG_SORT
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -77,124 +77,186 @@ WHERE NVL (USE_AYN, 'Y') <> 'N'
 -----------------------------------------------------------------------------------------------------------
 
 SELECT  
-                REG_NO AS REGIS_SEQNO,
-               to_char(REG_DTM,'yyyy-MM-dd') AS REGIS_DT,   
-               to_char(REG_DTM,'HH24miss') AS REGIS_TM,   
-               to_char(UPDT_DTM,'yyyyMMdd') AS MODIFY_DT,
-               to_char(UPDT_DTM,'HH24miss') AS MODIFY_TIME,
-               RGR_ID AS REGIS_ID,   
-               RGR_NM AS REGIS_NAME, 
-               ANW_NM AS REPLY_NAME, 
-               ANW_ID AS REPLY_ID,   
-               ANS_DT AS REPLY_DT,   
-               TXT AS CONTENTS,   
-               NVL(ATC_FL, '') AS ACCTFILE,   
-               NTT_TYP AS BOARD_TYPE, 
-               TITL AS TITLE,      
-               INQ_CNT AS CNT,
-               COUNT(*) OVER() AS TOTAL_CNT
-               FROM ETCH002M
-               WHERE MASKING_YB = 'Y'
+REG_NO AS REGIS_SEQNO,
+to_char(REG_DTM,'yyyy-MM-dd') AS REGIS_DT,
+to_char(REG_DTM,'HH24miss') AS REGIS_TM,
+to_char(UPDT_DTM,'yyyyMMdd') AS MODIFY_DT,
+to_char(UPDT_DTM,'HH24miss') AS MODIFY_TIME,
+RGR_ID AS REGIS_ID,
+RGR_NM AS REGIS_NAME,
+ANW_NM AS REPLY_NAME,
+ANW_ID AS REPLY_ID,
+ANS_DT AS REPLY_DT,
+TXT AS CONTENTS,
+NVL(ATC_FL, '') AS ACCTFILE,
+NTT_TYP AS BOARD_TYPE,
+TITL AS TITLE,
+INQ_CNT AS CNT,
+COUNT(*) OVER() AS TOTAL_CNT
+FROM ETCH002M
+WHERE MASKING_YB = 'Y'
 
 ------------------------------------------
 
 UPDATE ETCH002M
-       SET MASKING_YB = 'N'
-       WHERE MASKING_YB = 'Y'
+SET MASKING_YB = 'N'
+WHERE MASKING_YB = 'Y'
 
-------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
 UPDATE etch002m
-   SET updt_dtm = SYSDATE,
-       utur_id = 0912026,
-       anw_nm = '',
-       anw_id = '',
-       ans_dt = '',
-       txt = '<p>testㅏ</p><p><br></p><p>asd,asdfaasd~!@#%@W%sdfsdfsdd""""''''</p>',
-       atc_fl = '',
-       titl = test
- WHERE reg_no = 24831;
+SET updt_dtm = SYSDATE,
+utur_id = 0912026,
+anw_nm = '',
+anw_id = '',
+ans_dt = '',
+txt = '<p>testㅏ</p><p><br></p><p>asd,asdfaasd~!@#%@W%sdfsdfsdd""""''''</p>',
+atc_fl = '',
+titl = test
+WHERE reg_no = 24831;
 
- ------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
- INSERT INTO etob004m
-            (tsk_no, dept_cd, tsk_dv_cd, tsk_nm, oppb_gd_cd, txt, stt_dtm,
-             end_dtm, rgr_id, reg_dtm, utur_id, updt_dtm
-            )
-     VALUES ('2019-00436', '015000', '001', 'test', '001', '<p>123</p>', TO_DATE ('2019-08-08 09:00:00', 'yyyy-MM-dd HH24:mi:ss'),
-             TO_DATE ('2019-08-08 18:00:00', 'yyyy-MM-dd HH24:mi:ss'), '1507030', SYSDATE, '1507030', SYSDATE
-            )
+INSERT INTO etob004m
+(
+    tsk_no, dept_cd, tsk_dv_cd, tsk_nm, oppb_gd_cd, txt, stt_dtm,
+    end_dtm, rgr_id, reg_dtm, utur_id, updt_dtm
+)
+VALUES
+(
+    '2019-00436', '015000', '001', 'test', '001', '<p>123</p>', TO_DATE ('2019-08-08 09:00:00', 'yyyy-MM-dd HH24:mi:ss'),
+    TO_DATE ('2019-08-08 18:00:00', 'yyyy-MM-dd HH24:mi:ss'), '1507030', SYSDATE, '1507030', SYSDATE
+)
 
- -----------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
 DELETE FROM ETCH006M 
-       WHERE EMP_NO IN ('123', '124', '125', '126', '127', '128')
+WHERE EMP_NO IN ('123', '124', '125', '126', '127', '128')
 
- ------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
 DELETE FROM ETCH009M
-          WHERE PK_SEQ = '2019-00370'
+WHERE PK_SEQ = '2019-00370'
 
- ------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
-SELECT ROWNUM ROW_NUMBER, seq,
-       TO_CHAR (regdate, 'YYYY-MM-DD HH24:mi') AS regdate, content, subject,
-       send_email, send_flag, send_name, dept_code, dept_name, list_seq,
-       email, NAME, send_date
-  FROM 
-   ( 
-       SELECT   
-                 a.seq, a.regdate, a.content, a.subject, a.send_email,
-                 a.send_flag, a.send_name, a.dept_code, a.dept_name,
-                 b.list_seq, b.email, b.NAME, b.send_date
+SELECT
+ROWNUM ROW_NUMBER,
+seq,
+TO_CHAR (regdate, 'YYYY-MM-DD HH24:mi') AS regdate,
+content,
+subject,
+send_email,
+send_flag,
+send_name,
+dept_code,
+dept_name,
+list_seq,
+email,
+NAME,
+send_date
+FROM
+(
+    SELECT
+    a.seq,
+    a.regdate,
+    a.content,
+    a.subject,
+    a.send_email,
+    a.send_flag,
+    a.send_name,
+    a.dept_code,
+    a.dept_name,
+    b.list_seq,
+    b.email,
+    b.NAME,
+    b.send_date
+    FROM
+    ev_send_form a INNER JOIN ev_send_list b ON a.seq = b.seq
+    ORDER BY a.seq DESC, list_seq
+)
 
-       FROM ev_send_form a INNER JOIN ev_send_list b ON a.seq = b.seq
-       ORDER BY a.seq DESC, list_seq
-   )
-
- ------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
 SELECT COUNT (*)
-  FROM etch013m
- WHERE rgr_id = '1507030'
-   AND reg_no = NVL ((SELECT reg_no
-                        FROM etch002m
-                       WHERE masking_yb = 'Y'), -1)
-   AND reg_dtm + 7 > SYSDATE
+FROM etch013m
+WHERE rgr_id = '1507030' AND
+reg_no = NVL
+(
+    (
+        SELECT reg_no
+        FROM etch002m
+        WHERE masking_yb = 'Y'
+    ), -1
+) AND
+reg_dtm + 7 > SYSDATE
 
-------------------------------------------------------------------------------------
-
-   SELECT COUNT (*)
-     FROM etch013m
-    WHERE rgr_id = '1507030'
-      AND reg_no = NVL ((SELECT reg_no
-                           FROM etch002m
-                          WHERE masking_yb = 'Y'), -1)
-      AND reg_no2 = NVL ((SELECT reg_no
-                                  FROM etch002m
-                                 WHERE masking_yb = 'Y'), -1)
-
-------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
 SELECT COUNT (*)
-  FROM (SELECT *
-                               FROM etch002m
-                              WHERE masking_yb = 'Y')
- WHERE rgr_id = '1507030'
-   AND reg_no = NVL ((SELECT reg_no
-                        FROM etch002m
-                       WHERE masking_yb = 'Y'), -1)
-   AND reg_no2 = NVL ((SELECT reg_no
-                               FROM etch002m
-                              WHERE masking_yb = 'Y'), -1)
+FROM etch013m
+WHERE rgr_id = '1507030'
+AND reg_no = NVL
+(
+    (
+        SELECT reg_no
+        FROM etch002m
+        WHERE masking_yb = 'Y'
+    ), -1
+) AND
+reg_no2 = NVL
+(
+    (
+        SELECT reg_no
+        FROM etch002m
+        WHERE masking_yb = 'Y'
+    ), -1
+)
 
-------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
-SELECT A, B FROM (SELECT A, B FROM FROMTABLE WHERE SUBCONDITION = 'SUBCONDITION')
-WHERE C = (SELECT C FROM WHERETABLE WHERE WHERECONDITION = 'WHERECONDITION')
+SELECT COUNT (*)
+FROM
+(
+    SELECT *
+    FROM etch002m
+    WHERE masking_yb = 'Y'
+)
+WHERE rgr_id = '1507030' AND
+reg_no = NVL
+(
+    (
+        SELECT reg_no
+        FROM etch002m
+        WHERE masking_yb = 'Y'
+    ), -1
+) AND
+reg_no2 = NVL
+(
+    (
+        SELECT reg_no
+        FROM etch002m
+        WHERE masking_yb = 'Y'
+    ), -1
+)
+
+-----------------------------------------------------------------------------------------------------------
+
+SELECT A, B FROM
+(
+    SELECT A, B
+    FROM FROMTABLE
+    WHERE SUBCONDITION = 'SUBCONDITION'
+)
+WHERE C =
+(
+    SELECT C
+    FROM WHERETABLE
+    WHERE WHERECONDITION = 'WHERECONDITION'
+)
 ORDER BY A
 
-------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
 SELECT AAA.EQUIP_ID, C.SESSION_ID, E.COLLECT_ITEM_ID
 FROM
@@ -217,7 +279,7 @@ LEFT OUTER JOIN TB_RESOURCE C ON AAA.SECTOR_ID = C.SECTOR_ID
 INNER JOIN TB_EQUIP_ITEM D ON AAA.EQUIP_MODEL_ID = D.EQUIP_MODEL_ID
 INNER JOIN TB_EQUIP_COLLECT_ITEM E ON D.COLLECT_ITEM_ID = E.COLLECT_ITEM_ID
 
-------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
 SELECT A.a, C.b, E.c FROM
 (
@@ -239,33 +301,34 @@ LEFT OUTER JOIN table_resource C ON A.select_id = C.select_id
 INNER JOIN item D ON A.id = D.id
 INNER JOIN table_item E ON D.c = E.c
 
-------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
-select distinct val from
+SELECT DISTINCT VAL FROM
 (
     (
-        select field1 as val
-        from table1
+        SELECT FIELD1 AS VAL
+        FROM TABLE1
         where condition1 = 'condition1'
-    ) union all
+        WHERE CONDITION1 = 'CONDITION1'
+    ) UNION ALL
     (
-        select field2
-        from table1
-        where condition2 = 'condition2'
-    ) union all
+        SELECT FIELD2
+        FROM TABLE1
+        WHERE CONDITION2 = 'CONDITION2'
+    ) UNION ALL
     (
-        select field3
-        from table3
-        where condition3 = 'condition3'
-    ) union all
+        SELECT FIELD3
+        FROM TABLE3
+        WHERE CONDITION3 = 'CONDITION3'
+    ) UNION ALL
     (
-        select field3
-        from table3
-        where condition3 = 'condition3'
+        SELECT FIELD3
+        FROM TABLE3
+        WHERE CONDITION3 = 'CONDITION3'
     )
-) t
+) T
 
-------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
 SELECT * FROM
 (
