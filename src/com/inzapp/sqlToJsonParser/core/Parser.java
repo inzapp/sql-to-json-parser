@@ -226,8 +226,10 @@ public class Parser extends JsonManager {
                         injectJson(new Parser().parse(selectBodies.get(i).toString()));
 
                     if (i < setOperations.size()) {
-                        String setOperationKey = String.format("%s %d", setOperations.get(i), i + 1);
-                        putToJson(setOperationKey, new Parser().parse(selectBodies.get(i + 1).toString()));
+                        String setOperationKey = String.format("%s %d", setOperations.get(i), i + 1); // ex) UNION 1, UNION ALL 1 ...
+                        String setOperationAnalyseKey = String.format("%s %d", setOperations.get(i) + " ANALYSE", i + 1); // ex) UNION ANALYSE 1, UNION ALL ANALYSE 1 ...
+                        putToJson(setOperationKey, selectBodies.get(i + 1).toString());
+                        putToJson(setOperationAnalyseKey, new Parser().parse(selectBodies.get(i + 1).toString()));
                     } else break;
                 }
             }
