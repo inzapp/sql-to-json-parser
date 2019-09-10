@@ -17,7 +17,6 @@
       <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/Parser$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/Parser$7.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/Parser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SqlToJsonParser/com/inzapp/sqlToJsonParser/core/Parser.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/output.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/config/JsonKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/config/JsonKey.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/Parser.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

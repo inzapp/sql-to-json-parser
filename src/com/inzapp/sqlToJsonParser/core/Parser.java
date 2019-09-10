@@ -32,7 +32,7 @@ public class Parser extends JsonManager {
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
             statement.accept(statementVisitor);
-            return json;
+            return this.json;
         } catch (Exception e) {
             // sql parse failure
             e.printStackTrace();
@@ -220,18 +220,20 @@ public class Parser extends JsonManager {
             // union
             List<SelectBody> selectBodies = setOperationList.getSelects();
             List<SetOperation> setOperations = setOperationList.getOperations();
-            if (selectBodies != null && setOperations != null) {
-                for (int i = 0; i < selectBodies.size(); ++i) {
-                    if (i == 0)
-                        injectJson(new Parser().parse(selectBodies.get(i).toString()));
+            System.out.println("query : " + selectBodies.get(0).toString());
+            System.out.println("selectBodies.size() : " + selectBodies.size());
+            System.out.println("setOperations.size() : " + setOperations.size());
 
-                    if (i < setOperations.size()) {
-                        String setOperationKey = String.format("%s %d", setOperations.get(i), i + 1); // ex) UNION 1, UNION ALL 1 ...
-                        String setOperationAnalyseKey = String.format("%s %d", setOperations.get(i) + " ANALYSE", i + 1); // ex) UNION ANALYSE 1, UNION ALL ANALYSE 1 ...
-                        putToJson(setOperationKey, selectBodies.get(i + 1).toString());
-                        putToJson(setOperationAnalyseKey, new Parser().parse(selectBodies.get(i + 1).toString()));
-                    } else break;
-                }
+            for (int i = 0; i < selectBodies.size(); ++i) {
+                if (i == 0)
+                    injectJson(new Parser().parse(selectBodies.get(i).toString()));
+
+                if (i < setOperations.size()) {
+                    String setOperationKey = String.format("%s %d", setOperations.get(i), i + 1); // ex) UNION 1, UNION ALL 1 ...
+                    String setOperationAnalyseKey = String.format("%s %d", setOperations.get(i) + " ANALYSE", i + 1); // ex) UNION ANALYSE 1, UNION ALL ANALYSE 1 ...
+                    putToJson(setOperationKey, selectBodies.get(i + 1).toString());
+                    putToJson(setOperationAnalyseKey, new Parser().parse(selectBodies.get(i + 1).toString()));
+                } else break;
             }
         }
     };
