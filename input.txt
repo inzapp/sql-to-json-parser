@@ -1,23 +1,38 @@
-SELECT DISTINCT VAL FROM
+SELECT * FROM
 (
+    SELECT A, B, C
+    FROM SUBQUERYTABLE
+    WHERE CONDITION IN ('A', 'B', 'C') AND
+    CONDITION IN
     (
-        SELECT FIELD1 AS VAL
-        FROM TABLE1
-        WHERE CONDITION1 = 'CONDITION1'
-    ) UNION ALL
-    (
-        SELECT FIELD2
-        FROM TABLE1
-        WHERE CONDITION2 = 'CONDITION2'
-    ) UNION ALL
-    (
-        SELECT FIELD3
-        FROM TABLE3
-        WHERE CONDITION3 = 'CONDITION3'
-    ) UNION ALL
-    (
-        SELECT FIELD3
-        FROM TABLE3
-        WHERE CONDITION3 = 'CONDITION3'
+        SELECT CONDITION FROM ANOTHER
+        UNION
+        SELECT CONDITION FROM UNIONTABLE
     )
-) T
+)
+UNION ALL
+(
+    SELECT DISTINCT VAL FROM
+    (
+        (
+            SELECT FIELD1 AS VAL
+            FROM TABLE1
+            WHERE CONDITION1 = 'CONDITION1'
+        ) UNION ALL
+        (
+            SELECT FIELD2
+            FROM TABLE1
+            WHERE CONDITION2 = 'CONDITION2'
+        ) UNION ALL
+        (
+            SELECT FIELD3
+            FROM TABLE3
+            WHERE CONDITION3 = 'CONDITION3'
+        ) UNION ALL
+        (
+            SELECT FIELD3
+            FROM TABLE3
+            WHERE CONDITION3 = 'CONDITION3'
+        )
+    ) T
+)

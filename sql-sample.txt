@@ -308,7 +308,6 @@ SELECT DISTINCT VAL FROM
     (
         SELECT FIELD1 AS VAL
         FROM TABLE1
-        where condition1 = 'condition1'
         WHERE CONDITION1 = 'CONDITION1'
     ) UNION ALL
     (
