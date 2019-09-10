@@ -193,7 +193,7 @@ output
 }
 ```
 
-## Union, Union all
+## Union
 input
 ```sql
 SELECT * FROM
