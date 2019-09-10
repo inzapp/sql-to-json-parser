@@ -246,21 +246,42 @@ select distinct val from
     (
         select field1 as val
         from table1
-        where somethingelse = someval
+        where condition1 = 'condition1'
     ) union all
     (
         select field2
         from table1
-        where somethingelse = someval
+        where condition2 = 'condition2'
     ) union all
     (
-        select field1
-        from table2
-        where somethingelse = someval
+        select field3
+        from table3
+        where condition3 = 'condition3'
     ) union all
     (
-        select field2
-        from table2
-        where somethingelse = someval
+        select field3
+        from table3
+        where condition3 = 'condition3'
     )
 ) t
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT * FROM
+(
+    SELECT A, B, C
+    FROM SUBQUERYTABLE
+    WHERE CONDITION IN ('A', 'B', 'C') AND
+    CONDITION IN
+    (
+        SELECT CONDITION FROM ANOTHER
+        UNION
+        SELECT CONDITION FROM UNIONTABLE
+    )
+)
+UNION ALL
+(
+SELECT * FROM TAB2
+UNION
+SELECT * FROM TAB3
+)

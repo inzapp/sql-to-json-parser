@@ -217,13 +217,28 @@ public class Parser extends JsonManager {
          */
         @Override
         public void visit(SetOperationList setOperationList) {
-            // where sub query
+            // union
+//            System.out.println("visit(SetOperationList setOperationList)");
             List<SelectBody> selectBodies = setOperationList.getSelects();
-            if (selectBodies != null) {
-                selectBodies.forEach(selectBody -> {
-                    putToJson("UNION SUB", new Parser().parse(selectBody.toString()));
-                    selectBody.accept(selectVisitorAdapter);
-                });
+            List<SetOperation> setOperations = setOperationList.getOperations();
+            if (selectBodies != null && setOperations != null) {
+                for (int i = 0; i < selectBodies.size(); ++i) {
+                    if(i == 0) {
+//                        System.out.println("[main query] : " + selectBodies.get(i));
+                        injectJson(new Parser().parse(selectBodies.get(i).toString()));
+                    }
+
+                    if (i < setOperations.size()) {
+//                        System.out.println("[set operation] : " + setOperations.get(i));
+                        String setOperationKey = String.format("%s %d", setOperations.get(i), i + 1);
+                        putToJson(setOperationKey, new Parser().parse(selectBodies.get(i + 1).toString()));
+                    } else {
+                        break;
+//                        System.out.println("[set operation] : none");
+//                        putToJson("none", new Parser().parse(selectBodies.get(i).toString()));
+                    }
+//                    System.out.println();
+                }
             }
         }
     };

@@ -1,35 +1,37 @@
 {
-    "COLUMN": ["val"],
+    "COLUMN": ["*"],
     "CRUD": ["SELECT"],
-    "DISTINCT": ["TRUE"],
-    "TABLE": ["((SELECT field1 AS val FROM table1 WHERE somethingelse = someval) UNION ALL (SELECT field2 FROM table1 WHERE somethingelse = someval) UNION ALL (SELECT field1 FROM table2 WHERE somethingelse = someval) UNION ALL (SELECT field2 FROM table2 WHERE somethingelse = someval)) t"],
-    "TABLE ALIAS": ["t"],
-    "TABLE SUB QUERY 1": ["((SELECT field1 AS val FROM table1 WHERE somethingelse = someval) UNION ALL (SELECT field2 FROM table1 WHERE somethingelse = someval) UNION ALL (SELECT field1 FROM table2 WHERE somethingelse = someval) UNION ALL (SELECT field2 FROM table2 WHERE somethingelse = someval))"],
+    "TABLE": ["(SELECT A, B, C FROM SUBQUERYTABLE WHERE CONDITION IN ('A', 'B', 'C') AND CONDITION IN (SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE))"],
+    "TABLE SUB QUERY 1": ["(SELECT A, B, C FROM SUBQUERYTABLE WHERE CONDITION IN ('A', 'B', 'C') AND CONDITION IN (SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE))"],
     "TABLE SUB QUERY ANALYSE 1": {
         "COLUMN": [
-            "field1 AS val",
-            "field2",
-            "field1",
-            "field2"
+            "A",
+            "B",
+            "C"
         ],
         "CRUD": ["SELECT"],
-        "TABLE": [
-            "table1",
-            "table1",
-            "table2",
-            "table2"
-        ],
-        "UNION SUB": {
-            "COLUMN": ["field2"],
+        "TABLE": ["SUBQUERYTABLE"],
+        "WHERE": ["CONDITION IN ('A', 'B', 'C') AND CONDITION IN (SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE)"],
+        "WHERE SUB QUERY 1": ["(SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE)"],
+        "WHERE SUB QUERY ANALYSE 1": {
+            "COLUMN": ["CONDITION"],
             "CRUD": ["SELECT"],
-            "TABLE": ["table2"],
-            "WHERE": ["somethingelse = someval"]
-        },
-        "WHERE": [
-            "somethingelse = someval",
-            "somethingelse = someval",
-            "somethingelse = someval",
-            "somethingelse = someval"
-        ]
+            "TABLE": ["ANOTHER"],
+            "UNION 1": {
+                "COLUMN": ["CONDITION"],
+                "CRUD": ["SELECT"],
+                "TABLE": ["UNIONTABLE"]
+            }
+        }
+    },
+    "UNION ALL 1": {
+        "COLUMN": ["*"],
+        "CRUD": ["SELECT"],
+        "TABLE": ["TAB2"],
+        "UNION 1": {
+            "COLUMN": ["*"],
+            "CRUD": ["SELECT"],
+            "TABLE": ["TAB3"]
+        }
     }
 }

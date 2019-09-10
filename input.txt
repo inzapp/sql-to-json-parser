@@ -1,23 +1,18 @@
-select distinct val from
+SELECT * FROM
 (
+    SELECT A, B, C
+    FROM SUBQUERYTABLE
+    WHERE CONDITION IN ('A', 'B', 'C') AND
+    CONDITION IN
     (
-        select field1 as val
-        from table1
-        where somethingelse = someval
-    ) union all
-    (
-        select field2
-        from table1
-        where somethingelse = someval
-    ) union all
-    (
-        select field1
-        from table2
-        where somethingelse = someval
-    ) union all
-    (
-        select field2
-        from table2
-        where somethingelse = someval
+        SELECT CONDITION FROM ANOTHER
+        UNION
+        SELECT CONDITION FROM UNIONTABLE
     )
-) t
+)
+UNION ALL
+(
+SELECT * FROM TAB2
+UNION
+SELECT * FROM TAB3
+)

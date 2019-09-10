@@ -20,4 +20,6 @@ public class JsonKey {
     public static final String ORDER_BY = "ORDER_BY";
     public static final String JOIN = "JOIN ";
     public static final String JOIN_ALIAS = "JOIN ALIAS ";
+    public static final String UNION = "UNION ";
+    public static final String UNION_ALL = "UNION ALL ";
 }
