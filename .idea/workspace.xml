@@ -6,9 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f3efaa97-ec05-4093-9248-3ac33d751bec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/json/JsonManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inzapp/sqlToJsonParser/core/json/JsonManager.java" afterDir="false" />
-    </list>
+    <list default="true" id="f3efaa97-ec05-4093-9248-3ac33d751bec" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
