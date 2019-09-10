@@ -22,11 +22,22 @@ public class JsonManager {
      */
     protected JsonManager() {
         this.json = new JSONObject((Comparator<String>) (a, b) -> {
-            if(a.equals(JsonKey.CRUD) && b.equals(JsonKey.CRUD))
+            String jsonKey;
+
+            jsonKey = JsonKey.CRUD;
+            if(a.equals(jsonKey) && b.equals(jsonKey))
                 return 0;
-            else if(a.equals(JsonKey.CRUD))
+            else if(a.equals(jsonKey))
                 return -1;
-            else if(b.equals(JsonKey.CRUD))
+            else if(b.equals(jsonKey))
+                return 1;
+
+            jsonKey = JsonKey.DISTINCT;
+            if(a.equals(jsonKey) && b.equals(jsonKey))
+                return 0;
+            else if(a.equals(jsonKey))
+                return -1;
+            else if(b.equals(jsonKey))
                 return 1;
 
             return a.compareTo(b);
