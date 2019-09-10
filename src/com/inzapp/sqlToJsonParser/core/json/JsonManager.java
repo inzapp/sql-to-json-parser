@@ -14,7 +14,24 @@ public class JsonManager {
     /**
      * for saving parsed sql
      */
-    protected JSONObject json = new JSONObject();
+    protected JSONObject json;
+
+    /**
+     * default constructor of json object
+     * set default json key ordering
+     */
+    protected JsonManager() {
+        this.json = new JSONObject((Comparator<String>) (a, b) -> {
+            if(a.equals(JsonKey.CRUD) && b.equals(JsonKey.CRUD))
+                return 0;
+            else if(a.equals(JsonKey.CRUD))
+                return -1;
+            else if(b.equals(JsonKey.CRUD))
+                return 1;
+
+            return a.compareTo(b);
+        });
+    }
 
     /**
      * inject new json from outside
