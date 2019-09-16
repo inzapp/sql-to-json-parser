@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="sql-to-json-parser:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/sql_to_json_parser_jar</output-path>
+    <root id="archive" name="sql-to-json-parser.jar">
+      <element id="module-output" name="sql-to-json-parser" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jsqlparser-2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/TreemapJson.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
