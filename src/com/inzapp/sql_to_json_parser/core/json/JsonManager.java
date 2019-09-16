@@ -1,6 +1,6 @@
-package com.inzapp.sqlToJsonParser.core.json;
+package com.inzapp.sql_to_json_parser.core.json;
 
-import com.inzapp.sqlToJsonParser.config.JsonKey;
+import com.inzapp.sql_to_json_parser.config.JsonKey;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class JsonManager {
     /**

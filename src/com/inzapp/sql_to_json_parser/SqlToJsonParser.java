@@ -1,7 +1,7 @@
-package com.inzapp.sqlToJsonParser;
+package com.inzapp.sql_to_json_parser;
 
-import com.inzapp.sqlToJsonParser.config.Config;
-import com.inzapp.sqlToJsonParser.core.Parser;
+import com.inzapp.sql_to_json_parser.config.Config;
+import com.inzapp.sql_to_json_parser.core.Parser;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;

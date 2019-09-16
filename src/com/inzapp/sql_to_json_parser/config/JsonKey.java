@@ -1,4 +1,4 @@
-package com.inzapp.sqlToJsonParser.config;
+package com.inzapp.sql_to_json_parser.config;
 
 public class JsonKey {
     public static final String CRUD = "CRUD";

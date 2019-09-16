@@ -1,7 +1,7 @@
-package com.inzapp.sqlToJsonParser.core;
+package com.inzapp.sql_to_json_parser.core;
 
-import com.inzapp.sqlToJsonParser.config.JsonKey;
-import com.inzapp.sqlToJsonParser.core.json.JsonManager;
+import com.inzapp.sql_to_json_parser.config.JsonKey;
+import com.inzapp.sql_to_json_parser.core.json.JsonManager;
 import net.sf.jsqlparser.expression.Alias;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
