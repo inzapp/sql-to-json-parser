@@ -220,9 +220,6 @@ public class Parser extends JsonManager {
             // union
             List<SelectBody> selectBodies = setOperationList.getSelects();
             List<SetOperation> setOperations = setOperationList.getOperations();
-            System.out.println("query : " + selectBodies.get(0).toString());
-            System.out.println("selectBodies.size() : " + selectBodies.size());
-            System.out.println("setOperations.size() : " + setOperations.size());
 
             for (int i = 0; i < selectBodies.size(); ++i) {
                 if (i == 0)
