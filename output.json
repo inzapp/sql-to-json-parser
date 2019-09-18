@@ -1,40 +1,6 @@
 {
     "CRUD": ["SELECT"],
     "COLUMN": ["*"],
-    "TABLE": ["(SELECT A, B, C FROM SUBQUERYTABLE WHERE CONDITION IN ('A', 'B', 'C') AND CONDITION IN (SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE))"],
-    "TABLE SUB QUERY 1": ["(SELECT A, B, C FROM SUBQUERYTABLE WHERE CONDITION IN ('A', 'B', 'C') AND CONDITION IN (SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE))"],
-    "TABLE SUB QUERY ANALYSE 1": {
-        "CRUD": ["SELECT"],
-        "COLUMN": [
-            "A",
-            "B",
-            "C"
-        ],
-        "TABLE": ["SUBQUERYTABLE"],
-        "WHERE": ["CONDITION IN ('A', 'B', 'C') AND CONDITION IN (SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE)"],
-        "WHERE SUB QUERY 1": ["(SELECT CONDITION FROM ANOTHER UNION SELECT CONDITION FROM UNIONTABLE)"],
-        "WHERE SUB QUERY ANALYSE 1": {
-            "CRUD": ["SELECT"],
-            "COLUMN": ["CONDITION"],
-            "TABLE": ["ANOTHER"],
-            "UNION 1": ["SELECT CONDITION FROM UNIONTABLE"],
-            "UNION ANALYSE 1": {
-                "CRUD": ["SELECT"],
-                "COLUMN": ["CONDITION"],
-                "TABLE": ["UNIONTABLE"]
-            }
-        }
-    },
-    "UNION ALL 1": ["SELECT * FROM TAB2 UNION SELECT * FROM TAB3"],
-    "UNION ALL ANALYSE 1": {
-        "CRUD": ["SELECT"],
-        "COLUMN": ["*"],
-        "TABLE": ["TAB2"],
-        "UNION 1": ["SELECT * FROM TAB3"],
-        "UNION ANALYSE 1": {
-            "CRUD": ["SELECT"],
-            "COLUMN": ["*"],
-            "TABLE": ["TAB3"]
-        }
-    }
+    "GROUP_BY": ["A"],
+    "TABLE": ["TAB"]
 }

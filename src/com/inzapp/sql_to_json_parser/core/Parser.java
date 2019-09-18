@@ -295,7 +295,12 @@ public class Parser extends JsonManager {
          */
         @Override
         public void visit(GroupByElement groupByElement) {
-            putToJson(JsonKey.GROUP_BY, groupByElement.toString());
+            List<Expression> groupByExpressions = groupByElement.getGroupByExpressions();
+            groupByExpressions.forEach(groupByExpression -> {
+                // warning for duplicating json key
+                putToJson(JsonKey.GROUP_BY, groupByExpression.toString());
+            });
+
         }
     };
 
