@@ -10,13 +10,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/sql_to_json_parser_jar/sql-to-json-parser.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/sql_to_json_parser_jar/sql-to-json-parser.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-to-json-parser/com/inzapp/sql_to_json_parser/SqlToJsonParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-to-json-parser/com/inzapp/sql_to_json_parser/SqlToJsonParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-to-json-parser/com/inzapp/sql_to_json_parser/core/Parser$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-to-json-parser/com/inzapp/sql_to_json_parser/core/Parser$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-to-json-parser/com/inzapp/sql_to_json_parser/core/Parser$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-to-json-parser/com/inzapp/sql_to_json_parser/core/Parser$7.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/sql-to-json-parser/com/inzapp/sql_to_json_parser/core/Parser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/sql-to-json-parser/com/inzapp/sql_to_json_parser/core/Parser.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/output.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inzapp/sql_to_json_parser/SqlToJsonParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inzapp/sql_to_json_parser/SqlToJsonParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inzapp/sql_to_json_parser/core/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inzapp/sql_to_json_parser/core/Parser.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,6 +45,7 @@
       <command value="open Algorithm" />
       <command value="mvn" />
       <command value="open json-to-sql-parser" />
+      <command value="open sql-json-parser" />
     </option>
   </component>
   <component name="RunDashboard">

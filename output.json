@@ -1,6 +1,34 @@
 {
     "CRUD": ["SELECT"],
-    "COLUMN": ["*"],
-    "GROUP_BY": ["A"],
-    "TABLE": ["TAB"]
+    "COLUMN": [
+        "EC_CLPS_DV_CD AS STAFF_GBN",
+        "EC_NM AS STAFF_CLASS",
+        "EC_GRP AS ORG_STAFF_GBN",
+        "ODR AS ORDER_SEQ",
+        "ORGZ_ID AS ORG_ID",
+        "EMP_NO AS STAFF_EMP_ID",
+        "USE_AYN AS USE_YN",
+        "REG_DTM",
+        "RGR_ID",
+        "UPDT_DTM",
+        "UTUR_ID"
+    ],
+    "ORDER_BY": ["ODR"],
+    "TABLE": ["ETCH005M"],
+    "WHERE": ["EC_CLPS_DV_CD IN (SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV UNION SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N')"],
+    "WHERE SUB QUERY 1": ["(SELECT EC_DV AS staff_gbn FROM ETCH004M WHERE (TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD')) GROUP BY EC_DV UNION SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N')"],
+    "WHERE SUB QUERY ANALYSE 1": {
+        "CRUD": ["SELECT"],
+        "COLUMN": ["EC_DV AS staff_gbn"],
+        "GROUP_BY": ["EC_DV"],
+        "TABLE": ["ETCH004M"],
+        "UNION 1": ["SELECT EC_CLPS_DV_CD AS staff_gbn FROM ETCH005M WHERE NVL(USE_AYN, 'Y') <> 'N'"],
+        "UNION ANALYSE 1": {
+            "CRUD": ["SELECT"],
+            "COLUMN": ["EC_CLPS_DV_CD AS staff_gbn"],
+            "TABLE": ["ETCH005M"],
+            "WHERE": ["NVL(USE_AYN, 'Y') <> 'N'"]
+        },
+        "WHERE": ["(TO_DATE(SCH_REG_DT, 'YYYY-MM-DD') BETWEEN TO_DATE(SYSDATE, 'YYYY-MM-DD') AND TO_DATE(SYSDATE, 'YYYY-MM-DD'))"]
+    }
 }
